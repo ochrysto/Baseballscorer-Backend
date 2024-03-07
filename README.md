@@ -12,3 +12,9 @@ Es muss außerdem die Möglichkeit der Protesterfassung geben. Die Erfassung erf
 Bevor das Sheet an den entsprechenden Verband weitergeleitet wird, müssen Trainer, Schiedsrichter und Scorer unterschreiben. Dies soll elektronisch erfolgen.
 
 Nachdem alles eingetragen und unterschrieben ist, werden die Formulare als PDF exportiert und an den Verband geschickt. 
+
+# Authentifizierung
+- erfolgt über Keycloak
+
+# Dokumentation
+- Endpunkt-Dokumentation über Swagger UI
