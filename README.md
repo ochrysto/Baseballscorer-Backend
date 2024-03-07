@@ -57,4 +57,6 @@ See this [**step-by-step guide**](https://www.baeldung.com/spring-boot-keycloak)
 
 #### Step 3 - Creating a Role and a User
 
+TODO
+
 #### Step 4 - Generating Access Tokens With Keycloak’s API
