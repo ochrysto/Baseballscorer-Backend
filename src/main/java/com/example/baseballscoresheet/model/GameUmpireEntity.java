@@ -25,10 +25,14 @@ public class GameUmpireEntity {
     /**
      * {@link GameEntity} bildet das Spiel der Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "game_id")
     private GameEntity game;
 
     /**
      * {@link UmpireEntity} bildet den Schiedsrichter der Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "umpire_id")
     private UmpireEntity umpire;
 }

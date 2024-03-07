@@ -29,10 +29,14 @@ public class LeagueTeamEntity {
     /**
      * {@link TeamEntity} bildet das Team der Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "team_id")
     private TeamEntity team;
 
     /**
      * {@link LeagueEntity} bildet die League der Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "league_id")
     private LeagueEntity league;
 }

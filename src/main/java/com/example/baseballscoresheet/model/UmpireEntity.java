@@ -3,6 +3,8 @@ package com.example.baseballscoresheet.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 /**
  * Die Klasse {@link UmpireEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
  * Ein Umpire ist der Schiedsrichter des Spiels. Es kann mehr als einen Umpire pro Spiel geben.
@@ -36,4 +38,7 @@ public class UmpireEntity {
      * E-Mail-Adresse des Schiedsrichters.
      */
     private String email;
+
+    @OneToMany(mappedBy = "umpire")
+    private Set<GameUmpireEntity> gameUmpire;
 }

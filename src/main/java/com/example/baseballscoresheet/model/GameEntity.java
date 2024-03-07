@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 /**
  * Die Klasse {@link GameEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
@@ -75,4 +76,10 @@ public class GameEntity {
      * Dies wechselt jeweils nach drei Out
      */
     private Integer innings;
+
+    @OneToMany(mappedBy = "game")
+    private Set<GameTeamEntity> gameTeam;
+
+    @OneToMany(mappedBy = "game")
+    private Set<GameUmpireEntity> game;
 }

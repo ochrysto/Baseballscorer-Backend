@@ -3,6 +3,8 @@ package com.example.baseballscoresheet.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 //TODO bisschen mehr Infos zur Lineup Entität
 
 /**
@@ -32,4 +34,7 @@ public class LineupEntity {
      * {@link ManagerEntity} bildet den Manager in der Beziehung ab.
      */
     private ManagerEntity manager;
+
+    @OneToMany(mappedBy = "lineup")
+    private Set<LineupPlayerEntity> lineupPlayers;
 }

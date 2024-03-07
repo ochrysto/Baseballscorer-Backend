@@ -3,6 +3,8 @@ package com.example.baseballscoresheet.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 //TODO bisschen mehr Infos, was eine League ist?
 
 /**
@@ -29,4 +31,7 @@ public class LeagueEntity {
 
     //TODO was für eine E-Mail?
     private String email;
+
+    @OneToMany(mappedBy = "league")
+    private Set<LeagueTeamEntity> leagueTeam;
 }

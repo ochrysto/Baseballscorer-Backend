@@ -27,11 +27,15 @@ public class GameTeamEntity {
     /**
      * {@link TeamEntity} bildet das Team der Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "team_id")
     private TeamEntity team;
 
     /**
      * {@link GameEntity} bildet das Spiel der Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "game_id")
     private GameEntity game;
 
     //TODO was ist in diesem Kontext ein Type?

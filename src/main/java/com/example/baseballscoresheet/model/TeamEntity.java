@@ -4,6 +4,8 @@ package com.example.baseballscoresheet.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 /**
  * Die Klasse {@link TeamEntity} bildet ein Team-Objekt mit seinen dazugehörigen Attributen ab.
  * Ein Team besteht aus mehreren Spielern.
@@ -45,4 +47,13 @@ public class TeamEntity {
      * Logo des Teams.
      */
     private String logo;
+
+    @OneToMany(mappedBy = "team")
+    private Set<TeamPlayerEntity> teamPlayers;
+
+    @OneToMany(mappedBy = "team")
+    private Set<GameTeamEntity> gameTeam;
+
+    @OneToMany(mappedBy = "team")
+    private Set<LeagueTeamEntity> leagueTeam;
 }

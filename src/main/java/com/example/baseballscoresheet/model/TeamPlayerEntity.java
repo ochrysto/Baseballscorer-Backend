@@ -25,10 +25,16 @@ public class TeamPlayerEntity {
     /**
      * {@link TeamEntity} bildet das Team dieser Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "team_id")
     private TeamEntity team;
 
     /**
      * {@link PlayerEntity} bildet den Spieler dieser Beziehung ab.
      */
+    @ManyToOne
+    @JoinColumn(name = "player_id")
     private PlayerEntity player;
+
+
 }

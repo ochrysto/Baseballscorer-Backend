@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.Set;
+
 /**
  * Die Klasse {@link PlayerEntity} bildet ein Spieler-Objekt mit seinen dazugehörigen Attributen ab.
  * Er ist Teilnehmer eines Spiels und Mitglied in einem Team.
@@ -55,4 +57,7 @@ public class PlayerEntity {
     @Column(name = "tricot_number")
     @Size(max = 99, message = "Tricot Number must not be greater than 99")
     private Integer tricotNumber;
+
+    @OneToMany(mappedBy = "player")
+    private Set<TeamPlayerEntity> teamPlayers;
 }
