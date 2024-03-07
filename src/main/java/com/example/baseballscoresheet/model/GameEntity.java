@@ -63,7 +63,7 @@ public class GameEntity {
 
 
     /**
-     * Der Scorer ist die Person, die das Spiel dokumentiert.
+     * Der Scorer {@link ScorerEntity} ist die Person, die das Spiel dokumentiert.
      * Die Dokumentation erfolgt mithilfe eines Scoresheets.
      */
     private ScorerEntity scorer;
