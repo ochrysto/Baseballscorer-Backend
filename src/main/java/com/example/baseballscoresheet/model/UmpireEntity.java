@@ -1,0 +1,39 @@
+package com.example.baseballscoresheet.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+/**
+ * Die Klasse {@link UmpireEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
+ * Ein Umpire ist der Schiedsrichter des Spiels. Es kann mehr als einen Umpire pro Spiel geben.
+ */
+@Data
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "umpire")
+public class UmpireEntity {
+    /**
+     * Attribut, das zur eindeutigen Identifikation eines Umpire-Objekts dient.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /**
+     * Vorname des Schiedsrichters.
+     */
+    private String firstName;
+
+    /**
+     * Nachname des Schiedsrichters.
+     */
+    private String lastName;
+
+    /**
+     * E-Mail-Adresse des Schiedsrichters.
+     */
+    private String email;
+}
