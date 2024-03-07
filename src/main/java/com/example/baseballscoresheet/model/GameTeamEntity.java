@@ -6,6 +6,8 @@ import lombok.*;
 
 /**
  * Die Klasse {@link GameTeamEntity} bildet die n:m-Beziehung zwischen Game und Team mit ihren dazugehörigen Attributen ab.
+ * Es wird abgebildet, welche Teams in welchem Spiel teilgenommen haben.
+ * Weiterhin wird die Beziehung durch einen Type {@link Type} näher definiert.
  */
 @Data
 @Entity
@@ -23,12 +25,12 @@ public class GameTeamEntity {
     private Long id;
 
     /**
-     * {@link TeamEntity} bildet das Team ab.
+     * {@link TeamEntity} bildet das Team der Beziehung ab.
      */
     private TeamEntity team;
 
     /**
-     * {@link GameEntity} bildet das Spiel ab.
+     * {@link GameEntity} bildet das Spiel der Beziehung ab.
      */
     private GameEntity game;
 
