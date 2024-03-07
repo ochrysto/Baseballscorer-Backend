@@ -5,12 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-//TODO Javadoc - hinzufügen der Verlinkungen zu den genannten Klassen
-
 /**
- * Die Klasse PlayerEntity bildet ein Spieler-Objekt mit seinen Attributen ab.
- * Er ist Teilnehmer eines Spiels und Mitglied eines Teams.
- * {@link PlayerEntity}
+ * Die Klasse {@link PlayerEntity} bildet ein Spieler-Objekt mit seinen dazugehörigen Attributen ab.
+ * Er ist Teilnehmer eines Spiels und Mitglied in einem Team.
  */
 @Data
 @Entity
@@ -20,7 +17,6 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "player")
 public class PlayerEntity {
-
     /**
      * Attribut, das zur eindeutigen Identifikation eines Player-Objekts dient.
      */
@@ -45,6 +41,7 @@ public class PlayerEntity {
     /**
      * Aktuelle Passnummer eines Spielers.
      * Dient der Identifikation des Spielers im Spielbetrieb.
+     * Jeder Spieler hat eine eigene eindeutige Passnummer.
      */
     @Column(name = "pass_number")
     @NotBlank(message = "Players Pass Number is mandatory")
@@ -53,7 +50,7 @@ public class PlayerEntity {
     //TODO welche ist die maximal höchste Trikot Nummer?
     /**
      * Aktuelle Trikotnummer eines Spielers.
-     * Die Trikotnummer kann sich mit der Zeit ändern.
+     * Die Trikotnummer kann sich ändern und ist nicht fest einem Spieler zugeordnet.
      */
     @Column(name = "tricot_number")
     @Size(max = 99, message = "Tricot Number must not be greater than 99")

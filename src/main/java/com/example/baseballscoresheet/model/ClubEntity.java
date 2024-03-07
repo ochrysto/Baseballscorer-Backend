@@ -7,7 +7,6 @@ import lombok.*;
 //TODO bisschen mehr Infos, was ein Club ist / Unterscheidung von einem Team?
 /**
  * Die Klasse {@link ClubEntity} bildet ein Club-Objekt mit seinen dazugehörigen Attributen ab.
- *
  */
 @Data
 @Entity
