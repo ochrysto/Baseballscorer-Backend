@@ -35,6 +35,9 @@ public class UmpireEntity {
      */
     private String lastName;
 
+    /**
+     *
+     */
     @OneToMany(mappedBy = "umpire")
     private Set<GameUmpireEntity> gameUmpire;
 }

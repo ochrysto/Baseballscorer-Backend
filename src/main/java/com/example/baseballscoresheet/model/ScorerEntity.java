@@ -31,4 +31,10 @@ public class ScorerEntity {
      * Nachname des Scorers.
      */
     private String lastName;
+
+    /**
+     *
+     */
+    @OneToOne(mappedBy = "scorer")
+    private GameEntity game;
 }

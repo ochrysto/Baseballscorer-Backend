@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 /**
  * Die Klasse {@link GameEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
@@ -46,7 +47,9 @@ public class GameEntity {
      */
     private LocalTime endTime;
 
-    //TODO reicht int als Datentyp oder lieber Long? / Gibt sie die Spielnummer der Liga/des Verbandes etc. an?
+    /**
+     *
+     */
     private Integer gameNumber;
 
     /**
@@ -66,4 +69,30 @@ public class GameEntity {
      * Dies wechselt jeweils nach drei Out
      */
     private Integer innings;
+
+    /**
+     *
+     */
+    @OneToMany(mappedBy = "game")
+    private Set<GameUmpireEntity> gameUmpire;
+
+    /**
+     *
+     */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "scorer_passnumber", referencedColumnName = "passnumber")
+    private ScorerEntity scorer;
+
+    /**
+     *
+     */
+    @OneToMany(mappedBy = "game")
+    private Set<TeamEntity> teams;
+
+    /**
+     *
+     */
+    @ManyToOne
+    @JoinColumn(name = "association_id", nullable = false)
+    private AssociationEntity association;
 }

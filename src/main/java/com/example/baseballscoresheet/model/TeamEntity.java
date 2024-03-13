@@ -1,8 +1,9 @@
 package com.example.baseballscoresheet.model;
 
-import com.example.baseballscoresheet.enums.Type;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 /**
  * Die Klasse {@link TeamEntity} bildet ein Team-Objekt mit seinen dazugehörigen Attributen ab.
@@ -31,6 +32,34 @@ public class TeamEntity {
     /**
      *
      */
-    private Type type;
+    @OneToMany(mappedBy = "team")
+    private Set<TeamPlayerEntity> teamplayer;
 
+    /**
+     *
+     */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
+    private ManagerEntity manager;
+
+    /**
+     *
+     */
+    @ManyToOne
+    @JoinColumn(name="game_gameNr", nullable = false)
+    private GameEntity game;
+
+    /**
+     *
+     */
+    @ManyToOne
+    @JoinColumn(name="club_id", nullable = false)
+    private ClubEntity club;
+
+    /**
+     *
+     */
+    @ManyToOne
+    @JoinColumn(name="league_id", nullable = false)
+    private LeagueEntity league;
 }
