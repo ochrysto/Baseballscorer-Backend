@@ -5,7 +5,7 @@ Der Scorer kann sich bei der Anwendung anmelden, nur ausgewählten Personen sind
 
 Im Verlauf des Spiels kann jeder Spielzug über eine GUI vom Scorer erfasst werden. Korrekturen sind jederzeit möglich. Da die Dauer eines Spiels stark variieren kann, soll das Score Sheet in der Größe frei skalierbar sein.
 
-Am Ende der Partie wird eine statistische Auswertung erstellt, z.B. Betting-Average, On-Base-Average…
+Am Ende der Partie wird eine statistische Auswertung erstellt, z.B. Batting-Average, On-Base-Average…
 
 Es muss außerdem die Möglichkeit der Protesterfassung geben. Die Erfassung erfolgt auf einem separaten Formular.
 
