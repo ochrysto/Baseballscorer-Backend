@@ -52,11 +52,23 @@ See this [**step-by-step guide**](https://www.baeldung.com/spring-boot-keycloak)
 #### Step 2 - Creating a Client
 
 1. Navigate to the `Clients` page.
-2. Click `Create`. We’ll call the new Client login-app.
+2. Click `Create`. We’ll call the new Client `login-app`.
 3. We must change `Valid Redirect URIs` field. This field should contain the application URL(s) that will use this client for authentication:
 
 #### Step 3 - Creating a Role and a User
 
-TODO
+1. Navigate to the `Realm Roles` page
+2. Add the `user` role 
+3. Go to the `Users` page
+4. Add new user 
+5. Go to the `Credentials` tab
+6. Set the initial password
+7. Navigate to the `Role Mappings` tab
+8. Assign the `user` role to new user
+9. Navigate to the `Client Scopes` page and then set `microprofile-jwt` to “default”.
 
 #### Step 4 - Generating Access Tokens With Keycloak’s API
+
+Use `GetBearerToken.http` file to make requests to KeyCloak.
+
+**Note**: you must change credentials in this file
