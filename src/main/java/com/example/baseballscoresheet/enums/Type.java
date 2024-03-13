@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.enums;
 
+// definiert, ob das Team ein Home oder Away- Team ist
 public enum Type {
-
-    //TODO welche Types gibt es?
+    Away,
+    Home
 }

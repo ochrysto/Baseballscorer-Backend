@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
 
 /**
  * Die Klasse {@link GameEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
@@ -24,8 +23,7 @@ public class GameEntity {
      * Attribut, das zur eindeutigen Identifikation eines Game-Objekts dient.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long gameNr;
 
     /**
      * Datum, an dem das Spiel stattfindet.
@@ -48,27 +46,19 @@ public class GameEntity {
      */
     private LocalTime endTime;
 
-    //TODO was ist in diesem Kontext eine League?
-    private LeagueEntity league;
-
-    //TODO was ist in diesem Kontext ein Verband?
-    private AssociationEntity association;
-
     //TODO reicht int als Datentyp oder lieber Long? / Gibt sie die Spielnummer der Liga/des Verbandes etc. an?
     private Integer gameNumber;
 
-    //TODO was ist timeOfGame? die Länge? - dann aus Start- und Endzeit berechnen lassen
+    /**
+     * Dauer bzw. Länge des Spiels.
+     * Aus Start- und Endzeit berechnen lassen
+     */
     private Double timeOfGame;
 
-    //TODO ???
-    private String attendance;
-
-
     /**
-     * Der Scorer {@link ScorerEntity} ist die Person, die das Spiel dokumentiert.
-     * Die Dokumentation erfolgt mithilfe eines Scoresheets.
+     * Zuschauerzahl
      */
-    private ScorerEntity scorer;
+    private Integer attendance;
 
     /**
      * Anzahl der Innings, die während eines Spiels gespielt wurden.
@@ -76,10 +66,4 @@ public class GameEntity {
      * Dies wechselt jeweils nach drei Out
      */
     private Integer innings;
-
-    @OneToMany(mappedBy = "game")
-    private Set<GameTeamEntity> gameTeam;
-
-    @OneToMany(mappedBy = "game")
-    private Set<GameUmpireEntity> game;
 }

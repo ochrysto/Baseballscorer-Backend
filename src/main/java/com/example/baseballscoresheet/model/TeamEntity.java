@@ -1,10 +1,8 @@
 package com.example.baseballscoresheet.model;
 
-
+import com.example.baseballscoresheet.enums.Type;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Set;
 
 /**
  * Die Klasse {@link TeamEntity} bildet ein Team-Objekt mit seinen dazugehörigen Attributen ab.
@@ -30,30 +28,9 @@ public class TeamEntity {
      */
     private String name;
 
-    //TODO was ist der Club eines Teams?
-    private ClubEntity club;
-
     /**
-     * Stadt, aus dem das Team kommt.
+     *
      */
-    private String city;
+    private Type type;
 
-    /**
-     * E-Mailadresse des Teams.
-     */
-    private String email;
-
-    /**
-     * Logo des Teams.
-     */
-    private String logo;
-
-    @OneToMany(mappedBy = "team")
-    private Set<TeamPlayerEntity> teamPlayers;
-
-    @OneToMany(mappedBy = "team")
-    private Set<GameTeamEntity> gameTeam;
-
-    @OneToMany(mappedBy = "team")
-    private Set<LeagueTeamEntity> leagueTeam;
 }

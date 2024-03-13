@@ -7,6 +7,7 @@ import lombok.*;
 //TODO bisschen mehr Infos, was ein Club ist / Unterscheidung von einem Team?
 /**
  * Die Klasse {@link ClubEntity} bildet ein Club-Objekt mit seinen dazugehörigen Attributen ab.
+ * Ein Club ist ein Verein. Ein Verein kann mehrere Teams haben.
  */
 @Data
 @Entity
@@ -29,6 +30,9 @@ public class ClubEntity {
     @NotBlank(message = "Name of the club is mandatory")
     private String name;
 
-    //TODO 1:n- oder n:m-Beziehung?
-    private AssociationEntity association;
+    private String logo;
+
+    private String city;
+
+    private String email;
 }

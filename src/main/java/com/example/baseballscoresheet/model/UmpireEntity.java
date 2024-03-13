@@ -17,12 +17,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "umpire")
 public class UmpireEntity {
+
     /**
      * Attribut, das zur eindeutigen Identifikation eines Umpire-Objekts dient.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "passnumber")
+    private Long passnumber;
 
     /**
      * Vorname des Schiedsrichters.
@@ -33,11 +34,6 @@ public class UmpireEntity {
      * Nachname des Schiedsrichters.
      */
     private String lastName;
-
-    /**
-     * E-Mail-Adresse des Schiedsrichters.
-     */
-    private String email;
 
     @OneToMany(mappedBy = "umpire")
     private Set<GameUmpireEntity> gameUmpire;

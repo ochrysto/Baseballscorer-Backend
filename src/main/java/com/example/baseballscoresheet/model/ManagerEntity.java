@@ -6,6 +6,7 @@ import lombok.*;
 //TODO wozu gehört der Manager?
 /**
  * Die Klasse {@link ManagerEntity} bildet ein Manager-Objekt mit seinen dazugehörigen Attributen ab.
+ * Nachdem ein Spiel beendet wurde, erhält der Manager des Teams die Auswertung und Dokumentation des Spiels als PDF.
  */
 @Data
 @Entity

@@ -19,12 +19,15 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "player")
 public class PlayerEntity {
+
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Player-Objekts dient.
+     * Aktuelle Passnummer eines Spielers.
+     * Dient der Identifikation des Spielers im Spielbetrieb.
+     * Jeder Spieler hat eine eigene eindeutige Passnummer.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "passnumber")
+    private Long passnumber;
 
     /**
      * Vorname eines Spielers.
@@ -41,21 +44,11 @@ public class PlayerEntity {
     private String lastName;
 
     /**
-     * Aktuelle Passnummer eines Spielers.
-     * Dient der Identifikation des Spielers im Spielbetrieb.
-     * Jeder Spieler hat eine eigene eindeutige Passnummer.
-     */
-    @Column(name = "pass_number")
-    @NotBlank(message = "Players Pass Number is mandatory")
-    private String passNumber;
-
-    //TODO welche ist die maximal höchste Trikot Nummer?
-    /**
      * Aktuelle Trikotnummer eines Spielers.
-     * Die Trikotnummer kann sich ändern und ist nicht fest einem Spieler zugeordnet.
+     * Die Trikotnummer kann sich ändern und ist einem Spieler NICHT fest zugeordnet.
      */
     @Column(name = "tricot_number")
-    @Size(max = 99, message = "Tricot Number must not be greater than 99")
+    @Size(max = 99, min = 0, message = "Tricot Number must be between 0 and 99")
     private Integer tricotNumber;
 
     @OneToMany(mappedBy = "player")

@@ -15,12 +15,12 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "scorer")
 public class ScorerEntity {
+
     /**
      * Attribut, das zur eindeutigen Identifikation eines Scorer-Objekts dient.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long passnumber;
 
     /**
      * Vorname des Scorers.
@@ -31,9 +31,4 @@ public class ScorerEntity {
      * Nachname des Scorers.
      */
     private String lastName;
-
-    /**
-     * E-Mail des Scorers.
-     */
-    private String email;
 }
