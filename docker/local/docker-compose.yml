@@ -1,0 +1,17 @@
+version: '3.9'
+
+volumes:
+  Baseball-Scoresheet-Backend_postgres_data:
+    driver: local
+services:
+  postgres_for_Baseball-Scoresheet-Backend:
+    container_name: Baseball-Scoresheet-Backend_postgres_container
+    image: postgres:13.3
+    volumes:
+      - Baseball-Scoresheet-Backend_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: Baseball-Scoresheet-Backend_db
+      POSTGRES_USER: Baseball
+      POSTGRES_PASSWORD: Baseball
+    ports:
+      - "5432:5432"
