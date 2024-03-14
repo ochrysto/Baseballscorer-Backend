@@ -26,15 +26,17 @@ public class GameHistoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    /*@OneToMany(mappedBy = "gamehistory")
+    /**
+     *
+     */
+    @OneToMany(mappedBy = "gamehistory")
     private Set<PlayerEntity> playerSet;
 
-
-
-    @OneToMany(mappedBy = "game_history")
+    /**
+     *
+     */
+    @OneToMany(mappedBy = "gamehistory")
     private Set<GameEntity> gameSet;
-    */
 
     @Enumerated(EnumType.STRING)
     private POSITION position;

@@ -3,6 +3,9 @@ package com.example.baseballscoresheet.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Die Klasse {@link GameUmpireEntity} bildet ein GameHistory-Objekt mit seinen dazugehörigen Attributen ab.
+ */
 @Data
 @Entity
 @Getter

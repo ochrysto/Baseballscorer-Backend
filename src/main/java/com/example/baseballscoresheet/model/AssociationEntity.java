@@ -23,29 +23,34 @@ public class AssociationEntity {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     /**
      * Name des Verbandes.
      */
+    @Column
     @NotBlank(message = "the name of the association is mandatory")
     private String name;
 
     /**
      *
      */
+    @Column
     @OneToMany(mappedBy = "association")
     private Set<LeagueEntity> leagueSet;
 
     /**
      *
      */
+    @Column(name = "club")
     @OneToMany(mappedBy = "association")
     private Set<ClubEntity> clubSet;
 
     /**
      *
      */
+    @Column(name = "game")
     @OneToMany(mappedBy = "association")
     private Set<GameEntity> gameSet;
 }

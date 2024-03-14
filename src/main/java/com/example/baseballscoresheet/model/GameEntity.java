@@ -91,10 +91,10 @@ public class GameEntity {
     @JoinColumn(name = "association_id", nullable = false)
     private AssociationEntity association;
 
-    /*
-    @ManyToOne
-    @JoinColumn(name="game_history_id", nullable = false)
-    private GameHistoryEntity gameHistory;
-
+    /**
+     *
      */
+    @ManyToOne
+    @JoinColumn(name="gamehistory_id", nullable = false)
+    private GameHistoryEntity gamehistory;
 }
