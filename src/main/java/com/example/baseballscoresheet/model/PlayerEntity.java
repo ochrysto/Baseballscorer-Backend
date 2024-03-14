@@ -49,8 +49,15 @@ public class PlayerEntity {
      */
     @Column(name = "tricot_number")
     @Size(max = 99, min = 0, message = "Tricot Number must be between 0 and 99")
-    private Integer tricotNumber;
+    private Integer jerseyNr;
 
     @OneToMany(mappedBy = "player")
     private Set<TeamPlayerEntity> teamPlayers;
+
+    /**
+     *
+     */
+    @ManyToOne
+    @JoinColumn(name="game_history_id", nullable = false)
+    private GameHistoryEntity gameHistory;
 }

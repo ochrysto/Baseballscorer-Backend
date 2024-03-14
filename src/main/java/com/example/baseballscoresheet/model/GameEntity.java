@@ -48,11 +48,6 @@ public class GameEntity {
     private LocalTime endTime;
 
     /**
-     *
-     */
-    private Integer gameNumber;
-
-    /**
      * Dauer bzw. Länge des Spiels.
      * Aus Start- und Endzeit berechnen lassen
      */
@@ -95,4 +90,11 @@ public class GameEntity {
     @ManyToOne
     @JoinColumn(name = "association_id", nullable = false)
     private AssociationEntity association;
+
+    /**
+     *
+     */
+    @ManyToOne
+    @JoinColumn(name="game_history_id", nullable = false)
+    private GameHistoryEntity gameHistory;
 }
