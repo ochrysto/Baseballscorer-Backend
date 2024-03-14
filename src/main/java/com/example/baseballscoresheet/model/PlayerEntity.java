@@ -54,10 +54,10 @@ public class PlayerEntity {
     @OneToMany(mappedBy = "player")
     private Set<TeamPlayerEntity> teamPlayers;
 
-    /**
-     *
-     */
+    /*
     @ManyToOne
     @JoinColumn(name="game_history_id", nullable = false)
     private GameHistoryEntity gameHistory;
+
+     */
 }

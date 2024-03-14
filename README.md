@@ -57,10 +57,11 @@ You **must** change credentials before go live.
 
 Once you are in admin web panel, do following steps:
 
-1. Go to the `Users` page
-2. Add new user. Activate `Email verified` and fill
+1. Change realm to `BaseballScoresheet`
+2. Go to the `Users` page
+2. Add new user. Activate `Email verified` and fill all fields. Click `create`. 
 3. Go to the `Credentials` tab
-4. Set the initial password
+4. Set the password, set temporary off and click `save`.
 5. Navigate to the `Role Mappings` tab
 6. Assign the `user` role to new user
 
