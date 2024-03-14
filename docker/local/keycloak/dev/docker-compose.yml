@@ -1,0 +1,17 @@
+services:
+  auth:
+    image: quay.io/keycloak/keycloak
+    ports:
+      - 8070:8070
+    environment:
+      # read preconfigured realm file
+      #KEYCLOAK_IMPORT: /tmp/imports/realm-export.json
+      KEYCLOAK_ADMIN: admin  # change this in prod
+      KEYCLOAK_ADMIN_PASSWORD: admin  # change this in prod
+    # import preconfigured realm file into docker container
+    volumes:
+      - ./import:/opt/keycloak/data/import
+    command:
+      - start-dev
+      - --import-realm
+      - --http-port=8070

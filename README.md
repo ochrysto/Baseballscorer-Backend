@@ -6,11 +6,11 @@ To run keycloak locally, open terminal and do following steps...
 
 #### Step 0 - requirements
 
-For running Keycloak locally you need **Docker** installed.
+For running Keycloak locally you need to have **Docker** installed.
 
 Use this [**Docker download page link**](https://docs.docker.com/engine/install/) to download **Docker**.
 
-You can check that docker is installed with this command:
+You can check that docker is installed on your computer with this command:
 ```bash
 docker --version
 ```
@@ -18,9 +18,9 @@ docker --version
 #### Step 1 - change working directory
 ```bash
 # go into `docker/local` folder
-cd .\docker\local\  # Windows
+cd .\docker\local\keycloak\dev  # Windows
 # or
-cd docker/local  # Linux, MacOS
+cd docker/local/keycloak/dev  # Linux, MacOS
 ```
 #### Step 2 - create and start containers
 ```bash
@@ -29,16 +29,44 @@ docker compose up  # Windows, Linux, MacOS
 
 Now you can open keycloak in your web browser:
 
-Go at http://localhost:8080
+Go at **http://localhost:8070**
 
 Now you should see the login page. Input admin credential from `docker-compose.yml` file to log in.
 
 **Note**: by default we have `admin` as **username** and **password**.
 You **must** change credentials before go live.
 
+#### Step 3 - create user
 
+Once you are in admin web panel, do following steps:
 
-### Configure Keycloak.
+1. Go to the `Users` page
+2. Add new user. Activate `Email verified` and fill  
+3. Go to the `Credentials` tab
+4. Set the initial password
+5. Navigate to the `Role Mappings` tab
+6. Assign the `user` role to new user
+
+#### Step 4 - Generating Access Tokens With Keycloak’s API
+
+Use `GetBearerToken.http` file to make requests to KeyCloak.
+
+**Note**: you must change credentials in this file
+
+#### Step 5 - Test protected and public endpoint with Postman
+
+To test protected endpoint with Postman, do following steps:
+
+1. Start `BaseballScoresheetApplication`
+2. In Postman: create new GET connection for URL http://localhost:8080/protected
+3. Go into `Authorization` tab
+4. Select type `Bearer Token`
+5. Pass your access token into the `Token` field
+6. Press `Send`
+
+You should get status **200 OK** and JSON `{"text": "hello from protected backend GET resource"}`
+
+### (Production) Manually Configure Keycloak:
 
 See this [**step-by-step guide**](https://www.baeldung.com/spring-boot-keycloak).
 
