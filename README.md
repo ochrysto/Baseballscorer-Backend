@@ -15,8 +15,6 @@ Nachdem alles eingetragen und unterschrieben ist, werden die Formulare als PDF e
 
 # Authentifizierung
 
-# Baseball-Scoresheet
-
 ### How to start Keycloak locally?
 
 To run keycloak locally, open terminal and do following steps...
