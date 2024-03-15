@@ -48,7 +48,7 @@ public class PlayerEntity {
      * Die Trikotnummer kann sich ändern und ist einem Spieler NICHT fest zugeordnet.
      */
     @Column(name = "jersey_nr")
-    @Size(max = 99, min = 0, message = "Tricot Number must be between 0 and 99")
+    @Size(max = 99, message = "Tricot Number must be between 0 and 99")
     private Integer jerseyNr;
 
     @OneToMany(mappedBy = "player")
