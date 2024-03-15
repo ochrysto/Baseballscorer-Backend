@@ -47,14 +47,56 @@ public class PlayerEntity {
      * Aktuelle Trikotnummer eines Spielers.
      * Die Trikotnummer kann sich ändern und ist einem Spieler NICHT fest zugeordnet.
      */
-    @Column(name = "tricot_number")
+    @Column(name = "jersey_nr")
     @Size(max = 99, min = 0, message = "Tricot Number must be between 0 and 99")
     private Integer jerseyNr;
 
     @OneToMany(mappedBy = "player")
     private Set<TeamPlayerEntity> teamPlayers;
 
-    @ManyToOne
-    @JoinColumn(name="gamehistory_id", nullable = false)
-    private GameHistoryEntity gamehistory;
+    /**
+     *
+     */
+    @OneToMany(mappedBy = "player")
+    private Set<GameHistoryEntity> gameHistorySet;
+
+    private Integer pa;
+
+    private Integer ab;
+
+    private Integer r;
+
+    private Integer rbi;
+
+    private Integer h;
+
+    private Integer twoB;
+
+    private Integer threeB;
+
+    private Integer hr;
+
+    private Integer k;
+
+    private Integer bb;
+
+    private Integer hp;
+
+    private Integer sb;
+
+    private Integer cs;
+
+    private Integer sh;
+
+    private Integer sf;
+
+    private Integer a;
+
+    private Integer po;
+
+    private Integer e;
+
+    private Integer dp;
+
+    private Integer ip;
 }

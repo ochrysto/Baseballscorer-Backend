@@ -29,8 +29,9 @@ public class GameHistoryEntity {
     /**
      *
      */
-    @OneToMany(mappedBy = "gamehistory")
-    private Set<PlayerEntity> playerSet;
+    @ManyToOne
+    @JoinColumn(name="player_passnumber", nullable = false)
+    private PlayerEntity player;
 
     /**
      *

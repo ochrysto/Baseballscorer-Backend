@@ -20,7 +20,7 @@ public class GameUmpireEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "game_gameNr")
+    @JoinColumn(name = "gameNr")
     private GameEntity game;
 
     @ManyToOne
