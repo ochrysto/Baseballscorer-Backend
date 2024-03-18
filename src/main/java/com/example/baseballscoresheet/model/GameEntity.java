@@ -94,7 +94,6 @@ public class GameEntity {
     /**
      *
      */
-    @ManyToOne
-    @JoinColumn(name="gamehistory_id", nullable = false)
-    private GameHistoryEntity gamehistory;
+    @OneToMany(mappedBy = "game")
+    private Set<GameHistoryEntity> gamesHistories;
 }

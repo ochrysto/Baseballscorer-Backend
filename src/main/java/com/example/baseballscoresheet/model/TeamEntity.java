@@ -46,7 +46,7 @@ public class TeamEntity {
      *
      */
     @ManyToOne
-    @JoinColumn(name="game_Nr", nullable = false)
+    @JoinColumn(name="game_Nr")
     private GameEntity game;
 
     /**

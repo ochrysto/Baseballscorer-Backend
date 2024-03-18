@@ -36,8 +36,9 @@ public class GameHistoryEntity {
     /**
      *
      */
-    @OneToMany(mappedBy = "gamehistory")
-    private Set<GameEntity> gameSet;
+    @ManyToOne
+    @JoinColumn(name="game_nr", nullable = false)
+    private GameEntity game;
 
     @Enumerated(EnumType.STRING)
     private POSITION position;
