@@ -4,8 +4,6 @@ import com.example.baseballscoresheet.enums.POSITION;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 /**
  * Die Klasse {@link GameHistoryEntity} bildet ein GameHistory-Objekt mit seinen dazugehörigen Attributen ab.
  */
