@@ -31,14 +31,20 @@ class SecurityConfig {
     @Bean
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(new AntPathRequestMatcher("/protected"))
-                .hasRole("user")
-                .requestMatchers(new AntPathRequestMatcher("/"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/public"))
-                .permitAll()
-                .anyRequest()
-                .authenticated())
+                        .requestMatchers(new AntPathRequestMatcher("/protected"))
+                        .hasRole("user")
+                        .requestMatchers(new AntPathRequestMatcher("/"))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/public"))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher( "/swagger-ui.html"))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .csrf((csrf) -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
