@@ -8,6 +8,7 @@ import lombok.*;
 /**
  * Die Klasse {@link ManagerEntity} bildet ein Manager-Objekt mit seinen dazugehörigen Attributen ab.
  * Nachdem ein Spiel beendet wurde, erhält der Manager des Teams die Auswertung und Dokumentation des Spiels als PDF.
+ * Er ist der Trainer des Teams.
  */
 @Data
 @Entity
@@ -17,8 +18,9 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "manager")
 public class ManagerEntity {
+
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Manager-Objekts dient.
+     *
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

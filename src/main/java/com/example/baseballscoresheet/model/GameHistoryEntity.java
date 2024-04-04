@@ -18,31 +18,36 @@ import lombok.*;
 public class GameHistoryEntity {
 
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Association-Objekts dient.
+     *
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     *
-     */
-    @ManyToOne
-    @JoinColumn(name="player_passnumber", nullable = false)
-    private PlayerEntity player;
+    private Integer inning;
+
+    private Integer positionCounter;
+
+    private Integer battingOrder;
 
     /**
      *
      */
     @ManyToOne
-    @JoinColumn(name="game_nr", nullable = false)
+    @JoinColumn(name="lineup_player_id", nullable = false)
+    private LineupPlayerEntity lineupPlayer;
+
+    /**
+     *
+     */
+    @ManyToOne
+    @JoinColumn(name="game_id", nullable = false)
     private GameEntity game;
 
     @Enumerated(EnumType.STRING)
     private POSITION position;
 
-    private Integer positionCounter;
-
+    //
     private Integer pa;
 
     private Integer ab;

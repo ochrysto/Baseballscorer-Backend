@@ -1,8 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.league.AddLeagueDto;
-import com.example.baseballscoresheet.dto.league.GetLeagueDto;
-import com.example.baseballscoresheet.dto.league.UpdateLeagueDto;
+import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,11 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/league")
 public class LeagueController {
 
-    // Endpunkt zum Speichern eines neuen Leagues
+    /*
+    // Endpunkt zum Speichern einer neuen League
     @Operation(summary = "saves a new league")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created league",
@@ -38,6 +38,7 @@ public class LeagueController {
     public ResponseEntity<GetLeagueDto> createLeague(@RequestBody @Valid AddLeagueDto newLeague) {
         return null;
     }
+     */
 
     // Endpunkt, um alle existierenden Leagues abzurufen
     @Operation(summary = "retrieve all existing leagues")
@@ -77,6 +78,7 @@ public class LeagueController {
         return null;
     }
 
+    /*
     // Endpunkt zum Updaten einer existierenden League
     @Operation(summary = "updates a existing league",
             description = "league must exist")
@@ -96,7 +98,7 @@ public class LeagueController {
     @PutMapping("/{id}")
     @RolesAllowed("user")
     public ResponseEntity<GetLeagueDto> updateLeague(@PathVariable final Long id,
-                                                 @Valid @RequestBody final UpdateLeagueDto updateLeagueDto) {
+                                                     @Valid @RequestBody final UpdateLeagueDto updateLeagueDto) {
         return null;
     }
 
@@ -117,4 +119,5 @@ public class LeagueController {
     public void deleteLeagueById(@PathVariable Long id) {
 
     }
+   */
 }

@@ -2,6 +2,7 @@ package com.example.baseballscoresheet.enums;
 
 import lombok.Getter;
 
+// TODO Mapper, der ausgeschriebene Position auf Abkürzungen mappt, z.B. Pitcher = P
 @Getter
 public enum POSITION {
     PITCHER(1), CATCHER(2),

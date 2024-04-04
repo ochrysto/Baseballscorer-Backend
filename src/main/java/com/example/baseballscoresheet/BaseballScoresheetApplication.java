@@ -9,6 +9,6 @@ public class BaseballScoresheetApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BaseballScoresheetApplication.class, args);
-        System.out.println(POSITION.FIRST_BASEMAN.getId());
+        System.out.println(POSITION.FIRST_BASEMAN);
     }
 }

@@ -18,8 +18,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "league")
 public class LeagueEntity {
+
     /**
-     * Attribut, das zur eindeutigen Identifikation eines League-Objekts dient.
+     *
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

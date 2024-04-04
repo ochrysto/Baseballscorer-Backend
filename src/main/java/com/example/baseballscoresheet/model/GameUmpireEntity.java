@@ -15,6 +15,9 @@ import lombok.*;
 @Table(name = "game_umpire")
 public class GameUmpireEntity {
 
+    /**
+     *
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

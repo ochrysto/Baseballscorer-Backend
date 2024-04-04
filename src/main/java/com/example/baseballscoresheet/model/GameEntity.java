@@ -20,11 +20,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "game")
 public class GameEntity {
+
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Game-Objekts dient.
+     *
      */
     @Id
-    private Long gameNr;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     /**
      * Datum, an dem das Spiel stattfindet.
@@ -75,14 +77,9 @@ public class GameEntity {
      *
      */
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "scorer_passnumber", referencedColumnName = "passnumber")
+    @JoinColumn(name = "scorer_id", referencedColumnName = "id")
     private ScorerEntity scorer;
 
-    /**
-     *
-     */
-    @OneToMany(mappedBy = "game")
-    private Set<TeamEntity> teams;
 
     /**
      *
@@ -94,6 +91,14 @@ public class GameEntity {
     /**
      *
      */
-    @OneToMany(mappedBy = "game")
-    private Set<GameHistoryEntity> gamesHistories;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "guest_lineup_id", referencedColumnName = "id")
+    private LineupEntity guest;
+
+    /**
+     *
+     */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "host_lineup_id", referencedColumnName = "id")
+    private LineupEntity host;
 }

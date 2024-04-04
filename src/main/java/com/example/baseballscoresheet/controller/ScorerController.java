@@ -1,8 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.scorer.AddScorerDto;
-import com.example.baseballscoresheet.dto.scorer.GetScorerDto;
-import com.example.baseballscoresheet.dto.scorer.UpdateScorerDto;
+import com.example.baseballscoresheet.model.dto.scorer.GetScorerDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/scorer")
 public class ScorerController {
 
+    /*
     // Endpunkt zum Speichern eines neuen Scorers
     @Operation(summary = "saves a new scorer")
     @ApiResponses(value = {
@@ -38,6 +38,7 @@ public class ScorerController {
     public ResponseEntity<GetScorerDto> createScorer(@RequestBody @Valid AddScorerDto newScorer) {
         return null;
     }
+*/
 
     // Endpunkt, um alle existierenden Scorer abzurufen
     @Operation(summary = "retrieve all existing scorers")
@@ -77,6 +78,7 @@ public class ScorerController {
         return null;
     }
 
+    /*
     // Endpunkt zum Updaten eines existierenden Scorers
     @Operation(summary = "updates a existing scorer",
             description = "scorer must exist")
@@ -99,6 +101,7 @@ public class ScorerController {
                                                      @Valid @RequestBody final UpdateScorerDto updateScorerDto) {
         return null;
     }
+    */
 
     // Endpunkt, um einen existierenden Scorer zu löschen
     @Operation(summary = "deletes scorer by id",

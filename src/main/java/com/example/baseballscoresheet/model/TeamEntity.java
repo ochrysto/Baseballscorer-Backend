@@ -46,20 +46,19 @@ public class TeamEntity {
      *
      */
     @ManyToOne
-    @JoinColumn(name="game_Nr")
-    private GameEntity game;
-
-    /**
-     *
-     */
-    @ManyToOne
-    @JoinColumn(name="club_id", nullable = false)
+    @JoinColumn(name = "club_id", nullable = false)
     private ClubEntity club;
 
     /**
      *
      */
     @ManyToOne
-    @JoinColumn(name="league_id", nullable = false)
+    @JoinColumn(name = "league_id", nullable = false)
     private LeagueEntity league;
+
+    /**
+     *
+     */
+    @OneToMany(mappedBy = "team")
+    private Set<LineupEntity> lineups;
 }

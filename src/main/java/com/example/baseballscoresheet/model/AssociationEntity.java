@@ -18,14 +18,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "association")
 public class AssociationEntity {
+
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Association-Objekts dient.
+     *
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
-
     /**
      * Name des Verbandes.
      */

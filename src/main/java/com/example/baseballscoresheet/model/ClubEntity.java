@@ -20,8 +20,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "club")
 public class ClubEntity {
+
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Club-Objekts dient.
+     *
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

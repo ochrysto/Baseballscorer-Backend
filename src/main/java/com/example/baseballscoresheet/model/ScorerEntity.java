@@ -17,9 +17,15 @@ import lombok.*;
 public class ScorerEntity {
 
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Scorer-Objekts dient.
+     *
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /**
+     *
+     */
     private Long passnumber;
 
     /**

@@ -1,8 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.umpire.AddUmpireDto;
-import com.example.baseballscoresheet.dto.umpire.GetUmpireDto;
-import com.example.baseballscoresheet.dto.umpire.UpdateUmpireDto;
+import com.example.baseballscoresheet.model.dto.umpire.GetUmpireDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/umpire")
 public class UmpireController {
 
+    /*
     // Endpunkt zum Speichern eines neuen Umpires
     @Operation(summary = "saves a new umpire")
     @ApiResponses(value = {
@@ -38,6 +38,7 @@ public class UmpireController {
     public ResponseEntity<GetUmpireDto> createUmpire(@RequestBody @Valid AddUmpireDto newUmpire) {
         return null;
     }
+    */
 
     // Endpunkt, um alle existierenden Umpires abzurufen
     @Operation(summary = "retrieve all existing umpires")
@@ -77,6 +78,7 @@ public class UmpireController {
         return null;
     }
 
+    /*
     // Endpunkt zum Updaten eines existierenden Umpires
     @Operation(summary = "updates a existing umpire",
             description = "umpire must exist")
@@ -96,9 +98,10 @@ public class UmpireController {
     @PutMapping("/{id}")
     @RolesAllowed("user")
     public ResponseEntity<GetUmpireDto> updateUmpire(@PathVariable final Long id,
-                                                 @Valid @RequestBody final UpdateUmpireDto updateUmpireDto) {
+                                                     @Valid @RequestBody final UpdateUmpireDto updateUmpireDto) {
         return null;
     }
+    */
 
     // Endpunkt, um einen existierenden Umpire zu löschen
     @Operation(summary = "deletes umpire by id",

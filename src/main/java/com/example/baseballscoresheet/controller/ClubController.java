@@ -1,8 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.club.AddClubDto;
-import com.example.baseballscoresheet.dto.club.GetClubDto;
-import com.example.baseballscoresheet.dto.club.UpdateClubDto;
+import com.example.baseballscoresheet.model.dto.club.GetClubDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/club")
 public class ClubController {
 
+    /*
     // Endpunkt zum Speichern eines neuen Clubs
     @Operation(summary = "saves a new club")
     @ApiResponses(value = {
@@ -38,6 +38,7 @@ public class ClubController {
     public ResponseEntity<GetClubDto> createClub(@RequestBody @Valid AddClubDto newClub) {
         return null;
     }
+*/
 
     // Endpunkt, um alle existierenden Clubs abzurufen
     @Operation(summary = "retrieve all existing clubs")
@@ -77,6 +78,7 @@ public class ClubController {
         return null;
     }
 
+    /*
     // Endpunkt zum Updaten eines existierenden Clubs
     @Operation(summary = "updates a existing club",
             description = "club must exist")
@@ -96,9 +98,10 @@ public class ClubController {
     @PutMapping("/{id}")
     @RolesAllowed("user")
     public ResponseEntity<GetClubDto> updateClub(@PathVariable final Long id,
-                                                               @Valid @RequestBody final UpdateClubDto updateClubDto) {
+                                                 @Valid @RequestBody final UpdateClubDto updateClubDto) {
         return null;
     }
+    */
 
     // Endpunkt, um einen existierenden Club zu löschen
     @Operation(summary = "deletes club by id",

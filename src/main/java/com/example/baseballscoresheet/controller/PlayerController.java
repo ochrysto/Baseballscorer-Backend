@@ -1,8 +1,7 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.player.AddPlayerDto;
-import com.example.baseballscoresheet.dto.player.GetPlayerDto;
-import com.example.baseballscoresheet.dto.player.UpdatePlayerDto;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerDto;
+import com.example.baseballscoresheet.model.dto.player.UpdatePlayerDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +19,7 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
 
+    /*
     // Endpunkt zum Speichern eines neuen Players
     @Operation(summary = "saves a new player")
     @ApiResponses(value = {
@@ -38,6 +38,7 @@ public class PlayerController {
     public ResponseEntity<GetPlayerDto> createPlayer(@RequestBody @Valid AddPlayerDto newPlayer) {
         return null;
     }
+    */
 
     // Endpunkt, um alle existierenden Player abzurufen
     @Operation(summary = "retrieve all existing players")
@@ -57,6 +58,7 @@ public class PlayerController {
     public ResponseEntity<List<GetPlayerDto>> findAllPlayers() {
         return null;
     }
+
 
     // Endpunkt, um Informationen zu einem bestimmten Player abzurufen
     @Operation(summary = "retrieve all information of a specific player")

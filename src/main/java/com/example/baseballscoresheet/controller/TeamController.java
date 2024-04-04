@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.team.AddTeamDto;
-import com.example.baseballscoresheet.dto.team.GetTeamDto;
-import com.example.baseballscoresheet.dto.team.UpdateTeamDto;
+import com.example.baseballscoresheet.model.dto.team.AddTeamDto;
+import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
+import com.example.baseballscoresheet.model.dto.team.UpdateTeamDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/team")

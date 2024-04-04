@@ -42,60 +42,61 @@ VALUES (6, 'Tina', 'Turner', 'tina.turner@managermail.com');
 INSERT INTO manager(id, first_name, last_name, email)
 VALUES (7, 'Erika', 'Schuft', 'erika.schuft@managermail.com');
 
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb,
+                   cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (1, 'Harald', 'Schmidt', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (1, 000001, 'Harald', 'Schmidt', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (2, 'James', 'Bond', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (2, 000002, 'James', 'Bond', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (3, 'Harry', 'Potter', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (3, 000003, 'Harry', 'Potter', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (4, 'Hermine', 'Granger', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (4, 000004, 'Hermine', 'Granger', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (5, 'Ron', 'Weasley', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (5, 000005, 'Ron', 'Weasley', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (6, 'Lord', 'Voldemort', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (6, 000006, 'Lord', 'Voldemort', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (7, 'Fritz', 'Meinecke', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (7, 000007, 'Fritz', 'Meinecke', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (8, 'Knossi', 'Knossala', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (8, 000008, 'Knossi', 'Knossala', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (9, 'Peter', 'Zwegat', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (9, 000009, 'Peter', 'Zwegat', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (10, 'Horst', 'Schlemmer', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (10, 000010, 'Horst', 'Schlemmer', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (11, 'Elfriede', 'Mainz', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (11, 000011, 'Elfriede', 'Mainz', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (12, 'Bat', 'Man', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (12, 000012, 'Bat', 'Man', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (13, 'Iron', 'Man', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO player(passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+VALUES (13, 000013, 'Iron', 'Man', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(id, passnumber, first_name, last_name, jersey_nr, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
-VALUES (14, 'Newt', 'Scamander', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+VALUES (14, 000014, 'Newt', 'Scamander', 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-INSERT INTO scorer(passnumber, first_name, last_name)
+INSERT INTO scorer(id, passnumber, first_name, last_name)
 VALUES (1, 'Klaus', 'Büchner');
-INSERT INTO scorer(passnumber, first_name, last_name)
+INSERT INTO scorer(id, passnumber, first_name, last_name)
 VALUES (2, 'Thorsten', 'Legat');
 
-INSERT INTO umpire(passnumber, first_name, last_name)
+INSERT INTO umpire(id, passnumber, first_name, last_name)
 VALUES (1, 'Dieter', 'Bohlen');
-INSERT INTO umpire(passnumber, first_name, last_name)
+INSERT INTO umpire(id, passnumber, first_name, last_name)
 VALUES (2, 'Sebastian', 'Fitzek');
 
-INSERT INTO game(game_nr, date, end_time, start_time, time_of_game, location, scorer_passnumber, innings, attendance,
+INSERT INTO game(id, game_nr, date, end_time, start_time, time_of_game, location, scorer_passnumber, innings, attendance,
                  association_id)
 VALUES (1, '2023-08-18', '10:00:00', '12:00:00', 2.0, 'Bremen', 1, 9, 500, 1);
 

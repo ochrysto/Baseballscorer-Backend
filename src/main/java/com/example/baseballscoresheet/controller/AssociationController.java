@@ -1,8 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.association.AddAssociationDto;
-import com.example.baseballscoresheet.dto.association.GetAssociationDto;
-import com.example.baseballscoresheet.dto.association.UpdateAssociationDto;
+import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/association")
 public class AssociationController {
 
+    /*
     // Endpunkt zum Speichern einer neuen Association
     @Operation(summary = "saves a new association")
     @ApiResponses(value = {
@@ -38,6 +38,7 @@ public class AssociationController {
     public ResponseEntity<GetAssociationDto> createAssociation(@RequestBody @Valid AddAssociationDto newAssociation) {
         return null;
     }
+    */
 
     // Endpunkt, um alle existierenden Associations abzurufen
     @Operation(summary = "retrieve all existing associations")
@@ -77,6 +78,7 @@ public class AssociationController {
         return null;
     }
 
+    /*
     // Endpunkt zum Updaten einer existierenden Association
     @Operation(summary = "updates a existing association",
             description = "association must exist")
@@ -117,4 +119,5 @@ public class AssociationController {
     public void deleteAssociationById(@PathVariable Long id) {
 
     }
+    */
 }

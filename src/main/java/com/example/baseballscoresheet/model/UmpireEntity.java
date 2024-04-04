@@ -19,9 +19,15 @@ import java.util.Set;
 public class UmpireEntity {
 
     /**
-     * Attribut, das zur eindeutigen Identifikation eines Umpire-Objekts dient.
+     *
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /**
+     *
+     */
     @Column(name = "passnumber")
     private Long passnumber;
 

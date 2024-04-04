@@ -1,15 +1,12 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.dto.manager.AddManagerDto;
-import com.example.baseballscoresheet.dto.manager.GetManagerDto;
-import com.example.baseballscoresheet.dto.manager.UpdateManagerDto;
+import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +17,7 @@ import java.util.List;
 @RequestMapping("/manager")
 public class ManagerController {
 
+    /*
     // Endpunkt zum Speichern eines neuen Managers
     @Operation(summary = "saves a new manager")
     @ApiResponses(value = {
@@ -38,6 +36,8 @@ public class ManagerController {
     public ResponseEntity<GetManagerDto> createManager(@RequestBody @Valid AddManagerDto newManager) {
         return null;
     }
+    /*
+     */
 
     // Endpunkt, um alle existierenden Managers abzurufen
     @Operation(summary = "retrieve all existing managers")
@@ -77,6 +77,7 @@ public class ManagerController {
         return null;
     }
 
+    /*
     // Endpunkt zum Updaten eines existierenden Managers
     @Operation(summary = "updates a existing manager",
             description = "manager must exist")
@@ -99,6 +100,7 @@ public class ManagerController {
                                                        @Valid @RequestBody final UpdateManagerDto updateManagerDto) {
         return null;
     }
+    */
 
     // Endpunkt, um einen existierenden Manager zu löschen
     @Operation(summary = "deletes manager by id",
