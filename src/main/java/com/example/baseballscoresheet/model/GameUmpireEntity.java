@@ -23,10 +23,10 @@ public class GameUmpireEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "gameNr")
+    @JoinColumn(name = "game_id")
     private GameEntity game;
 
     @ManyToOne
-    @JoinColumn(name = "umpire_passnumber")
+    @JoinColumn(name = "umpire_id")
     private UmpireEntity umpire;
 }

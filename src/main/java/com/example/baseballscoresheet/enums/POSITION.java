@@ -10,7 +10,7 @@ public enum POSITION {
     SHORTSTOP(6),
     LEFTFIELDER(7), CENTERFIELDER(8), RIGHTFIELDER(9);
 
-    private int id;
-    POSITION(int id) {
+    private Integer id;
+    POSITION(Integer id) {
     }
 }

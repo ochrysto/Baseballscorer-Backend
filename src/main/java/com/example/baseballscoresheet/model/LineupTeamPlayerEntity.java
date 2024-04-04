@@ -13,8 +13,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "lineup_player")
-public class LineupPlayerEntity {
+@Table(name = "lineup_team_player")
+public class LineupTeamPlayerEntity {
     /**
      *
      */

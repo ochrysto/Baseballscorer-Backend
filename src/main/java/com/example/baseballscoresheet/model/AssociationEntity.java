@@ -25,6 +25,7 @@ public class AssociationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     /**
      * Name des Verbandes.
      */

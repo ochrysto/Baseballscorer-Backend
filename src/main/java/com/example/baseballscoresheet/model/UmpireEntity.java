@@ -28,7 +28,6 @@ public class UmpireEntity {
     /**
      *
      */
-    @Column(name = "passnumber")
     private Long passnumber;
 
     /**

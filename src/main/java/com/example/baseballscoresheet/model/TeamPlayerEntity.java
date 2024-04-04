@@ -27,7 +27,7 @@ public class TeamPlayerEntity {
     private TeamEntity team;
 
     @ManyToOne
-    @JoinColumn(name = "player_passnumber")
+    @JoinColumn(name = "player_id")
     private PlayerEntity player;
 
 }

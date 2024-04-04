@@ -29,6 +29,11 @@ public class GameEntity {
     private Long id;
 
     /**
+     *
+     */
+    private Integer gameNr;
+
+    /**
      * Datum, an dem das Spiel stattfindet.
      */
     @NotBlank(message = "Date of the game is mandatory")

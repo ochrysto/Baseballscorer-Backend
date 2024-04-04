@@ -35,7 +35,7 @@ public class GameHistoryEntity {
      */
     @ManyToOne
     @JoinColumn(name="lineup_player_id", nullable = false)
-    private LineupPlayerEntity lineupPlayer;
+    private LineupTeamPlayerEntity lineupPlayer;
 
     /**
      *
