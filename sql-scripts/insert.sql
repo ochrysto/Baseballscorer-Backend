@@ -99,8 +99,8 @@ INSERT INTO game(id, date, end_time, start_time, time_of_game, location, scorer_
                  attendance, association_id, guest_lineup_id, host_lineup_id)
 VALUES (1, '2023-08-18', '10:00:00', '12:00:00', 2.0, 'Bremen', 1, 9, 500, 1, 1, 2);
 
-INSERT INTO game_umpire(id, game_nr, umpire_passnumber)
-VALUES (1, 1, 000001);
+INSERT INTO game_umpire(id, game_id, umpire_id)
+VALUES (1, 1, 1);
 
 INSERT INTO team(id, name, club_id, league_id, manager_id)
 VALUES (1, 'Mannheimer Maulwürfe', 1, 1, 2);
@@ -117,31 +117,31 @@ VALUES (6, 'Solinger Schnabeltiere', 6, 3, 7);
 INSERT INTO team(id, name, club_id, league_id, manager_id)
 VALUES (7, 'Heidenheimer Hasen', 7, 1, 1);
 
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (1, 1, 000001);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (2, 1, 000002);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (3, 2, 000003);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (4, 2, 000004);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (5, 3, 000005);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (6, 3, 000006);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (7, 4, 000007);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (8, 4, 000008);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (9, 5, 000009);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (10, 5, 000010);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (11, 6, 000011);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (12, 6, 000012);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (13, 7, 000013);
-INSERT INTO team_player(id, team_id, player_passnumber)
-VALUES (14, 7, 000014);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (1, 1, 1);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (2, 1, 2);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (3, 2, 3);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (4, 2, 4);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (5, 3, 5);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (6, 3, 6);
+INSERT INTO team_player(id, team_id,player_id)
+VALUES (7, 4, 7);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (8, 4, 8);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (9, 5, 9);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (10, 5, 10);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (11, 6, 11);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (12, 6, 12);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (13, 7, 13);
+INSERT INTO team_player(id, team_id, player_id)
+VALUES (14, 7, 14);
