@@ -91,16 +91,9 @@ INSERT INTO scorer(id, passnumber, first_name, last_name)
 VALUES (2, 000002, 'Thorsten', 'Legat');
 
 INSERT INTO umpire(id, passnumber, first_name, last_name)
-VALUES (1, 'Dieter', 'Bohlen');
+VALUES (1, 000001, 'Dieter', 'Bohlen');
 INSERT INTO umpire(id, passnumber, first_name, last_name)
-VALUES (2, 'Sebastian', 'Fitzek');
-
-INSERT INTO game(id, date, end_time, start_time, time_of_game, location, scorer_id, innings,
-                 attendance, association_id, guest_lineup_id, host_lineup_id)
-VALUES (1, '2023-08-18', '10:00:00', '12:00:00', 2.0, 'Bremen', 1, 9, 500, 1, 1, 2);
-
-INSERT INTO game_umpire(id, game_id, umpire_id)
-VALUES (1, 1, 1);
+VALUES (2, 000002, 'Sebastian', 'Fitzek');
 
 INSERT INTO team(id, name, club_id, league_id, manager_id)
 VALUES (1, 'Mannheimer Maulwürfe', 1, 1, 2);
@@ -116,6 +109,15 @@ INSERT INTO team(id, name, club_id, league_id, manager_id)
 VALUES (6, 'Solinger Schnabeltiere', 6, 3, 7);
 INSERT INTO team(id, name, club_id, league_id, manager_id)
 VALUES (7, 'Heidenheimer Hasen', 7, 1, 1);
+
+INSERT INTO lineup(id, team_id)
+VALUES(1,1);
+INSERT INTO lineup(id, team_id)
+VALUES(2,2);
+INSERT INTO lineup(id, team_id)
+VALUES(3,3);
+INSERT INTO lineup(id, team_id)
+VALUES(4,4);
 
 INSERT INTO team_player(id, team_id, player_id)
 VALUES (1, 1, 1);
@@ -145,3 +147,14 @@ INSERT INTO team_player(id, team_id, player_id)
 VALUES (13, 7, 13);
 INSERT INTO team_player(id, team_id, player_id)
 VALUES (14, 7, 14);
+
+INSERT INTO lineup_team_player(id, team_player_id,position,jersey_nr, lineup_id)
+VALUES(1,1,5,75393,1);
+
+INSERT INTO game(id, date, end_time, start_time, time_of_game, location, scorer_id, innings,
+                 attendance, association_id, guest_lineup_id, host_lineup_id)
+VALUES (1, '2023-08-18', '10:00:00', '12:00:00', 2.0, 'Bremen', 1, 9, 500, 1, 1, 2);
+
+INSERT INTO game_umpire(id, game_id, umpire_id)
+VALUES (1, 1, 1);
+
