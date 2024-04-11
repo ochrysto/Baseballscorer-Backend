@@ -39,5 +39,5 @@ public class LineupTeamPlayerEntity {
      *
      */
     @OneToMany(mappedBy = "lineupPlayer")
-    private Set<GameHistoryEntity> gameHistorySet;
+    private Set<GameStateEntity> gameStateSet;
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * Die Klasse {@link GameUmpireEntity} bildet ein GameHistory-Objekt mit seinen dazugehörigen Attributen ab.
+ * Die Klasse {@link GameUmpireEntity} bildet ein GameState-Objekt mit seinen dazugehörigen Attributen ab.
  */
 @Data
 @Entity

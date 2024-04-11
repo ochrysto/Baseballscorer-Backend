@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * Die Klasse {@link GameHistoryEntity} bildet ein GameHistory-Objekt mit seinen dazugehörigen Attributen ab.
+ * Die Klasse {@link GameStateEntity} bildet ein GameState-Objekt mit seinen dazugehörigen Attributen ab.
  */
 
 @Data
@@ -15,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "game_history")
-public class GameHistoryEntity {
+public class GameStateEntity {
 
     /**
      *
