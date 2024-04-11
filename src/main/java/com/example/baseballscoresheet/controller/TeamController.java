@@ -1,8 +1,10 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.model.dto.team.AddTeamDto;
-import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
-import com.example.baseballscoresheet.model.dto.team.UpdateTeamDto;
+import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.TeamEntity;
+import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
+import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
+import com.example.baseballscoresheet.services.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +24,21 @@ import java.util.List;
 @RequestMapping("/team")
 public class TeamController {
 
+    private final MappingService mappingService;
+    private final TeamService teamService;
+
+    @Autowired
+    public TeamController(MappingService mappingService, TeamService teamService) {
+        this.mappingService = mappingService;
+        this.teamService = teamService;
+    }
+
     // Endpunkt zum Speichern eines neuen Teams
     @Operation(summary = "saves a new team")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created team",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetTeamDto.class))}),
+                            schema = @Schema(implementation = GetTeamInfoDto.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "not authorized",
@@ -36,8 +48,11 @@ public class TeamController {
     })
     @RolesAllowed("user")
     @PostMapping
-    public ResponseEntity<GetTeamDto> createTeam(@RequestBody @Valid AddTeamDto newTeam) {
-        return null;
+    public ResponseEntity<GetTeamInfoDto> createTeam(@RequestBody @Valid AddTeamInfoDto addTeamInfoDto) {
+        TeamEntity teamEntity = this.mappingService.mapAddTeamDtoToTeamEntity(addTeamInfoDto);
+        teamEntity = this.teamService.createTeam(teamEntity);
+        GetTeamInfoDto request = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);
+        return new ResponseEntity<>(request, HttpStatus.OK);
     }
 
     // Endpunkt, um alle existierenden Teams abzurufen
@@ -45,7 +60,7 @@ public class TeamController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "teams found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetTeamDto.class))}),
+                            schema = @Schema(implementation = GetTeamInfoDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "teams not found",
@@ -55,7 +70,7 @@ public class TeamController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetTeamDto>> findAllTeams() {
+    public ResponseEntity<List<GetTeamInfoDto>> findAllTeams() {
         return null;
     }
 
@@ -64,7 +79,7 @@ public class TeamController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "team found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetTeamDto.class))}),
+                            schema = @Schema(implementation = GetTeamInfoDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "team not found",
@@ -74,7 +89,7 @@ public class TeamController {
     })
     @GetMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetTeamDto> findTeamById(@PathVariable Long id) {
+    public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long id) {
         return null;
     }
 
@@ -84,7 +99,7 @@ public class TeamController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "team found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetTeamDto.class))}),
+                            schema = @Schema(implementation = GetTeamInfoDto.class))}),
             @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
@@ -96,8 +111,8 @@ public class TeamController {
     })
     @PutMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetTeamDto> updateTeam(@PathVariable final Long id,
-                                                     @Valid @RequestBody final UpdateTeamDto updateTeamDto) {
+    public ResponseEntity<GetTeamInfoDto> updateTeam(@PathVariable final Long id,
+                                                     @Valid @RequestBody final AddTeamInfoDto updateTeamDto) {
         return null;
     }
 
