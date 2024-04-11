@@ -30,27 +30,27 @@ public class TeamEntity {
     private String name;
 
     /**
-     *
+     * Liste aller Teammitglieder.
      */
     @OneToMany(mappedBy = "team")
     private Set<TeamPlayerEntity> teamplayer;
 
     /**
-     *
+     * Manager des Teams.
      */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private ManagerEntity manager;
 
     /**
-     *
+     * Verein des Teams.
      */
     @ManyToOne
     @JoinColumn(name = "club_id", nullable = false)
     private ClubEntity club;
 
     /**
-     *
+     * Liga, in der das Team spielt.
      */
     @ManyToOne
     @JoinColumn(name = "league_id", nullable = false)
@@ -61,4 +61,6 @@ public class TeamEntity {
      */
     @OneToMany(mappedBy = "team")
     private Set<LineupEntity> lineups;
+
+    private String teamLogo;
 }

@@ -37,7 +37,7 @@ public class ClubEntity {
     /**
      *
      */
-    private String logo;
+    private String clubLogo;
 
     /**
      *
