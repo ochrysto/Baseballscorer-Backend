@@ -1,24 +1,34 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.LeagueEntity;
 import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
+import com.example.baseballscoresheet.services.LeagueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.security.RolesAllowed;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/league")
 public class LeagueController {
+
+    private final LeagueService leagueService;
+    private final MappingService mappingService;
+
+    public LeagueController(LeagueService leagueService, MappingService mappingService) {
+        this.leagueService = leagueService;
+        this.mappingService = mappingService;
+    }
 
     /*
     // Endpunkt zum Speichern einer neuen League
@@ -57,7 +67,13 @@ public class LeagueController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetLeagueDto>> findAllLeagues() {
-        return null;
+        List<LeagueEntity> allLeagueEntities = leagueService.readAll();
+        List<GetLeagueDto> allLeagueDtos = new LinkedList<>();
+
+        for (LeagueEntity leagueEntity : allLeagueEntities) {
+            allLeagueDtos.add(mappingService.mapLeagueEntityToGetLeagueDto(leagueEntity));
+        }
+        return new ResponseEntity<>(allLeagueDtos, HttpStatus.OK);
     }
 
     // Endpunkt, um Informationen zu einer bestimmten League abzurufen

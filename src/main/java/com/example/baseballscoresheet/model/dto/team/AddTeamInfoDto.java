@@ -1,9 +1,5 @@
 package com.example.baseballscoresheet.model.dto.team;
 
-import com.example.baseballscoresheet.model.AssociationEntity;
-import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
-import com.example.baseballscoresheet.model.dto.club.GetClubDto;
-import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -18,13 +14,13 @@ public class AddTeamInfoDto {
     private String name;
 
     @NotBlank(message = "Manager is obligatory")
-    private GetManagerDto manager;
+    private Long managerId;
 
     @NotBlank(message = "Club is obligatory")
-    private GetClubDto club;
+    private Long clubId;
 
-    @NotBlank(message = "Association is obligatory")
-    private GetAssociationDto association;
+    @NotBlank(message = "League is obligatory")
+    private Long leagueId;
 
     private String teamLogo;
 

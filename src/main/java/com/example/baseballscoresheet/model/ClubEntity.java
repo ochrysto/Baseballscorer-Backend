@@ -6,8 +6,6 @@ import lombok.*;
 
 import java.util.Set;
 
-//TODO bisschen mehr Infos, was ein Club ist / Unterscheidung von einem Team?
-
 /**
  * Die Klasse {@link ClubEntity} bildet ein Club-Objekt mit seinen dazugehörigen Attributen ab.
  * Ein Club ist ein Verein. Ein Verein kann mehrere Teams haben.

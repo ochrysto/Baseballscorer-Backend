@@ -62,5 +62,8 @@ public class TeamEntity {
     @OneToMany(mappedBy = "team")
     private Set<LineupEntity> lineups;
 
+    /**
+     *
+     */
     private String teamLogo;
 }

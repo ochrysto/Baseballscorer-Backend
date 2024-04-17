@@ -14,7 +14,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "game_history")
+@Table(name = "game_state")
 public class GameStateEntity {
 
     /**

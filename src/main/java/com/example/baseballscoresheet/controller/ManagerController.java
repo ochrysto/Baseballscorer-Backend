@@ -1,6 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.ManagerEntity;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
+import com.example.baseballscoresheet.services.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,11 +14,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/manager")
 public class ManagerController {
+
+    private final ManagerService managerService;
+    private final MappingService mappingService;
+
+    public ManagerController(ManagerService managerService, MappingService mappingService) {
+        this.managerService = managerService;
+        this.mappingService = mappingService;
+    }
 
     /*
     // Endpunkt zum Speichern eines neuen Managers
@@ -55,7 +67,13 @@ public class ManagerController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetManagerDto>> findAllManagers() {
-        return null;
+        List<ManagerEntity> allManagerEntities = managerService.readAll();
+        List<GetManagerDto> allManagerDtos = new LinkedList<>();
+
+        for (ManagerEntity manager : allManagerEntities) {
+            allManagerDtos.add(mappingService.mapManagerEntityToGetManagerDto(manager));
+        }
+        return new ResponseEntity<>(allManagerDtos, HttpStatus.OK);
     }
 
     // Endpunkt, um Informationen zu einem bestimmten Manager abzurufen

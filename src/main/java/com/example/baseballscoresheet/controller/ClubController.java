@@ -1,6 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.ClubEntity;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
+import com.example.baseballscoresheet.services.ClubService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -18,7 +22,15 @@ import java.util.List;
 @RequestMapping("/club")
 public class ClubController {
 
-    /*
+    private final ClubService clubService;
+    private final MappingService mappingService;
+
+    public ClubController(ClubService clubService, MappingService mappingService) {
+        this.clubService = clubService;
+        this.mappingService = mappingService;
+    }
+
+ /*
     // Endpunkt zum Speichern eines neuen Clubs
     @Operation(summary = "saves a new club")
     @ApiResponses(value = {
@@ -55,7 +67,13 @@ public class ClubController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetClubDto>> findAllClubs() {
-        return null;
+        List<ClubEntity> allClubEntities = clubService.readAll();
+        List<GetClubDto> allClubDtos = new LinkedList<>();
+
+        for (ClubEntity clubEntity : allClubEntities) {
+            allClubDtos.add(mappingService.mapClubEntityToGetClubDto(clubEntity));
+        }
+        return new ResponseEntity<>(allClubDtos, HttpStatus.OK);
     }
 
     // Endpunkt, um Informationen zu einem bestimmten Club abzurufen

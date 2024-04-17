@@ -5,8 +5,6 @@ import lombok.*;
 
 import java.util.Set;
 
-//TODO bisschen mehr Infos, was eine League ist?
-
 /**
  * Die Klasse {@link LeagueEntity} bildet ein League-Objekt mit seinen dazugehörigen Attributen ab.
  */

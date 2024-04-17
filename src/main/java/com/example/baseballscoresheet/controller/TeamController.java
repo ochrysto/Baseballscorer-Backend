@@ -1,9 +1,16 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.ClubEntity;
+import com.example.baseballscoresheet.model.LeagueEntity;
+import com.example.baseballscoresheet.model.ManagerEntity;
 import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
+import com.example.baseballscoresheet.services.ClubService;
+import com.example.baseballscoresheet.services.LeagueService;
+import com.example.baseballscoresheet.services.ManagerService;
 import com.example.baseballscoresheet.services.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,11 +33,18 @@ public class TeamController {
 
     private final MappingService mappingService;
     private final TeamService teamService;
+    private final ManagerService managerService;
+    private final ClubService clubService;
+    private final LeagueService leagueService;
 
     @Autowired
-    public TeamController(MappingService mappingService, TeamService teamService) {
+    public TeamController(MappingService mappingService, TeamService teamService, ManagerService managerService,
+                          ClubService clubService, LeagueService leagueService) {
         this.mappingService = mappingService;
         this.teamService = teamService;
+        this.managerService = managerService;
+        this.clubService = clubService;
+        this.leagueService = leagueService;
     }
 
     // Endpunkt zum Speichern eines neuen Teams
@@ -49,7 +63,40 @@ public class TeamController {
     @RolesAllowed("user")
     @PostMapping
     public ResponseEntity<GetTeamInfoDto> createTeam(@RequestBody @Valid AddTeamInfoDto addTeamInfoDto) {
-        TeamEntity teamEntity = this.mappingService.mapAddTeamDtoToTeamEntity(addTeamInfoDto);
+        ManagerEntity managerEntity;
+        ClubEntity clubEntity;
+        LeagueEntity leagueEntity;
+
+        // sucht anhand der übergebenen managerId nach Manager in DB
+        if (managerService.getManagerById(addTeamInfoDto.getManagerId()).isPresent()) {
+            // fügt ManagerEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
+            managerEntity = managerService.getManagerById(addTeamInfoDto.getManagerId()).get();
+        } else {
+            // wirft Exception, wenn kein passender Manager in DB gefunden wurde
+            throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + "was not found.");
+        }
+
+        // sucht anhand der übergebenen clubId nach Club in DB
+        if (clubService.getClubById(addTeamInfoDto.getClubId()).isPresent()) {
+            // fügt ClubEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
+            clubEntity = clubService.getClubById(addTeamInfoDto.getClubId()).get();
+        } else {
+            // wirft Exception, wenn kein passender Manager in DB gefunden wurde
+            throw new RessourceNotFoundException("Club with id " + addTeamInfoDto.getClubId() + "was not found.");
+        }
+
+        // sucht anhand der übergebenen managerId nach Manager in DB
+        if (leagueService.getLeagueById(addTeamInfoDto.getLeagueId()).isPresent()) {
+            // fügt LeagueEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
+            leagueEntity = leagueService.getLeagueById(addTeamInfoDto.getLeagueId()).get();
+        } else {
+            // wirft Exception, wenn kein passender Manager in DB gefunden wurde
+            throw new RessourceNotFoundException("League with id " + addTeamInfoDto.getLeagueId() + "was not found.");
+        }
+
+        // mappt TeamDto auf TeamEntity und speichert sie in Datenbank
+        TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
+                addTeamInfoDto, managerEntity, clubEntity, leagueEntity);
         teamEntity = this.teamService.createTeam(teamEntity);
         GetTeamInfoDto request = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);
         return new ResponseEntity<>(request, HttpStatus.OK);

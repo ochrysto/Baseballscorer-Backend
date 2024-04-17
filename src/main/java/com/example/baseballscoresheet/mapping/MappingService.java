@@ -1,64 +1,77 @@
 package com.example.baseballscoresheet.mapping;
 
 import com.example.baseballscoresheet.model.*;
+import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
 import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MappingService {
-    public TeamEntity mapAddTeamDtoToTeamEntity(AddTeamInfoDto addTeamInfoDto) {
+    public TeamEntity mapAddTeamInfoDtoToTeamEntity(AddTeamInfoDto addTeamInfoDto, ManagerEntity managerEntity,
+                                                    ClubEntity clubEntity, LeagueEntity leagueEntity) {
         var teamEntity = new TeamEntity();
 
         teamEntity.setName(addTeamInfoDto.getName());
-        teamEntity.setManager(mapManagerDtoToManagerEntity(addTeamInfoDto.getManager()));
-        teamEntity.setClub(mapClubDtoToClubEntity(addTeamInfoDto.getClub()));
-        teamEntity.setLeague(mapLeagueDtoToLeagueEntity(addTeamInfoDto.getAssociation().));
+        teamEntity.setManager(managerEntity);
+        teamEntity.setClub(clubEntity);
+        teamEntity.setLeague(leagueEntity);
         teamEntity.setTeamLogo(addTeamInfoDto.getTeamLogo());
 
-        //TODO mapAddTeamDtoToTeamEntity(AddTeamInfoDto addTeamInfoDto)
-
         return teamEntity;
-    }
-
-    private LeagueEntity mapLeagueDtoToLeagueEntity(GetLeagueDto leagueDto) {
-        var leagueEntity = new LeagueEntity();
-
-
-
-        //TODO mapLeagueDtoToLeagueEntity(GetLeagueDto leagueDto)
-
-        return leagueEntity;
-    }
-
-    private ClubEntity mapClubDtoToClubEntity(GetClubDto clubDto) {
-        var clubEntity = new ClubEntity();
-
-        //TODO mapClubDtoToClubEntity(GetClubDto clubDto)
-
-        return clubEntity;
     }
 
     public GetTeamInfoDto mapTeamToGetTeamInfoDto(TeamEntity teamEntity) {
         GetTeamInfoDto getTeamInfoDto = new GetTeamInfoDto();
 
         getTeamInfoDto.setName(teamEntity.getName());
-
-        //TODO mapTeamToGetTeamInfoDto(TeamEntity teamEntity)
+        getTeamInfoDto.setGetClubDto(mapClubEntityToGetClubDto(teamEntity.getClub()));
+        getTeamInfoDto.setGetManagerDto(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
+        getTeamInfoDto.setGetLeagueDto(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
+        getTeamInfoDto.setTeamLogo(teamEntity.getTeamLogo());
 
         return getTeamInfoDto;
     }
 
-    public ManagerEntity mapManagerDtoToManagerEntity(GetManagerDto managerDto) {
-        var managerEntity = new ManagerEntity();
+    public GetClubDto mapClubEntityToGetClubDto(ClubEntity clubEntity) {
+        GetClubDto getClubDto = new GetClubDto();
 
-        managerEntity.setFirstName(managerDto.getFirstName());
-        managerEntity.setLastName(managerDto.getLastName());
-        managerEntity.setEmail(managerDto.getEmail());
+        getClubDto.setName(clubEntity.getName());
+        getClubDto.setCity(getClubDto.getCity());
+        getClubDto.setEmail(getClubDto.getEmail());
+        getClubDto.setLogo(getClubDto.getLogo());
+        getClubDto.setAssociationDto(getClubDto.getAssociationDto());
 
-        //TODO mapManagerDtoToManagerEntity(GetManagerDto managerDto)
+        return getClubDto;
+    }
 
-        return managerEntity;
+    public GetManagerDto mapManagerEntityToGetManagerDto(ManagerEntity managerEntity) {
+        GetManagerDto getManagerDto = new GetManagerDto();
+
+        getManagerDto.setFirstName(managerEntity.getFirstName());
+        getManagerDto.setLastName(managerEntity.getLastName());
+        getManagerDto.setEmail(managerEntity.getEmail());
+
+        return getManagerDto;
+    }
+
+    public GetLeagueDto mapLeagueEntityToGetLeagueDto(LeagueEntity leagueEntity) {
+        GetLeagueDto getLeagueDto = new GetLeagueDto();
+
+        getLeagueDto.setName(leagueEntity.getName());
+        getLeagueDto.setAssociation(mapAssociationEntityToGetAssociationDto(leagueEntity.getAssociation()));
+
+        return getLeagueDto;
+    }
+
+    public GetAssociationDto mapAssociationEntityToGetAssociationDto(AssociationEntity associationEntity) {
+        GetAssociationDto associationDto = new GetAssociationDto();
+
+        associationDto.setName(associationDto.getName());
+
+        return associationDto;
     }
 }

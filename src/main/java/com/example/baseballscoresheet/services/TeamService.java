@@ -2,7 +2,9 @@ package com.example.baseballscoresheet.services;
 
 import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.repositories.TeamRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TeamService {
 
     private TeamRepository teamRepository;

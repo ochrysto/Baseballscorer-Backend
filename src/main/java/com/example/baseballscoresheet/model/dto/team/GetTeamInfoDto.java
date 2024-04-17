@@ -1,7 +1,7 @@
 package com.example.baseballscoresheet.model.dto.team;
 
-import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
+import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,14 +10,13 @@ import lombok.Setter;
 @Setter
 public class GetTeamInfoDto {
 
-    private GetAssociationDto association;
-
-    private GetClubDto club;
-
     private String name;
 
-    private String clubLogo;
+    private GetClubDto getClubDto;
 
-    private GetManagerDto manager;
+    private GetManagerDto getManagerDto;
 
+    private GetLeagueDto getLeagueDto;
+
+    private String teamLogo;
 }
