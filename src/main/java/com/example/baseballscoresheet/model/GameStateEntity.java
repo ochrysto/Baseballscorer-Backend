@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "game_state")
 public class GameStateEntity {
 

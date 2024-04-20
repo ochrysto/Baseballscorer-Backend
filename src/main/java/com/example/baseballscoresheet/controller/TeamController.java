@@ -26,9 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/team")
+@RequestMapping(value = "/team")
 public class TeamController {
 
     private final MappingService mappingService;
@@ -37,7 +36,6 @@ public class TeamController {
     private final ClubService clubService;
     private final LeagueService leagueService;
 
-    @Autowired
     public TeamController(MappingService mappingService, TeamService teamService, ManagerService managerService,
                           ClubService clubService, LeagueService leagueService) {
         this.mappingService = mappingService;
@@ -60,8 +58,8 @@ public class TeamController {
             @ApiResponse(responseCode = "500", description = "server error",
                     content = @Content)
     })
-    @RolesAllowed("user")
     @PostMapping
+    //@RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> createTeam(@RequestBody @Valid AddTeamInfoDto addTeamInfoDto) {
         ManagerEntity managerEntity;
         ClubEntity clubEntity;
@@ -73,10 +71,10 @@ public class TeamController {
             managerEntity = managerService.getManagerById(addTeamInfoDto.getManagerId()).get();
         } else {
             // wirft Exception, wenn kein passender Manager in DB gefunden wurde
-            throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + "was not found.");
+            throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + " was not found.");
         }
 
-        // sucht anhand der übergebenen clubId nach Club in DB
+        // sucht anhand der übergebenen clubId nach Club in DBe
         if (clubService.getClubById(addTeamInfoDto.getClubId()).isPresent()) {
             // fügt ClubEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
             clubEntity = clubService.getClubById(addTeamInfoDto.getClubId()).get();
@@ -84,6 +82,7 @@ public class TeamController {
             // wirft Exception, wenn kein passender Manager in DB gefunden wurde
             throw new RessourceNotFoundException("Club with id " + addTeamInfoDto.getClubId() + "was not found.");
         }
+
 
         // sucht anhand der übergebenen managerId nach Manager in DB
         if (leagueService.getLeagueById(addTeamInfoDto.getLeagueId()).isPresent()) {
@@ -95,11 +94,13 @@ public class TeamController {
         }
 
         // mappt TeamDto auf TeamEntity und speichert sie in Datenbank
-        TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
+        /*TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 addTeamInfoDto, managerEntity, clubEntity, leagueEntity);
         teamEntity = this.teamService.createTeam(teamEntity);
-        GetTeamInfoDto request = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);
-        return new ResponseEntity<>(request, HttpStatus.OK);
+        GetTeamInfoDto addedTeam = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);*/
+
+        GetTeamInfoDto addedTeam = new GetTeamInfoDto();
+        return new ResponseEntity<>(addedTeam, HttpStatus.CREATED);
     }
 
     // Endpunkt, um alle existierenden Teams abzurufen
@@ -178,6 +179,5 @@ public class TeamController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteTeamById(@PathVariable Long id) {
-
     }
 }

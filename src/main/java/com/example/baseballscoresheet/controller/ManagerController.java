@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/manager")
+@RequestMapping(value="/manager")
 public class ManagerController {
 
     private final ManagerService managerService;

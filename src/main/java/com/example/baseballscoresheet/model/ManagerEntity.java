@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "manager")
 public class ManagerEntity {
 

@@ -12,7 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "lineup_team_player")
 public class LineupTeamPlayerEntity {
     /**

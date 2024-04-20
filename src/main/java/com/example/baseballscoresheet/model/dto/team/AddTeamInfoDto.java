@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.model.dto.team;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,13 +14,13 @@ public class AddTeamInfoDto {
     @Size(max = 70, message = "Name must not exceed 70 characters")
     private String name;
 
-    @NotBlank(message = "Manager is obligatory")
+    @NotNull
     private Long managerId;
 
-    @NotBlank(message = "Club is obligatory")
+    @NotNull
     private Long clubId;
 
-    @NotBlank(message = "League is obligatory")
+    @NotNull
     private Long leagueId;
 
     private String teamLogo;

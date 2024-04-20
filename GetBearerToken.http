@@ -4,3 +4,4 @@ Content-Type: application/x-www-form-urlencoded
 
 # don't forgen to create a user in keycloak admin panel.
 grant_type=password&client_id=login-app&username=user1&password=password
+

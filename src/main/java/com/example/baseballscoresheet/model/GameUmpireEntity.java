@@ -11,7 +11,6 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "game_umpire")
 public class GameUmpireEntity {
 
