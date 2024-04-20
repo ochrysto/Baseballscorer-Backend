@@ -9,7 +9,6 @@ import java.util.Set;
  * Die Klasse {@link UmpireEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
  * Ein Umpire ist der Schiedsrichter des Spiels. Es kann mehr als einen Umpire pro Spiel geben.
  */
-@Data
 @Entity
 @Getter
 @Setter
