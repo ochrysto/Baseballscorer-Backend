@@ -10,7 +10,6 @@ import java.util.Set;
  * Die Klasse {@link PlayerEntity} bildet ein Spieler-Objekt mit seinen dazugehörigen Attributen ab.
  * Er ist Teilnehmer eines Spiels und Mitglied in einem Team.
  */
-@Data
 @Entity
 @Getter
 @Setter

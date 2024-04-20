@@ -12,7 +12,6 @@ import java.util.Set;
  * Die Klasse {@link GameEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
  * Ein Game-Objekt speichert sämtliche Daten und Informationen zu einem Spiel.
  */
-@Data
 @Entity
 @Getter
 @Setter

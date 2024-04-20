@@ -7,7 +7,6 @@ import lombok.*;
  * Die Klasse {@link ScorerEntity} bildet ein Scorer-Objekt mit seinen dazugehörigen Attributen ab.
  * Der Scorer erfasst aller relevanten Aktionen eines Spiels.
  */
-@Data
 @Entity
 @Getter
 @Setter

@@ -8,7 +8,6 @@ import java.util.Set;
 /**
  * Die Klasse {@link LeagueEntity} bildet ein League-Objekt mit seinen dazugehörigen Attributen ab.
  */
-@Data
 @Entity
 @Getter
 @Setter

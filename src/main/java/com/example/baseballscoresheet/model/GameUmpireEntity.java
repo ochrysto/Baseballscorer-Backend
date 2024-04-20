@@ -6,7 +6,6 @@ import lombok.*;
 /**
  * Die Klasse {@link GameUmpireEntity} bildet ein GameState-Objekt mit seinen dazugehörigen Attributen ab.
  */
-@Data
 @Entity
 @Getter
 @Setter

@@ -9,7 +9,6 @@ import java.util.Set;
  * Die Klasse {@link TeamEntity} bildet ein Team-Objekt mit seinen dazugehörigen Attributen ab.
  * Ein Team besteht aus mehreren Spielern.
  */
-@Data
 @Entity
 @Getter
 @Setter

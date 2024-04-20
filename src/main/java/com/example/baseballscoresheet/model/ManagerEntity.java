@@ -8,7 +8,6 @@ import lombok.*;
  * Nachdem ein Spiel beendet wurde, erhält der Manager des Teams die Auswertung und Dokumentation des Spiels als PDF.
  * Er ist der Trainer des Teams.
  */
-@Data
 @Entity
 @Getter
 @Setter

@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/team")
@@ -66,9 +67,10 @@ public class TeamController {
         LeagueEntity leagueEntity;
 
         // sucht anhand der übergebenen managerId nach Manager in DB
-        if (managerService.getManagerById(addTeamInfoDto.getManagerId()).isPresent()) {
+        Optional<ManagerEntity> managerOptional = managerService.getManagerById(addTeamInfoDto.getManagerId());
+        if (managerOptional.isPresent()) {
             // fügt ManagerEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
-            managerEntity = managerService.getManagerById(addTeamInfoDto.getManagerId()).get();
+            managerEntity = managerOptional.get();
         } else {
             // wirft Exception, wenn kein passender Manager in DB gefunden wurde
             throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + " was not found.");
@@ -77,7 +79,7 @@ public class TeamController {
         // sucht anhand der übergebenen clubId nach Club in DBe
         if (clubService.getClubById(addTeamInfoDto.getClubId()).isPresent()) {
             // fügt ClubEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
-            clubEntity = clubService.getClubById(addTeamInfoDto.getClubId()).get();
+            clubEntity = clubService.getClubById(addTeamInfoDto.getClubId()).orElse(null);
         } else {
             // wirft Exception, wenn kein passender Manager in DB gefunden wurde
             throw new RessourceNotFoundException("Club with id " + addTeamInfoDto.getClubId() + "was not found.");
@@ -87,7 +89,7 @@ public class TeamController {
         // sucht anhand der übergebenen managerId nach Manager in DB
         if (leagueService.getLeagueById(addTeamInfoDto.getLeagueId()).isPresent()) {
             // fügt LeagueEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
-            leagueEntity = leagueService.getLeagueById(addTeamInfoDto.getLeagueId()).get();
+            leagueEntity = leagueService.getLeagueById(addTeamInfoDto.getLeagueId()).orElse(null);
         } else {
             // wirft Exception, wenn kein passender Manager in DB gefunden wurde
             throw new RessourceNotFoundException("League with id " + addTeamInfoDto.getLeagueId() + "was not found.");

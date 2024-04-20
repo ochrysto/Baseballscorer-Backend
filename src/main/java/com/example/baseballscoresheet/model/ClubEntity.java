@@ -10,7 +10,6 @@ import java.util.Set;
  * Die Klasse {@link ClubEntity} bildet ein Club-Objekt mit seinen dazugehörigen Attributen ab.
  * Ein Club ist ein Verein. Ein Verein kann mehrere Teams haben.
  */
-@Data
 @Entity
 @Getter
 @Setter
