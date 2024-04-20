@@ -40,10 +40,10 @@ public class MappingService {
         GetClubDto getClubDto = new GetClubDto();
 
         getClubDto.setName(clubEntity.getName());
-        getClubDto.setCity(getClubDto.getCity());
-        getClubDto.setEmail(getClubDto.getEmail());
-        getClubDto.setLogo(getClubDto.getLogo());
-        getClubDto.setAssociationDto(getClubDto.getAssociationDto());
+        getClubDto.setCity(clubEntity.getCity());
+        getClubDto.setEmail(clubEntity.getEmail());
+        getClubDto.setLogo(clubEntity.getClubLogo());
+        getClubDto.setAssociationDto(mapAssociationEntityToGetAssociationDto(clubEntity.getAssociation()));
 
         return getClubDto;
     }
@@ -70,7 +70,7 @@ public class MappingService {
     public GetAssociationDto mapAssociationEntityToGetAssociationDto(AssociationEntity associationEntity) {
         GetAssociationDto associationDto = new GetAssociationDto();
 
-        associationDto.setName(associationDto.getName());
+        associationDto.setName(associationEntity.getName());
 
         return associationDto;
     }

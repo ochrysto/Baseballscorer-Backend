@@ -95,20 +95,20 @@ VALUES (1, 000001, 'Dieter', 'Bohlen');
 INSERT INTO umpire(id, passnumber, first_name, last_name)
 VALUES (2, 000002, 'Sebastian', 'Fitzek');
 
-INSERT INTO team(id, name, club_id, league_id, manager_id)
-VALUES (1, 'Mannheimer Maulwürfe', 1, 1, 2);
-INSERT INTO team(id, name, club_id, league_id, manager_id)
-VALUES (2, 'Paderborner Pinguine', 2, 1, 3);
-INSERT INTO team(id, name, club_id, league_id, manager_id)
-VALUES (3, 'Mainzer Mäuse', 3, 2, 4);
-INSERT INTO team(id, name, club_id, league_id, manager_id)
-VALUES (4, 'Berliner Bären', 4, 2, 5);
-INSERT INTO team(id, name, club_id, league_id, manager_id)
-VALUES (5, 'Bonner Blindschleichen', 5, 3, 6);
-INSERT INTO team(id, name, club_id, league_id, manager_id)
-VALUES (6, 'Solinger Schnabeltiere', 6, 3, 7);
-INSERT INTO team(id, name, club_id, league_id, manager_id)
-VALUES (7, 'Heidenheimer Hasen', 7, 1, 1);
+-- INSERT INTO team(id, name, club_id, league_id, manager_id)
+-- VALUES (1, 'Mannheimer Maulwürfe', 1, 1, 2);
+-- INSERT INTO team(id, name, club_id, league_id, manager_id)
+-- VALUES (2, 'Paderborner Pinguine', 2, 1, 3);
+-- INSERT INTO team(id, name, club_id, league_id, manager_id)
+-- VALUES (3, 'Mainzer Mäuse', 3, 2, 4);
+-- INSERT INTO team(id, name, club_id, league_id, manager_id)
+-- VALUES (4, 'Berliner Bären', 4, 2, 5);
+-- INSERT INTO team(id, name, club_id, league_id, manager_id)
+-- VALUES (5, 'Bonner Blindschleichen', 5, 3, 6);
+-- INSERT INTO team(id, name, club_id, league_id, manager_id)
+-- VALUES (6, 'Solinger Schnabeltiere', 6, 3, 7);
+-- INSERT INTO team(id, name, club_id, league_id, manager_id)
+-- VALUES (7, 'Heidenheimer Hasen', 7, 1, 1);
 
 INSERT INTO lineup(id, team_id)
 VALUES(1,1);
