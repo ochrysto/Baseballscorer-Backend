@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +45,7 @@ public class TeamController {
         this.leagueService = leagueService;
     }
 
-    // Endpunkt zum Speichern eines neuen Teams
+    // Endpoint for saving a new team
     @Operation(summary = "saves a new team")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created team",
@@ -66,38 +65,37 @@ public class TeamController {
         ClubEntity clubEntity;
         LeagueEntity leagueEntity;
 
-        // sucht anhand der übergebenen managerId nach Manager in DB
+        // searches for managers in DB using the managerId
         Optional<ManagerEntity> managerOptional = managerService.getManagerById(addTeamInfoDto.getManagerId());
         if (managerOptional.isPresent()) {
-            // fügt ManagerEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
+            // adds ManagerEntity to TeamEntity if a DB entry is found
             managerEntity = managerOptional.get();
         } else {
-            // wirft Exception, wenn kein passender Manager in DB gefunden wurde
+            // throws exception if no suitable manager was found in DB
             throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + " was not found.");
         }
 
-        // sucht anhand der übergebenen clubId nach Club in DBe
+        // searches for clubs in DB using the clubId
         Optional<ClubEntity> clubOptional = clubService.getClubById(addTeamInfoDto.getClubId());
         if (clubOptional.isPresent()) {
-            // fügt ClubEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
+            // adds ClubEntity to TeamEntity if a DB entry is found
             clubEntity = clubOptional.get();
         } else {
-            // wirft Exception, wenn kein passender Manager in DB gefunden wurde
+            // throws exception if no suitable club was found in DB
             throw new RessourceNotFoundException("Club with id " + addTeamInfoDto.getClubId() + "was not found.");
         }
 
-
-        // sucht anhand der übergebenen managerId nach Manager in DB
+        // searches for leagues in DB using the leagueId
         Optional<LeagueEntity> leagueOptional = leagueService.getLeagueById(addTeamInfoDto.getLeagueId());
         if (leagueOptional.isPresent()) {
-            // fügt LeagueEntity bei gefundenen DB-Eintrag zur TeamEntity hinzu
+            // adds LeagueEntity to TeamEntity if a DB entry is found
             leagueEntity = leagueOptional.get();
         } else {
-            // wirft Exception, wenn kein passender Manager in DB gefunden wurde
+            // throws exception if no suitable league was found in DB
             throw new RessourceNotFoundException("League with id " + addTeamInfoDto.getLeagueId() + "was not found.");
         }
 
-        // mappt TeamDto auf TeamEntity und speichert sie in Datenbank
+        // maps TeamDto to TeamEntity and saves it in the database
         TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 addTeamInfoDto, managerEntity, clubEntity, leagueEntity);
         teamEntity = this.teamService.createTeam(teamEntity);
@@ -107,7 +105,7 @@ public class TeamController {
         return new ResponseEntity<>(addedTeam, HttpStatus.CREATED);
     }
 
-    // Endpunkt, um alle existierenden Teams abzurufen
+    // Endpoint to retrieve all existing teams
     @Operation(summary = "retrieve all existing teams")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "teams found",
@@ -124,9 +122,11 @@ public class TeamController {
     @RolesAllowed("user")
     public ResponseEntity<List<GetTeamInfoDto>> findAllTeams() {
         return null;
+
+        // TODO
     }
 
-    // Endpunkt, um Informationen zu einem bestimmten Team abzurufen
+    // Endpoint to retrieve information about a specific team by id
     @Operation(summary = "retrieve all information of a specific team")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "team found",
@@ -143,9 +143,11 @@ public class TeamController {
     @RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long id) {
         return null;
+
+        //TODO
     }
 
-    // Endpunkt zum Updaten eines existierenden Teams
+    // Endpoint for updating an existing team by id
     @Operation(summary = "updates a existing team",
             description = "team must exist")
     @ApiResponses(value = {
@@ -166,9 +168,11 @@ public class TeamController {
     public ResponseEntity<GetTeamInfoDto> updateTeam(@PathVariable final Long id,
                                                      @Valid @RequestBody final AddTeamInfoDto updateTeamDto) {
         return null;
+
+        // TODO
     }
 
-    // Endpunkt, um ein existierendes Team zu löschen
+    // Endpoint to delete an existing team by id
     @Operation(summary = "deletes team by id",
             description = "team must exist")
     @ApiResponses(value = {
@@ -183,5 +187,8 @@ public class TeamController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteTeamById(@PathVariable Long id) {
+
+        // TODO
+
     }
 }
