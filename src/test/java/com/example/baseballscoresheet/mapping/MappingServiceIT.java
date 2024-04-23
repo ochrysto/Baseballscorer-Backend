@@ -1,4 +1,4 @@
-package com.example.baseballscoresheet;
+package com.example.baseballscoresheet.mapping;
 
 import com.example.baseballscoresheet.model.ClubEntity;
 import com.example.baseballscoresheet.model.LeagueEntity;
@@ -11,7 +11,6 @@ import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
