@@ -36,7 +36,7 @@ public class TeamEntity {
     /**
      * Manager des Teams.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private ManagerEntity manager;
 
