@@ -17,7 +17,7 @@ public class AddPlayerInfoDto {
     private String lastName;
 
     @NotNull
-    @Min(value = 00000000)
+    @Min(value = 0)
     @Max(value = 99999999)
     private Integer passnumber;
 }

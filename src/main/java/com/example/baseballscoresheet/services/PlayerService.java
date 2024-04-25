@@ -21,10 +21,6 @@ public class PlayerService {
         return this.playerRepository.save(newPlayer);
     }
 
-    public Optional<PlayerEntity> findPlayerById(Long id) {
-        return this.playerRepository.findById(id);
-    }
-
     public Optional<PlayerEntity> getPlayerById(Long playerId) {
         return this.playerRepository.findById(playerId);
     }

@@ -51,7 +51,7 @@ public class MappingService {
     }
 
     public GetClubDto mapClubEntityToGetClubDto(ClubEntity clubEntity) {
-        GetClubDto getClubDto = new GetClubDto();
+        GetClubDto getClubDto;
 
         getClubDto = this.mapper.map(clubEntity, GetClubDto.class);
         getClubDto.setAssociationDto(mapAssociationEntityToGetAssociationDto(clubEntity.getAssociation()));
@@ -64,7 +64,7 @@ public class MappingService {
     }
 
     public GetLeagueDto mapLeagueEntityToGetLeagueDto(LeagueEntity leagueEntity) {
-        GetLeagueDto getLeagueDto = new GetLeagueDto();
+        GetLeagueDto getLeagueDto;
 
         getLeagueDto = this.mapper.map(leagueEntity, GetLeagueDto.class);
         getLeagueDto.setAssociation(mapAssociationEntityToGetAssociationDto(leagueEntity.getAssociation()));
