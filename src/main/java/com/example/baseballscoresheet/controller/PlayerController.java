@@ -119,10 +119,12 @@ public class PlayerController {
     @RolesAllowed("user")
     public ResponseEntity<GetPlayerInfoDto> updatePlayer(@PathVariable final Long id,
                                                          @Valid @RequestBody final AddPlayerInfoDto addPlayerInfoDto) {
-
-        // TODO updatePlayer Endpunkt
-
-        return null;
+        GetPlayerInfoDto updatedTeamDto;
+        PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(addPlayerInfoDto);
+        updatedPlayerEntity.setId(id);
+        updatedPlayerEntity = this.playerService.update(updatedPlayerEntity);
+        updatedTeamDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(updatedPlayerEntity);
+        return new ResponseEntity<>(updatedTeamDto, HttpStatus.CREATED);
     }
 
     // Endpunkt, um einen existierenden Player zu löschen

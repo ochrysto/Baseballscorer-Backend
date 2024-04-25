@@ -12,7 +12,7 @@ public class Utility {
 
     public static PlayerEntity returnPlayerIfExists(Long playerId) {
         PlayerEntity playerEntity;
-        Optional<PlayerEntity> playerOptional = playerService.getPlayerById(playerId);
+        Optional<PlayerEntity> playerOptional = playerService.findPlayerById(playerId);
         if (playerOptional.isPresent()) {
             // adds ManagerEntity to TeamEntity if a DB entry is found
             playerEntity = playerOptional.get();
