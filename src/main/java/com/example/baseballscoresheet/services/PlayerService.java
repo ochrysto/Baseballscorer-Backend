@@ -5,6 +5,8 @@ import com.example.baseballscoresheet.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PlayerService {
 
@@ -17,5 +19,12 @@ public class PlayerService {
 
     public PlayerEntity createPlayer(PlayerEntity newPlayer) {
         return this.playerRepository.save(newPlayer);
+    }
+
+    public Optional<PlayerEntity> findPlayerById(Long id) {
+        return this.playerRepository.findById(id);
+    }
+
+    public Optional<PlayerEntity> getPlayerById(Long playerId) {
     }
 }

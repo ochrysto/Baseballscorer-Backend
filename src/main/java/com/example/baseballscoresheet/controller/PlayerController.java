@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.PlayerEntity;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
@@ -88,7 +89,11 @@ public class PlayerController {
     @GetMapping("/{id}")
     @RolesAllowed("user")
     public ResponseEntity<GetPlayerInfoDto> findPlayerById(@PathVariable Long id) {
-        return null;
+        PlayerEntity playerEntity;
+        // searches and returns player in DB using playerId
+        playerEntity = Utility.returnPlayerIfExists(id);
+        GetPlayerInfoDto getPlayerInfoDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
+        return new ResponseEntity<>(getPlayerInfoDto, HttpStatus.OK);
     }
 
     // Endpunkt zum Updaten eines existierenden Players
