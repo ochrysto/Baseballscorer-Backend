@@ -29,7 +29,7 @@ public class PlayerEntity {
      * Jeder Spieler hat eine eigene eindeutige Passnummer.
      */
     @Column(name = "passnumber", unique = true)
-    private Long passnumber;
+    private Integer passnumber;
 
     /**
      * Vorname eines Spielers.

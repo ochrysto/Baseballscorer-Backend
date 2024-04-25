@@ -1,7 +1,10 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.model.dto.player.GetPlayerDto;
-import com.example.baseballscoresheet.model.dto.player.UpdatePlayerDto;
+import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.PlayerEntity;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
+import com.example.baseballscoresheet.services.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,13 +22,15 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
 
-    /*
+    private MappingService mappingService;
+    private PlayerService playerService;
+
     // Endpunkt zum Speichern eines neuen Players
     @Operation(summary = "saves a new player")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created player",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "not authorized",
@@ -35,17 +40,21 @@ public class PlayerController {
     })
     @RolesAllowed("user")
     @PostMapping
-    public ResponseEntity<GetPlayerDto> createPlayer(@RequestBody @Valid AddPlayerDto newPlayer) {
-        return null;
+    public ResponseEntity<GetPlayerInfoDto> createPlayer(@RequestBody @Valid AddPlayerInfoDto newPlayer) {
+        // maps PlayerDto to PlayerEntity
+        PlayerEntity playerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(newPlayer);
+        // saves Player in DB
+        playerEntity = this.playerService.createPlayer(playerEntity);
+        GetPlayerInfoDto addedPlayer = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
+        return new ResponseEntity<>(addedPlayer, HttpStatus.CREATED);
     }
-    */
 
     // Endpunkt, um alle existierenden Player abzurufen
     @Operation(summary = "retrieve all existing players")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "players found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "players not found",
@@ -55,7 +64,10 @@ public class PlayerController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetPlayerDto>> findAllPlayers() {
+    public ResponseEntity<List<GetPlayerInfoDto>> findAllPlayers() {
+
+        //TODO findAllPlayers Endpunkt
+
         return null;
     }
 
@@ -65,7 +77,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "player found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "player not found",
@@ -75,7 +87,7 @@ public class PlayerController {
     })
     @GetMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetPlayerDto> findPlayerById(@PathVariable Long id) {
+    public ResponseEntity<GetPlayerInfoDto> findPlayerById(@PathVariable Long id) {
         return null;
     }
 
@@ -85,7 +97,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "player found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
             @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
@@ -97,8 +109,11 @@ public class PlayerController {
     })
     @PutMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetPlayerDto> updatePlayer(@PathVariable final Long id,
-                                                     @Valid @RequestBody final UpdatePlayerDto updatePlayerDto) {
+    public ResponseEntity<GetPlayerInfoDto> updatePlayer(@PathVariable final Long id,
+                                                         @Valid @RequestBody final AddPlayerInfoDto addPlayerInfoDto) {
+
+        // TODO updatePlayer Endpunkt
+
         return null;
     }
 
@@ -117,6 +132,8 @@ public class PlayerController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deletePlayerById(@PathVariable Long id) {
+
+        // TODO deletePlayerById Endpunkt
 
     }
 }

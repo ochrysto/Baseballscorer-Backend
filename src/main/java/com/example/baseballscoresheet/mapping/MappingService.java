@@ -5,6 +5,8 @@ import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
 import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
+import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import org.modelmapper.ModelMapper;
@@ -72,5 +74,21 @@ public class MappingService {
 
     public GetAssociationDto mapAssociationEntityToGetAssociationDto(AssociationEntity associationEntity) {
         return this.mapper.map(associationEntity, GetAssociationDto.class);
+    }
+
+    public PlayerEntity mapAddPlayerInfoDtoToPlayerEntity(AddPlayerInfoDto newPlayer) {
+        PlayerEntity playerEntity = new PlayerEntity();
+        playerEntity.setFirstName(newPlayer.getFirstName());
+        playerEntity.setLastName(newPlayer.getLastName());
+        playerEntity.setPassnumber(newPlayer.getPassnumber());
+        return playerEntity;
+    }
+
+    public GetPlayerInfoDto mapPlayerEntityToGetPlayerInfoDto(PlayerEntity playerEntity) {
+        GetPlayerInfoDto getPlayerInfoDto = new GetPlayerInfoDto();
+        getPlayerInfoDto.setFirstName(playerEntity.getFirstName());
+        getPlayerInfoDto.setLastName(playerEntity.getLastName());
+        getPlayerInfoDto.setPassnumber(playerEntity.getPassnumber());
+        return getPlayerInfoDto;
     }
 }

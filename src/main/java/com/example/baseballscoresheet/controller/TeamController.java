@@ -121,9 +121,10 @@ public class TeamController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetTeamInfoDto>> findAllTeams() {
-        return null;
 
-        // TODO
+        // TODO findAllTeams - Endpunkt
+
+        return null;
     }
 
     // Endpoint to retrieve information about a specific team by id
@@ -144,7 +145,7 @@ public class TeamController {
     public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long id) {
         return null;
 
-        //TODO
+        //TODO findTeamById - Endpunkt
     }
 
     // Endpoint for updating an existing team by id
@@ -165,11 +166,11 @@ public class TeamController {
     })
     @PutMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetTeamInfoDto> updateTeam(@PathVariable final Long id,
-                                                     @Valid @RequestBody final AddTeamInfoDto updateTeamDto) {
+    public ResponseEntity<GetTeamInfoDto> updateTeamInfo(@PathVariable final Long id,
+                                                         @Valid @RequestBody final AddTeamInfoDto updateTeamDto) {
         return null;
 
-        // TODO
+        // TODO updateTeamInfo - Endpunkt
     }
 
     // Endpoint to delete an existing team by id
@@ -188,7 +189,7 @@ public class TeamController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteTeamById(@PathVariable Long id) {
 
-        // TODO
+        // TODO deleteTeamById - Endpunkt
 
     }
 }
