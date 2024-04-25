@@ -28,8 +28,7 @@ public class PlayerEntity {
      * Aktuelle Passnummer eines Spielers.
      * Jeder Spieler hat eine eigene eindeutige Passnummer.
      */
-    @Column(name = "passnumber")
-    //Unique
+    @Column(name = "passnumber", unique = true)
     private Long passnumber;
 
     /**
