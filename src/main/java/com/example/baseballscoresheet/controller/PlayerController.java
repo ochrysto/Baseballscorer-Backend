@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -66,10 +67,12 @@ public class PlayerController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetPlayerInfoDto>> findAllPlayers() {
-
-        //TODO findAllPlayers Endpunkt
-
-        return null;
+        List<PlayerEntity> playerEntities = this.playerService.findAllPlayers();
+        List<GetPlayerInfoDto> playerDtos = new LinkedList<>();
+        for (PlayerEntity playerEntity : playerEntities) {
+            playerDtos.add(this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity));
+        }
+        return new ResponseEntity<>(playerDtos, HttpStatus.OK);
     }
 
 
