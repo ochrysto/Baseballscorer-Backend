@@ -26,5 +26,6 @@ public class PlayerService {
     }
 
     public Optional<PlayerEntity> getPlayerById(Long playerId) {
+        return this.playerRepository.findById(playerId);
     }
 }
