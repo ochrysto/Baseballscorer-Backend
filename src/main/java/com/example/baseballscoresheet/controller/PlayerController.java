@@ -24,8 +24,13 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
 
-    private MappingService mappingService;
-    private PlayerService playerService;
+    private final MappingService mappingService;
+    private final PlayerService playerService;
+
+    public PlayerController(MappingService mappingService, PlayerService playerService) {
+        this.mappingService = mappingService;
+        this.playerService = playerService;
+    }
 
     // Endpunkt zum Speichern eines neuen Players
     @Operation(summary = "saves a new player")
@@ -119,12 +124,12 @@ public class PlayerController {
     @RolesAllowed("user")
     public ResponseEntity<GetPlayerInfoDto> updatePlayer(@PathVariable final Long id,
                                                          @Valid @RequestBody final AddPlayerInfoDto addPlayerInfoDto) {
-        GetPlayerInfoDto updatedTeamDto;
+        GetPlayerInfoDto updatedPlayerDto;
         PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(addPlayerInfoDto);
         updatedPlayerEntity.setId(id);
         updatedPlayerEntity = this.playerService.update(updatedPlayerEntity);
-        updatedTeamDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(updatedPlayerEntity);
-        return new ResponseEntity<>(updatedTeamDto, HttpStatus.CREATED);
+        updatedPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(updatedPlayerEntity);
+        return new ResponseEntity<>(updatedPlayerDto, HttpStatus.CREATED);
     }
 
     // Endpunkt, um einen existierenden Player zu löschen

@@ -86,6 +86,7 @@ public class MappingService {
 
     public GetPlayerInfoDto mapPlayerEntityToGetPlayerInfoDto(PlayerEntity playerEntity) {
         GetPlayerInfoDto getPlayerInfoDto = new GetPlayerInfoDto();
+        getPlayerInfoDto.setId(playerEntity.getId());
         getPlayerInfoDto.setFirstName(playerEntity.getFirstName());
         getPlayerInfoDto.setLastName(playerEntity.getLastName());
         getPlayerInfoDto.setPassnumber(playerEntity.getPassnumber());

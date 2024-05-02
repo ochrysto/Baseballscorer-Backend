@@ -39,7 +39,7 @@ public class PlayerService {
             updatedPlayer = this.findPlayerById(updatedPlayerEntity.getId()).get();
             updatedPlayer.setFirstName(updatedPlayerEntity.getFirstName());
             updatedPlayer.setLastName(updatedPlayerEntity.getLastName());
-            updatedPlayer.setPassnumber(updatedPlayer.getPassnumber());
+            updatedPlayer.setPassnumber(updatedPlayerEntity.getPassnumber());
             this.playerRepository.save(updatedPlayer);
             return updatedPlayer;
         }

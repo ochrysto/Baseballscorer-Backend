@@ -3,12 +3,20 @@ package com.example.baseballscoresheet;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.PlayerEntity;
 import com.example.baseballscoresheet.services.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class Utility {
 
     private static PlayerService playerService;
+
+    @Autowired
+    public void setPlayerService(PlayerService playerService) {
+        Utility.playerService = playerService;
+    }
 
     public static PlayerEntity returnPlayerIfExists(Long playerId) {
         PlayerEntity playerEntity;
