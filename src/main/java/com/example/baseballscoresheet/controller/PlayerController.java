@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.PlayerEntity;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
@@ -146,9 +147,16 @@ public class PlayerController {
     @DeleteMapping("/{id}")
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deletePlayerById(@PathVariable Long id) {
-
-        // TODO deletePlayerById Endpunkt
-
+    public ResponseEntity<Object> deletePlayerById(@PathVariable Long id) {
+        if (id != null || id != 0) {
+            if (playerService.findPlayerById(id).isPresent()) {
+                this.playerService.delete(id);
+            } else {
+                throw new RessourceNotFoundException("Player with id: " + id + " not found");
+            }
+        } else {
+            throw new RessourceNotFoundException("Id not valid.");
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

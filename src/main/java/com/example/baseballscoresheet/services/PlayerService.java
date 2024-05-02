@@ -44,4 +44,8 @@ public class PlayerService {
             return updatedPlayer;
         }
     }
+
+    public void delete(Long id) {
+        this.playerRepository.deleteById(id);
+    }
 }
