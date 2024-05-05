@@ -4,6 +4,7 @@ import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.*;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.services.ClubService;
@@ -166,9 +167,26 @@ public class TeamController {
     @RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> updateTeamInfo(@PathVariable final Long id,
                                                          @Valid @RequestBody final AddTeamInfoDto updateTeamDto) {
-        return null;
+        ManagerEntity managerEntity;
+        ClubEntity clubEntity;
+        LeagueEntity leagueEntity;
 
-        // TODO updateTeamInfo - Endpunkt
+        // searches for managers in DB using the managerId
+        managerEntity = Utility.returnManagerIfExists(updateTeamDto.getManagerId());
+
+        // searches for clubs in DB using the clubId
+        clubEntity = Utility.returnClubIfExists(updateTeamDto.getClubId());
+
+        // searches for leagues in DB using the leagueId
+        leagueEntity = Utility.returnLeagueIfExists(updateTeamDto.getLeagueId());
+
+        // maps TeamDto to TeamEntity and saves it in the database
+        TeamEntity updatedTeamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
+                updateTeamDto, managerEntity, clubEntity, leagueEntity);
+        updatedTeamEntity.setId(id);
+        updatedTeamEntity = this.teamService.update(updatedTeamEntity);
+        GetTeamInfoDto updatedTeamDto = this.mappingService.mapTeamToGetTeamInfoDto(updatedTeamEntity);
+        return new ResponseEntity<>(updatedTeamDto, HttpStatus.CREATED);
     }
 
     // Endpoint to delete an existing team by id

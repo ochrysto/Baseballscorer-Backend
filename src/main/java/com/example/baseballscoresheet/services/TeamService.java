@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.ManagerEntity;
 import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.repositories.TeamRepository;
@@ -40,5 +41,21 @@ public class TeamService {
 
     public Optional<TeamEntity> findTeamById(Long id) {
         return this.teamRepository.findById(id);
+    }
+
+    public TeamEntity update(TeamEntity updatedTeamEntity) {
+        TeamEntity updatedTeam;
+        if (this.teamRepository.findById(updatedTeamEntity.getId()).isEmpty()) {
+            throw new RessourceNotFoundException("Team with the id = " + updatedTeamEntity.getId() + " not found");
+        } else {
+            updatedTeam = this.findTeamById(updatedTeamEntity.getId()).get();
+            updatedTeam.setName(updatedTeamEntity.getName());
+            updatedTeam.setManager(updatedTeamEntity.getManager());
+            updatedTeam.setClub(updatedTeamEntity.getClub());
+            updatedTeam.setLeague(updatedTeamEntity.getLeague());
+            updatedTeam.setTeamLogo(updatedTeamEntity.getTeamLogo());
+            this.teamRepository.save(updatedTeam);
+            return updatedTeam;
+        }
     }
 }
