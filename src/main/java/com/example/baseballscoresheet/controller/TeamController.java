@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.*;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.services.ClubService;
@@ -73,7 +73,6 @@ public class TeamController {
             // throws exception if no suitable manager was found in DB
             throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + " was not found.");
         }
-
         // searches for clubs in DB using the clubId
         Optional<ClubEntity> clubOptional = clubService.getClubById(addTeamInfoDto.getClubId());
         if (clubOptional.isPresent()) {
@@ -83,7 +82,6 @@ public class TeamController {
             // throws exception if no suitable club was found in DB
             throw new RessourceNotFoundException("Club with id " + addTeamInfoDto.getClubId() + "was not found.");
         }
-
         // searches for leagues in DB using the leagueId
         Optional<LeagueEntity> leagueOptional = leagueService.getLeagueById(addTeamInfoDto.getLeagueId());
         if (leagueOptional.isPresent()) {
@@ -93,14 +91,11 @@ public class TeamController {
             // throws exception if no suitable league was found in DB
             throw new RessourceNotFoundException("League with id " + addTeamInfoDto.getLeagueId() + "was not found.");
         }
-
         // maps TeamDto to TeamEntity and saves it in the database
         TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 addTeamInfoDto, managerEntity, clubEntity, leagueEntity);
         teamEntity = this.teamService.createTeam(teamEntity);
-
         GetTeamInfoDto addedTeam = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);
-
         return new ResponseEntity<>(addedTeam, HttpStatus.CREATED);
     }
 
@@ -120,7 +115,6 @@ public class TeamController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetTeamInfoDto>> findAllTeams() {
-
         List<TeamEntity> teamEntities = this.teamService.findAll();
         List<GetTeamInfoDto> teamDtos = new LinkedList<>();
         for (TeamEntity teamEntity : teamEntities) {
@@ -145,9 +139,11 @@ public class TeamController {
     @GetMapping("/{id}")
     @RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long id) {
-        return null;
-
-        //TODO findTeamById - Endpunkt
+        TeamEntity teamEntity;
+        // searches and returns team using teamId
+        teamEntity = Utility.returnTeamIfExists(id);
+        GetTeamInfoDto getTeamInfoDto = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);
+        return new ResponseEntity<>(getTeamInfoDto, HttpStatus.OK);
     }
 
     // Endpoint for updating an existing team by id

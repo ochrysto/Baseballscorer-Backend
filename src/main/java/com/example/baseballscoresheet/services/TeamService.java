@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -35,5 +36,9 @@ public class TeamService {
             allManagersInTeams.add(teamEntity.getManager());
         }
         return allManagersInTeams;
+    }
+
+    public Optional<TeamEntity> findTeamById(Long id) {
+        return this.teamRepository.findById(id);
     }
 }
