@@ -58,4 +58,8 @@ public class TeamService {
             return updatedTeam;
         }
     }
+
+    public void delete(Long id) {
+        this.teamRepository.deleteById(id);
+    }
 }

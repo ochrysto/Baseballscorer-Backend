@@ -4,7 +4,6 @@ import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.*;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.services.ClubService;
@@ -203,9 +202,16 @@ public class TeamController {
     @DeleteMapping("/{id}")
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteTeamById(@PathVariable Long id) {
-
-        // TODO deleteTeamById - Endpunkt
-
+    public ResponseEntity<Object> deleteTeamById(@PathVariable Long id) {
+        if (id != null || id != 0) {
+            if (teamService.findTeamById(id).isPresent()) {
+                this.teamService.delete(id);
+            } else {
+                throw new RessourceNotFoundException("Team with id: " + id + " not found");
+            }
+        } else {
+            throw new RessourceNotFoundException("Id not valid.");
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
