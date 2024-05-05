@@ -2,10 +2,8 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.ClubEntity;
-import com.example.baseballscoresheet.model.LeagueEntity;
-import com.example.baseballscoresheet.model.ManagerEntity;
-import com.example.baseballscoresheet.model.TeamEntity;
+import com.example.baseballscoresheet.model.*;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.services.ClubService;
@@ -23,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,9 +121,12 @@ public class TeamController {
     @RolesAllowed("user")
     public ResponseEntity<List<GetTeamInfoDto>> findAllTeams() {
 
-        // TODO findAllTeams - Endpunkt
-
-        return null;
+        List<TeamEntity> teamEntities = this.teamService.findAll();
+        List<GetTeamInfoDto> teamDtos = new LinkedList<>();
+        for (TeamEntity teamEntity : teamEntities) {
+            teamDtos.add(this.mappingService.mapTeamToGetTeamInfoDto(teamEntity));
+        }
+        return new ResponseEntity<>(teamDtos, HttpStatus.OK);
     }
 
     // Endpoint to retrieve information about a specific team by id
