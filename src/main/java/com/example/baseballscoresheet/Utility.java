@@ -31,6 +31,12 @@ public class Utility {
         Utility.leagueService = leagueService;
     }
 
+    // prüft, ob der übergebene Spieler bereits einem Team zugeordnet ist
+    // gibt boolean zurück
+    public static boolean isPlayerAssignedToATeam(Long playerId) {
+        return playerService.isPlayerAssignedToATeam(playerId);
+    }
+
     public static ManagerEntity returnManagerIfExists(Long managerId) {
         ManagerEntity managerEntity;
         Optional<ManagerEntity> managerOptional = managerService.getManagerById(managerId);
