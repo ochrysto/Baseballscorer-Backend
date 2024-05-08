@@ -31,17 +31,18 @@ public class Utility {
         Utility.leagueService = leagueService;
     }
 
-    // prüft, ob der übergebene Spieler bereits einem Team zugeordnet ist
-    // gibt boolean zurück
+    // checks whether the transferred player is already assigned to a team
+    // returns boolean
     public static boolean isPlayerAssignedToATeam(Long playerId) {
         return playerService.isPlayerAssignedToATeam(playerId);
     }
 
+    // checks whether a manager with the transferred id exists in database
+    // returns this if the check is successful
     public static ManagerEntity returnManagerIfExists(Long managerId) {
         ManagerEntity managerEntity;
         Optional<ManagerEntity> managerOptional = managerService.getManagerById(managerId);
         if (managerOptional.isPresent()) {
-            // adds ManagerEntity to TeamEntity if a DB entry is found
             managerEntity = managerOptional.get();
         } else {
             // throws exception if no suitable manager was found in DB
@@ -50,11 +51,12 @@ public class Utility {
         return managerEntity;
     }
 
+    // checks whether a club with the transferred id exists in database
+    // returns this if the check is successful
     public static ClubEntity returnClubIfExists(Long clubId) {
         ClubEntity clubEntity;
         Optional<ClubEntity> clubOptional = clubService.getClubById(clubId);
         if (clubOptional.isPresent()) {
-            // adds ClubEntity to TeamEntity if a DB entry is found
             clubEntity = clubOptional.get();
         } else {
             // throws exception if no suitable club was found in DB
@@ -63,11 +65,12 @@ public class Utility {
         return clubEntity;
     }
 
+    // checks whether a league with the transferred id exists in database
+    // returns this if the check is successful
     public static LeagueEntity returnLeagueIfExists(Long leagueId) {
         LeagueEntity leagueEntity;
         Optional<LeagueEntity> leagueOptional = leagueService.getLeagueById(leagueId);
         if (leagueOptional.isPresent()) {
-            // adds LeagueEntity to TeamEntity if a DB entry is found
             leagueEntity = leagueOptional.get();
         } else {
             // throws exception if no suitable league was found in DB
@@ -76,6 +79,8 @@ public class Utility {
         return leagueEntity;
     }
 
+    // checks whether a team with the transferred id exists in database
+    // returns this if the check is successful
     public static TeamEntity returnTeamIfExists(Long id) {
         TeamEntity teamEntity;
         Optional<TeamEntity> teamOptional = teamService.findTeamById(id);
@@ -88,6 +93,8 @@ public class Utility {
         return teamEntity;
     }
 
+    // checks whether a player with the transferred id exists in database
+    // returns this if the check is successful
     public static PlayerEntity returnPlayerIfExists(Long playerId) {
         PlayerEntity playerEntity;
         Optional<PlayerEntity> playerOptional = playerService.findPlayerById(playerId);

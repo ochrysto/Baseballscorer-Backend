@@ -62,35 +62,34 @@ public class TeamController {
         ManagerEntity managerEntity;
         ClubEntity clubEntity;
         LeagueEntity leagueEntity;
-
-        // searches for managers in DB using the managerId
+        // searches for manager in DB using the managerId
         Optional<ManagerEntity> managerOptional = managerService.getManagerById(addTeamInfoDto.getManagerId());
         if (managerOptional.isPresent()) {
-            // adds ManagerEntity to TeamEntity if a DB entry is found
+            // adds ManagerEntity object to TeamEntity object if a DB entry is found
             managerEntity = managerOptional.get();
         } else {
             // throws exception if no suitable manager was found in DB
             throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + " was not found.");
         }
-        // searches for clubs in DB using the clubId
+        // searches for club in DB using the clubId
         Optional<ClubEntity> clubOptional = clubService.getClubById(addTeamInfoDto.getClubId());
         if (clubOptional.isPresent()) {
-            // adds ClubEntity to TeamEntity if a DB entry is found
+            // adds ClubEntity object to TeamEntity object if a DB entry is found
             clubEntity = clubOptional.get();
         } else {
             // throws exception if no suitable club was found in DB
             throw new RessourceNotFoundException("Club with id " + addTeamInfoDto.getClubId() + "was not found.");
         }
-        // searches for leagues in DB using the leagueId
+        // searches for league in DB using the leagueId
         Optional<LeagueEntity> leagueOptional = leagueService.getLeagueById(addTeamInfoDto.getLeagueId());
         if (leagueOptional.isPresent()) {
-            // adds LeagueEntity to TeamEntity if a DB entry is found
+            // adds LeagueEntity object to TeamEntity object if a DB entry is found
             leagueEntity = leagueOptional.get();
         } else {
             // throws exception if no suitable league was found in DB
             throw new RessourceNotFoundException("League with id " + addTeamInfoDto.getLeagueId() + "was not found.");
         }
-        // maps TeamDto to TeamEntity and saves it in the database
+        // maps TeamDto object to TeamEntity object and saves it in the database
         TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 addTeamInfoDto, managerEntity, clubEntity, leagueEntity);
         teamEntity = this.teamService.createTeam(teamEntity);
@@ -114,11 +113,15 @@ public class TeamController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetTeamInfoDto>> findAllTeams() {
+        // searches the database for all teams and adds them to a list
         List<TeamEntity> teamEntities = this.teamService.findAll();
         List<GetTeamInfoDto> teamDtos = new LinkedList<>();
+        // maps each TeamEntity object found from the list to a GetTeamInfoDto object
+        // adds each GetTeamInfoDto object to a list
         for (TeamEntity teamEntity : teamEntities) {
             teamDtos.add(this.mappingService.mapTeamToGetTeamInfoDto(teamEntity));
         }
+        // returns a list with GetTeamInfoDto objects
         return new ResponseEntity<>(teamDtos, HttpStatus.OK);
     }
 
@@ -139,9 +142,11 @@ public class TeamController {
     @RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long id) {
         TeamEntity teamEntity;
-        // searches and returns team using teamId
+        // search for team by id in the database
         teamEntity = Utility.returnTeamIfExists(id);
+        // maps the found team entity object to a GetTeamInfoDto object
         GetTeamInfoDto getTeamInfoDto = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);
+        // returns the mapped GetTeamInfoDto object
         return new ResponseEntity<>(getTeamInfoDto, HttpStatus.OK);
     }
 
@@ -168,17 +173,24 @@ public class TeamController {
         ManagerEntity managerEntity;
         ClubEntity clubEntity;
         LeagueEntity leagueEntity;
-        // searches for managers in DB using the managerId
+        // searches for manager in DB using the managerId
         managerEntity = Utility.returnManagerIfExists(updateTeamDto.getManagerId());
-        // searches for clubs in DB using the clubId
+        // searches for club in DB using the clubId
         clubEntity = Utility.returnClubIfExists(updateTeamDto.getClubId());
-        // searches for leagues in DB using the leagueId
+        // searches for league in DB using the leagueId
         leagueEntity = Utility.returnLeagueIfExists(updateTeamDto.getLeagueId());
-        // maps TeamDto to TeamEntity and saves it in the database
+
+        // maps all information and the id to a TeamEntity object
         TeamEntity updatedTeamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 updateTeamDto, managerEntity, clubEntity, leagueEntity);
         updatedTeamEntity.setId(id);
+        // the mapped TeamEntity object is passed on to the TeamService
+        // the service checks whether the TeamEntity object that is to be updated in the database actually exists in the database
+        // if not, a ResourceNotFoundException is thrown
+        // if the corresponding TeamEntity object is found, its attribute values are updated with the attribute values of the transferred TeamEntity object
+        // the updated TeamEntity object is stored in the database
         updatedTeamEntity = this.teamService.update(updatedTeamEntity);
+        // the mapped TeamEntity object is mapped to a GetTeamInfoDto object and returned
         GetTeamInfoDto updatedTeamDto = this.mappingService.mapTeamToGetTeamInfoDto(updatedTeamEntity);
         return new ResponseEntity<>(updatedTeamDto, HttpStatus.CREATED);
     }
@@ -198,28 +210,21 @@ public class TeamController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deleteTeamById(@PathVariable Long id) {
-        if (id != null) {
-            if (teamService.findTeamById(id).isPresent()) {
-                this.teamService.delete(id);
-            } else {
-                throw new RessourceNotFoundException("Team with id: " + id + " not found");
-            }
+        // check whether the id is present in the database
+        if (teamService.findTeamById(id).isPresent()) {
+            // if yes, then the data record with the id is deleted
+            this.teamService.delete(id);
         } else {
-            throw new RessourceNotFoundException("Id not valid.");
+            // if not, then a ResourceNotFoundException is thrown
+            throw new RessourceNotFoundException("Team with id: " + id + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
-     * Endpoint for adding players to a team
-     *
-     * @param teamId     - id des Teams, zu dem Spieler hinzugefügt werden sollen
-     * @param playerList - Liste der Spieler Ids, die zum Team hinzugefügt werden sollen
-     * @return Objekt, das Informationen zum Team und die Spielerliste enthält
-     */
+    // Endpoint to add one or more players to a existing team
     @Operation(summary = "saves a new team")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "created team",
+            @ApiResponse(responseCode = "200", description = "added player(s) to team",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = GetTeamInfoDto.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
@@ -232,30 +237,36 @@ public class TeamController {
     @PostMapping("{teamId}")
     public ResponseEntity<GetTeamDto> addPlayersToTeam(@PathVariable Long teamId,
                                                        @RequestBody List<Long> playerList) {
-
-        // sucht nach Team mit der übergebenen teamId
-        // gibt Team zurück, wenn es gefunden wird
+        // searches for team data record with the passed id
+        // returns team when found
         TeamEntity teamEntity = Utility.returnTeamIfExists(teamId);
-        // erstellt neue Liste mit Player-Objekten
-        // iteriert über die übergebene Liste mit player ids
-        // sucht nach der id in DB
-        // gibt player zurück, wenn er gefunden wird
-        // und fügt ihn zur Liste mit Player-Objekten hinzu
+        // creates new set with PlayerEntity objects
         Set<PlayerEntity> players = new HashSet<>();
+        // iterates over the transferred list with player ids
         for (Long playerId : playerList) {
+            // searches for PlayerEntity object in database using player id from list
+            // returns PlayerEntity object when found in database
             PlayerEntity playerEntity = Utility.returnPlayerIfExists(playerId);
+            //checks whether the PlayerEntity object found is already assigned to a team
+            // if not, then adding it to the list of PlayerEntity objects
             if (!Utility.isPlayerAssignedToATeam(playerEntity.getId())) {
                 players.add(playerEntity);
             } else {
+                //if yes, then a PlayerIsPartOfATeamException is thrown
                 throw new PlayerIsPartOfATeamException("Player with the id: " + " is already assigned to another team.");
             }
         }
+        // it is iterated over the list currently filled with PlayerEntity objects
+        // each PlayerEntity is assigned to a new TeamPlayerEntity object
+        // the TeamEntity object is the team with the transferred teamId
         for (PlayerEntity playerEntity : players) {
             TeamPlayerEntity teamPlayerEntity = new TeamPlayerEntity();
             teamPlayerEntity.setPlayer(playerEntity);
             teamPlayerEntity.setTeam(teamEntity);
+            // the TeamPlayerEntity object is saved in database
             this.teamPlayerService.createTeamPlayer(teamPlayerEntity);
         }
+        // mapping and returning the TeamEntity object
         GetTeamDto getTeamDto = this.mappingService.mapTeamEntityToGetTeamDto(teamEntity);
         return new ResponseEntity<>(getTeamDto, HttpStatus.CREATED);
     }

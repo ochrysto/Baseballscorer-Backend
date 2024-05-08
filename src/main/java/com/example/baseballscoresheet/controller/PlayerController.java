@@ -4,8 +4,8 @@ import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.PlayerEntity;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.services.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,7 +33,7 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    // Endpunkt zum Speichern eines neuen Players
+    // Endpoint for saving a new player
     @Operation(summary = "saves a new player")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created player",
@@ -49,15 +49,17 @@ public class PlayerController {
     @RolesAllowed("user")
     @PostMapping
     public ResponseEntity<GetPlayerInfoDto> createPlayer(@RequestBody @Valid AddPlayerInfoDto newPlayer) {
-        // maps PlayerDto to PlayerEntity
+        // mapping AddPlayerInfoDto object to PlayerEntity object
         PlayerEntity playerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(newPlayer);
-        // saves Player in DB
+        // saving PlayerEntity object in database
         playerEntity = this.playerService.createPlayer(playerEntity);
+        // mapping saved PlayerEntity object to GetPlayerInfoDto object
         GetPlayerInfoDto addedPlayer = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
+        // returning mapped GetPlayerInfoDto object
         return new ResponseEntity<>(addedPlayer, HttpStatus.CREATED);
     }
 
-    // Endpunkt, um alle existierenden Player abzurufen
+    // Endpoint to retrieve all existing players
     @Operation(summary = "retrieve all existing players")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "players found",
@@ -73,16 +75,19 @@ public class PlayerController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetPlayerInfoDto>> findAllPlayers() {
+        // creates list with all player objects from database
         List<PlayerEntity> playerEntities = this.playerService.findAllPlayers();
         List<GetPlayerInfoDto> playerDtos = new LinkedList<>();
+        // maps each PlayerEntity object to a GetPlayerInfoDto object
+        // and inserts each GetPlayerInfoDto object into a list
         for (PlayerEntity playerEntity : playerEntities) {
             playerDtos.add(this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity));
         }
+        // returns the list of GetPlayerInfoDto objects
         return new ResponseEntity<>(playerDtos, HttpStatus.OK);
     }
 
-
-    // Endpunkt, um Informationen zu einem bestimmten Player abzurufen
+    // Endpoint to retrieve information about a specific player
     @Operation(summary = "retrieve all information of a specific player")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "player found",
@@ -99,13 +104,21 @@ public class PlayerController {
     @RolesAllowed("user")
     public ResponseEntity<GetPlayerInfoDto> findPlayerById(@PathVariable Long id) {
         PlayerEntity playerEntity;
-        // searches and returns player in DB using playerId
-        playerEntity = Utility.returnPlayerIfExists(id);
-        GetPlayerInfoDto getPlayerInfoDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
+        GetPlayerInfoDto getPlayerInfoDto = null;
+        // searches for PlayerEntity object in database by player id
+        // if the search is successful, the PlayerEntity object found is returned
+        // otherwise a ResourceNotFoundException is thrown
+        // the PlayerEntity object found is mapped to a GetPlayerInfoDto object and returned
+        try {
+            playerEntity = Utility.returnPlayerIfExists(id);
+            getPlayerInfoDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
+        } catch (RessourceNotFoundException e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity<>(getPlayerInfoDto, HttpStatus.OK);
     }
 
-    // Endpunkt zum Updaten eines existierenden Players
+    // Endpoint for updating an existing player
     @Operation(summary = "updates a existing player",
             description = "player must exist")
     @ApiResponses(value = {
@@ -126,14 +139,21 @@ public class PlayerController {
     public ResponseEntity<GetPlayerInfoDto> updatePlayer(@PathVariable final Long id,
                                                          @Valid @RequestBody final AddPlayerInfoDto addPlayerInfoDto) {
         GetPlayerInfoDto updatedPlayerDto;
+        // the passed AddPlayerInfoDto and the id are mapped to a PlayerEntity object
         PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(addPlayerInfoDto);
         updatedPlayerEntity.setId(id);
+        // the mapped PlayerEntity object is passed on to the PlayerService
+        // the service checks whether the PlayerEntity object that is to be updated in the database actually exists in the database
+        // if not, a ResourceNotFoundException is thrown
+        // if the corresponding PlayerEntity object is found, its attribute values are updated with the attribute values of the transferred PlayerEntity object
+        // the updated PlayerEntity object is stored in the database
         updatedPlayerEntity = this.playerService.update(updatedPlayerEntity);
+        // the mapped PlayerEntity object is mapped to a GetPlayerInfoDto object and returned
         updatedPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(updatedPlayerEntity);
         return new ResponseEntity<>(updatedPlayerDto, HttpStatus.CREATED);
     }
 
-    // Endpunkt, um einen existierenden Player zu löschen
+    //Endpoint to delete an existing player
     @Operation(summary = "deletes player by id",
             description = "player must exist")
     @ApiResponses(value = {
@@ -148,14 +168,13 @@ public class PlayerController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deletePlayerById(@PathVariable Long id) {
-        if (id != null) {
-            if (playerService.findPlayerById(id).isPresent()) {
-                this.playerService.delete(id);
-            } else {
-                throw new RessourceNotFoundException("Player with id: " + id + " not found");
-            }
+        // check whether the id is present in the database
+        if (playerService.findPlayerById(id).isPresent()) {
+            // if yes, then the data record with the id is deleted
+            this.playerService.delete(id);
         } else {
-            throw new RessourceNotFoundException("Id not valid.");
+            // if not, then a ResourceNotFoundException is thrown
+            throw new RessourceNotFoundException("Player with id: " + id + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

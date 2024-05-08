@@ -33,7 +33,6 @@ public class TeamService {
     public List<ManagerEntity> findAllManagersInTeams() {
         List<TeamEntity> allTeams = this.findAll();
         List<ManagerEntity> allManagersInTeams = new ArrayList<>();
-
         for (TeamEntity teamEntity : allTeams) {
             allManagersInTeams.add(teamEntity.getManager());
         }
@@ -55,11 +54,9 @@ public class TeamService {
             updatedTeam.setClub(updatedTeamEntity.getClub());
             updatedTeam.setLeague(updatedTeamEntity.getLeague());
             updatedTeam.setTeamLogo(updatedTeamEntity.getTeamLogo());
-
             for (TeamPlayerEntity teamPlayerEntity : updatedTeamEntity.getTeamplayer()){
                 updatedTeam.getTeamplayer().add(teamPlayerEntity);
             }
-
             this.teamRepository.save(updatedTeam);
             return updatedTeam;
         }
