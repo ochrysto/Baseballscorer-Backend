@@ -236,7 +236,6 @@ public class TeamController {
         // sucht nach Team mit der übergebenen teamId
         // gibt Team zurück, wenn es gefunden wird
         TeamEntity teamEntity = Utility.returnTeamIfExists(teamId);
-
         // erstellt neue Liste mit Player-Objekten
         // iteriert über die übergebene Liste mit player ids
         // sucht nach der id in DB
@@ -251,17 +250,13 @@ public class TeamController {
                 throw new PlayerIsPartOfATeamException("Player with the id: " + " is already assigned to another team.");
             }
         }
-
-        Set<TeamPlayerEntity> teamPlayerEntitySet = new HashSet<>();
         for (PlayerEntity playerEntity : players) {
             TeamPlayerEntity teamPlayerEntity = new TeamPlayerEntity();
             teamPlayerEntity.setPlayer(playerEntity);
             teamPlayerEntity.setTeam(teamEntity);
             this.teamPlayerService.createTeamPlayer(teamPlayerEntity);
         }
-
         GetTeamDto getTeamDto = this.mappingService.mapTeamEntityToGetTeamDto(teamEntity);
-
         return new ResponseEntity<>(getTeamDto, HttpStatus.CREATED);
     }
 }

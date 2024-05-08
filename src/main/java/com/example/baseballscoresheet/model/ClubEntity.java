@@ -7,8 +7,8 @@ import lombok.*;
 import java.util.Set;
 
 /**
- * Die Klasse {@link ClubEntity} bildet ein Club-Objekt mit seinen dazugehörigen Attributen ab.
- * Ein Club ist ein Verein. Ein Verein kann mehrere Teams haben.
+ * The class {@link ClubEntity} represents a club object with its associated attributes.
+ * A club is an association. A club can have several teams.
  */
 @Entity
 @Getter
@@ -17,9 +17,6 @@ import java.util.Set;
 @Table(name = "club")
 public class ClubEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,30 +27,15 @@ public class ClubEntity {
     @NotBlank(message = "Name of the club is mandatory")
     private String name;
 
-    /**
-     *
-     */
     private String clubLogo;
 
-    /**
-     *
-     */
     private String city;
 
-    /**
-     *
-     */
     private String email;
 
-    /**
-     *
-     */
     @OneToMany(mappedBy = "club")
     private Set<TeamEntity> teamSet;
 
-    /**
-     *
-     */
     @ManyToOne
     @JoinColumn(name = "association_id", nullable = false)
     private AssociationEntity association;

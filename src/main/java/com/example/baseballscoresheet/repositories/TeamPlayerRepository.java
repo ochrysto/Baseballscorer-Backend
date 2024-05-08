@@ -7,5 +7,4 @@ public interface TeamPlayerRepository extends JpaRepository<TeamPlayerEntity, Lo
 
     boolean existsByPlayer_Id(Long playerId);
 
-    TeamPlayerEntity findTeamPlayerEntityByPlayer_Id(Long playerId);
 }

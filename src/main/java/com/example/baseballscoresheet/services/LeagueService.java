@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class LeagueService {
 
-    private LeagueRepository leagueRepository;
+    private final LeagueRepository leagueRepository;
 
     @Autowired
     public LeagueService(LeagueRepository leagueRepository) {

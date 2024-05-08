@@ -9,8 +9,8 @@ import java.time.LocalTime;
 import java.util.Set;
 
 /**
- * Die Klasse {@link GameEntity} bildet ein Game-Objekt mit seinen dazugehörigen Attributen ab.
- * Ein Game-Objekt speichert sämtliche Daten und Informationen zu einem Spiel.
+ * The Class {@link GameEntity} represents a game object with its associated attributes.
+ * A game object stores all data and information about a game.
  */
 @Entity
 @Getter
@@ -19,88 +19,48 @@ import java.util.Set;
 @Table(name = "game")
 public class GameEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     *
-     */
     private Integer gameNr;
 
-    /**
-     * Datum, an dem das Spiel stattfindet.
-     */
     @NotBlank(message = "Date of the game is mandatory")
     private LocalDate date;
 
-    /**
-     * Ort/Stadt, an dem oder in der das Spiel stattfindet.
-     */
     private String location;
 
-    /**
-     * Zeit, zu der das Spiel gestartet wurde.
-     */
     private LocalTime startTime;
 
-    /**
-     * Zeit, zu der das Spiel beendet wurde.
-     */
     private LocalTime endTime;
 
-    /**
-     * Dauer bzw. Länge des Spiels.
-     * Aus Start- und Endzeit berechnen lassen
-     */
     private Double timeOfGame;
 
-    /**
-     * Zuschauerzahl
-     */
     private Integer attendance;
 
     /**
-     * Anzahl der Innings, die während eines Spiels gespielt wurden.
-     * Ein Inning ist im Baseball ein Spielabschnitt. Ein Inning ist beendet, wenn beide Mannschaften einmal Schlagrecht hatten und einmal in der Verteidigung waren.
-     * Dies wechselt jeweils nach drei Out
+     * Number of innings played during a game.
+     * In baseball, an inning is a period of play.
+     * An inning is over when both teams have batted once and been on defense once.
+     * This changes after every three 'Outs'.
      */
     private Integer innings;
 
-    /**
-     *
-     */
     @OneToMany(mappedBy = "game")
     private Set<GameUmpireEntity> gameUmpire;
 
-    /**
-     *
-     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "scorer_id", referencedColumnName = "id")
     private ScorerEntity scorer;
 
-
-    /**
-     *
-     */
     @ManyToOne
     @JoinColumn(name = "association_id", nullable = false)
     private AssociationEntity association;
 
-    /**
-     *
-     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "guest_lineup_id", referencedColumnName = "id")
     private LineupEntity guest;
 
-    /**
-     *
-     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "host_lineup_id", referencedColumnName = "id")
     private LineupEntity host;

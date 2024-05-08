@@ -148,7 +148,7 @@ public class PlayerController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deletePlayerById(@PathVariable Long id) {
-        if (id != null || id != 0) {
+        if (id != null) {
             if (playerService.findPlayerById(id).isPresent()) {
                 this.playerService.delete(id);
             } else {

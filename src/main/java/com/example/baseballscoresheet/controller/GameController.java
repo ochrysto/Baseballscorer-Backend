@@ -59,25 +59,6 @@ public class GameController {
         return null;
     }
 
-    // Endpunkt, um Informationen zu einem bestimmten Game abzurufen
-    @Operation(summary = "retrieve all information of a specific game")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "game found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetGameDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "game not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
-    @GetMapping("/{id}")
-    @RolesAllowed("user")
-    public ResponseEntity<GetGameDto> findGameById(@PathVariable Long id) {
-        return null;
-    }
-
     // Endpunkt zum Updaten eines existierenden Games
     @Operation(summary = "updates a existing game",
             description = "game must exist")

@@ -25,61 +25,56 @@ public class MappingService {
         this.mapper = new ModelMapper();
     }
 
+    // AddTeamInfoDto + ManagerEntity + ClubEntity + LeagueEntity -> TeamEntity
     public TeamEntity mapAddTeamInfoDtoToTeamEntity(AddTeamInfoDto addTeamInfoDto, ManagerEntity managerEntity,
                                                     ClubEntity clubEntity, LeagueEntity leagueEntity) {
         var teamEntity = new TeamEntity();
-
         teamEntity.setName(addTeamInfoDto.getName());
         teamEntity.setTeamLogo(addTeamInfoDto.getTeamLogo());
-
         teamEntity.setClub(clubEntity);
         teamEntity.setLeague(leagueEntity);
         teamEntity.setManager(managerEntity);
-
-        System.out.println(teamEntity);
-
         return teamEntity;
     }
 
+    // TeamEntity -> GetTeamInfoDto
     public GetTeamInfoDto mapTeamToGetTeamInfoDto(TeamEntity teamEntity) {
         GetTeamInfoDto teamInfoDto = new GetTeamInfoDto();
-
         teamInfoDto.setName(teamEntity.getName());
         teamInfoDto.setTeamLogo(teamEntity.getTeamLogo());
-
         teamInfoDto.setGetManagerDto(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
         teamInfoDto.setGetLeagueDto(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
         teamInfoDto.setGetClubDto(mapClubEntityToGetClubDto(teamEntity.getClub()));
-
         return teamInfoDto;
     }
 
+    // ClubEntity -> GetClubDto
     public GetClubDto mapClubEntityToGetClubDto(ClubEntity clubEntity) {
         GetClubDto getClubDto;
-
         getClubDto = this.mapper.map(clubEntity, GetClubDto.class);
         getClubDto.setAssociationDto(mapAssociationEntityToGetAssociationDto(clubEntity.getAssociation()));
-
         return getClubDto;
     }
 
+    // ManagerEntity -> GetManagerDto
     public GetManagerDto mapManagerEntityToGetManagerDto(ManagerEntity managerEntity) {
         return this.mapper.map(managerEntity, GetManagerDto.class);
     }
 
+    // ManagerEntity -> GetLeagueDto
     public GetLeagueDto mapLeagueEntityToGetLeagueDto(LeagueEntity leagueEntity) {
         GetLeagueDto getLeagueDto;
-
         getLeagueDto = this.mapper.map(leagueEntity, GetLeagueDto.class);
         getLeagueDto.setAssociation(mapAssociationEntityToGetAssociationDto(leagueEntity.getAssociation()));
-
         return getLeagueDto;
     }
 
+    // AssociationEntity -> GetAssociationDto
     public GetAssociationDto mapAssociationEntityToGetAssociationDto(AssociationEntity associationEntity) {
         return this.mapper.map(associationEntity, GetAssociationDto.class);
     }
 
+    // AddPlayerInfoDto -> PlayerEntity
     public PlayerEntity mapAddPlayerInfoDtoToPlayerEntity(AddPlayerInfoDto newPlayer) {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setFirstName(newPlayer.getFirstName());
@@ -88,6 +83,7 @@ public class MappingService {
         return playerEntity;
     }
 
+    // PlayerEntity -> GetPlayerInfoDto
     public GetPlayerInfoDto mapPlayerEntityToGetPlayerInfoDto(PlayerEntity playerEntity) {
         GetPlayerInfoDto getPlayerInfoDto = new GetPlayerInfoDto();
         getPlayerInfoDto.setId(playerEntity.getId());
@@ -97,24 +93,23 @@ public class MappingService {
         return getPlayerInfoDto;
     }
 
+    // TeamEntity -> GetTeamDto
     public GetTeamDto mapTeamEntityToGetTeamDto(TeamEntity teamEntity) {
-
         Set<GetPlayerInfoDto> players = new HashSet<>();
         GetTeamDto getTeamDto = new GetTeamDto();
-
         getTeamDto.setName(teamEntity.getName());
         getTeamDto.setGetClubDto(mapClubEntityToGetClubDto(teamEntity.getClub()));
         getTeamDto.setGetManagerDto(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
         getTeamDto.setGetLeagueDto(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
         getTeamDto.setTeamLogo(teamEntity.getTeamLogo());
         getTeamDto.setPlayers(players);
-
         for (TeamPlayerEntity teamPlayerEntity : teamEntity.getTeamplayer()) {
             getTeamDto.getPlayers().add(mapTeamPlayerEntityToGetPlayerInfoDto(teamPlayerEntity));
         }
         return getTeamDto;
     }
 
+    // TeamPlayerEntity -> GetPlayerInfoDto
     public GetPlayerInfoDto mapTeamPlayerEntityToGetPlayerInfoDto(TeamPlayerEntity teamPlayerEntity) {
         GetPlayerInfoDto playerInfoDto = new GetPlayerInfoDto();
         playerInfoDto.setId(teamPlayerEntity.getPlayer().getId());
