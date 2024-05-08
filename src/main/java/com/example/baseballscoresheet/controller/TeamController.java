@@ -1,15 +1,14 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
+import com.example.baseballscoresheet.exceptionHandling.PlayerIsPartOfATeamException;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.*;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
+import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
-import com.example.baseballscoresheet.services.ClubService;
-import com.example.baseballscoresheet.services.LeagueService;
-import com.example.baseballscoresheet.services.ManagerService;
-import com.example.baseballscoresheet.services.TeamService;
+import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,9 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/team")
@@ -34,14 +31,16 @@ public class TeamController {
     private final ManagerService managerService;
     private final ClubService clubService;
     private final LeagueService leagueService;
+    private final TeamPlayerService teamPlayerService;
 
     public TeamController(MappingService mappingService, TeamService teamService, ManagerService managerService,
-                          ClubService clubService, LeagueService leagueService) {
+                          ClubService clubService, LeagueService leagueService, TeamPlayerService teamPlayerService) {
         this.mappingService = mappingService;
         this.teamService = teamService;
         this.managerService = managerService;
         this.clubService = clubService;
         this.leagueService = leagueService;
+        this.teamPlayerService = teamPlayerService;
     }
 
     // Endpoint for saving a new team
@@ -169,16 +168,12 @@ public class TeamController {
         ManagerEntity managerEntity;
         ClubEntity clubEntity;
         LeagueEntity leagueEntity;
-
         // searches for managers in DB using the managerId
         managerEntity = Utility.returnManagerIfExists(updateTeamDto.getManagerId());
-
         // searches for clubs in DB using the clubId
         clubEntity = Utility.returnClubIfExists(updateTeamDto.getClubId());
-
         // searches for leagues in DB using the leagueId
         leagueEntity = Utility.returnLeagueIfExists(updateTeamDto.getLeagueId());
-
         // maps TeamDto to TeamEntity and saves it in the database
         TeamEntity updatedTeamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 updateTeamDto, managerEntity, clubEntity, leagueEntity);
@@ -203,7 +198,7 @@ public class TeamController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deleteTeamById(@PathVariable Long id) {
-        if (id != null || id != 0) {
+        if (id != null) {
             if (teamService.findTeamById(id).isPresent()) {
                 this.teamService.delete(id);
             } else {
@@ -213,5 +208,60 @@ public class TeamController {
             throw new RessourceNotFoundException("Id not valid.");
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint for adding players to a team
+     *
+     * @param teamId     - id des Teams, zu dem Spieler hinzugefügt werden sollen
+     * @param playerList - Liste der Spieler Ids, die zum Team hinzugefügt werden sollen
+     * @return Objekt, das Informationen zum Team und die Spielerliste enthält
+     */
+    @Operation(summary = "saves a new team")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "created team",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetTeamInfoDto.class))}),
+            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content)
+    })
+    @PostMapping("{teamId}")
+    public ResponseEntity<GetTeamDto> addPlayersToTeam(@PathVariable Long teamId,
+                                                       @RequestBody List<Long> playerList) {
+
+        // sucht nach Team mit der übergebenen teamId
+        // gibt Team zurück, wenn es gefunden wird
+        TeamEntity teamEntity = Utility.returnTeamIfExists(teamId);
+
+        // erstellt neue Liste mit Player-Objekten
+        // iteriert über die übergebene Liste mit player ids
+        // sucht nach der id in DB
+        // gibt player zurück, wenn er gefunden wird
+        // und fügt ihn zur Liste mit Player-Objekten hinzu
+        Set<PlayerEntity> players = new HashSet<>();
+        for (Long playerId : playerList) {
+            PlayerEntity playerEntity = Utility.returnPlayerIfExists(playerId);
+            if (!Utility.isPlayerAssignedToATeam(playerEntity.getId())) {
+                players.add(playerEntity);
+            } else {
+                throw new PlayerIsPartOfATeamException("Player with the id: " + " is already assigned to another team.");
+            }
+        }
+
+        Set<TeamPlayerEntity> teamPlayerEntitySet = new HashSet<>();
+        for (PlayerEntity playerEntity : players) {
+            TeamPlayerEntity teamPlayerEntity = new TeamPlayerEntity();
+            teamPlayerEntity.setPlayer(playerEntity);
+            teamPlayerEntity.setTeam(teamEntity);
+            this.teamPlayerService.createTeamPlayer(teamPlayerEntity);
+        }
+
+        GetTeamDto getTeamDto = this.mappingService.mapTeamEntityToGetTeamDto(teamEntity);
+
+        return new ResponseEntity<>(getTeamDto, HttpStatus.CREATED);
     }
 }
