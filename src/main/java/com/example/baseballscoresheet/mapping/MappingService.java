@@ -7,10 +7,14 @@ import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Service
@@ -91,5 +95,32 @@ public class MappingService {
         getPlayerInfoDto.setLastName(playerEntity.getLastName());
         getPlayerInfoDto.setPassnumber(playerEntity.getPassnumber());
         return getPlayerInfoDto;
+    }
+
+    public GetTeamDto mapTeamEntityToGetTeamDto(TeamEntity teamEntity) {
+
+        Set<GetPlayerInfoDto> players = new HashSet<>();
+        GetTeamDto getTeamDto = new GetTeamDto();
+
+        getTeamDto.setName(teamEntity.getName());
+        getTeamDto.setGetClubDto(mapClubEntityToGetClubDto(teamEntity.getClub()));
+        getTeamDto.setGetManagerDto(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
+        getTeamDto.setGetLeagueDto(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
+        getTeamDto.setTeamLogo(teamEntity.getTeamLogo());
+        getTeamDto.setPlayers(players);
+
+        for (TeamPlayerEntity teamPlayerEntity : teamEntity.getTeamplayer()) {
+            getTeamDto.getPlayers().add(mapTeamPlayerEntityToGetPlayerInfoDto(teamPlayerEntity));
+        }
+        return getTeamDto;
+    }
+
+    public GetPlayerInfoDto mapTeamPlayerEntityToGetPlayerInfoDto(TeamPlayerEntity teamPlayerEntity) {
+        GetPlayerInfoDto playerInfoDto = new GetPlayerInfoDto();
+        playerInfoDto.setId(teamPlayerEntity.getPlayer().getId());
+        playerInfoDto.setFirstName(teamPlayerEntity.getPlayer().getFirstName());
+        playerInfoDto.setLastName(teamPlayerEntity.getPlayer().getLastName());
+        playerInfoDto.setPassnumber(teamPlayerEntity.getPlayer().getPassnumber());
+        return playerInfoDto;
     }
 }
