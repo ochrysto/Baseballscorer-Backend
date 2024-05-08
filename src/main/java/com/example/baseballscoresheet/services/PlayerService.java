@@ -2,7 +2,9 @@ package com.example.baseballscoresheet.services;
 
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.PlayerEntity;
+import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.repositories.PlayerRepository;
+import com.example.baseballscoresheet.repositories.TeamPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,12 @@ import java.util.Optional;
 public class PlayerService {
 
     PlayerRepository playerRepository;
+    TeamPlayerRepository teamPlayerRepository;
 
     @Autowired
-    public PlayerService(PlayerRepository playerRepository) {
+    public PlayerService(PlayerRepository playerRepository, TeamPlayerRepository teamPlayerRepository) {
         this.playerRepository = playerRepository;
+        this.teamPlayerRepository = teamPlayerRepository;
     }
 
     public PlayerEntity createPlayer(PlayerEntity newPlayer) {
@@ -47,5 +51,9 @@ public class PlayerService {
 
     public void delete(Long id) {
         this.playerRepository.deleteById(id);
+    }
+
+    public boolean isPlayerAssignedToATeam(Long playerId) {
+        return this.teamPlayerRepository.existsByPlayer_Id(playerId);
     }
 }

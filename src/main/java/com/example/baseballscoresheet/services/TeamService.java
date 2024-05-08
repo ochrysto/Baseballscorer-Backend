@@ -3,6 +3,7 @@ package com.example.baseballscoresheet.services;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.ManagerEntity;
 import com.example.baseballscoresheet.model.TeamEntity;
+import com.example.baseballscoresheet.model.TeamPlayerEntity;
 import com.example.baseballscoresheet.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,11 @@ public class TeamService {
             updatedTeam.setClub(updatedTeamEntity.getClub());
             updatedTeam.setLeague(updatedTeamEntity.getLeague());
             updatedTeam.setTeamLogo(updatedTeamEntity.getTeamLogo());
+
+            for (TeamPlayerEntity teamPlayerEntity : updatedTeamEntity.getTeamplayer()){
+                updatedTeam.getTeamplayer().add(teamPlayerEntity);
+            }
+
             this.teamRepository.save(updatedTeam);
             return updatedTeam;
         }
