@@ -1,7 +1,5 @@
 package com.example.baseballscoresheet.model.dto.team;
 
-import com.example.baseballscoresheet.model.PlayerEntity;
-import com.example.baseballscoresheet.model.TeamPlayerEntity;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
 import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
