@@ -82,7 +82,7 @@ public class ManagerController {
     }
 
     // Endpunkt, um alle existierenden Managers abzurufen
-    @Operation(summary = "retrieve all existing managers")
+    /*@Operation(summary = "retrieve all existing managers")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "managers found",
                     content = {@Content(mediaType = "application/json",
@@ -104,5 +104,5 @@ public class ManagerController {
             allManagerDtos.add(mappingService.mapManagerEntityToGetManagerDto(manager));
         }
         return new ResponseEntity<>(allManagerDtos, HttpStatus.OK);
-    }
+    }*/
 }

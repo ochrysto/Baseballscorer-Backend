@@ -54,8 +54,10 @@ public class TeamService {
             updatedTeam.setClub(updatedTeamEntity.getClub());
             updatedTeam.setLeague(updatedTeamEntity.getLeague());
             updatedTeam.setTeamLogo(updatedTeamEntity.getTeamLogo());
-            for (TeamPlayerEntity teamPlayerEntity : updatedTeamEntity.getTeamplayer()){
-                updatedTeam.getTeamplayer().add(teamPlayerEntity);
+            if (updatedTeamEntity.getTeamplayer() != null) {
+                for (TeamPlayerEntity teamPlayerEntity : updatedTeamEntity.getTeamplayer()) {
+                    updatedTeam.getTeamplayer().add(teamPlayerEntity);
+                }
             }
             this.teamRepository.save(updatedTeam);
             return updatedTeam;

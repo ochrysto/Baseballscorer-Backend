@@ -234,7 +234,7 @@ public class TeamController {
             @ApiResponse(responseCode = "500", description = "server error",
                     content = @Content)
     })
-    @PostMapping("{teamId}")
+    @PutMapping("{teamId}")
     public ResponseEntity<GetTeamDto> addPlayersToTeam(@PathVariable Long teamId,
                                                        @RequestBody List<Long> playerList) {
         // searches for team data record with the passed id
