@@ -221,7 +221,7 @@ public class TeamController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // Endpoint to add one or more players to a existing team
+    // Endpoint to add one or more players to an existing team
     @Operation(summary = "saves a new team")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "added player(s) to team",

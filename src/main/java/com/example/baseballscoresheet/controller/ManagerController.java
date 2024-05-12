@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -98,11 +97,11 @@ public class ManagerController {
     @RolesAllowed("user")
     public ResponseEntity<List<GetManagerDto>> findAllManagers() {
         List<ManagerEntity> allManagerEntities = managerService.readAll();
-        List<GetManagerDto> allManagerDtos = new LinkedList<>();
+        List<GetManagerDto> allManagerDos = new LinkedList<>();
 
         for (ManagerEntity manager : allManagerEntities) {
-            allManagerDtos.add(mappingService.mapManagerEntityToGetManagerDto(manager));
+            allManagerDos.add(mappingService.mapManagerEntityToGetManagerDto(manager));
         }
-        return new ResponseEntity<>(allManagerDtos, HttpStatus.OK);
+        return new ResponseEntity<>(allManagerDos, HttpStatus.OK);
     }*/
 }
