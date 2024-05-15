@@ -221,7 +221,7 @@ public class TeamController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // Endpoint to add one or more players to a existing team
+    // Endpoint to add one or more players to an existing team
     @Operation(summary = "saves a new team")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "added player(s) to team",
@@ -234,7 +234,7 @@ public class TeamController {
             @ApiResponse(responseCode = "500", description = "server error",
                     content = @Content)
     })
-    @PostMapping("{teamId}")
+    @PutMapping("{teamId}")
     public ResponseEntity<GetTeamDto> addPlayersToTeam(@PathVariable Long teamId,
                                                        @RequestBody List<Long> playerList) {
         // searches for team data record with the passed id
