@@ -4,6 +4,7 @@ import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundExcepti
 import com.example.baseballscoresheet.model.ManagerEntity;
 import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.model.TeamPlayerEntity;
+import com.example.baseballscoresheet.repositories.TeamPlayerRepository;
 import com.example.baseballscoresheet.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ import java.util.Optional;
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final TeamPlayerRepository teamPlayerRepository;
 
     @Autowired
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, TeamPlayerRepository teamPlayerRepository) {
         this.teamRepository = teamRepository;
+        this.teamPlayerRepository = teamPlayerRepository;
     }
 
     public TeamEntity createTeam(TeamEntity teamEntity) {
@@ -66,5 +69,9 @@ public class TeamService {
 
     public void delete(Long id) {
         this.teamRepository.deleteById(id);
+    }
+
+    public void deletePlayerFromTeam(Long teamId, Long playerId) {
+        teamPlayerRepository.deleteByPlayer_IdAndTeam_Id(playerId,teamId);
     }
 }

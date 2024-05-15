@@ -7,4 +7,5 @@ public interface TeamPlayerRepository extends JpaRepository<TeamPlayerEntity, Lo
 
     boolean existsByPlayer_Id(Long playerId);
 
+    void deleteByPlayer_IdAndTeam_Id(Long player_id, Long team_id);
 }

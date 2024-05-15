@@ -21,6 +21,7 @@ public class Utility {
     private static ClubService clubService;
     private static LeagueService leagueService;
 
+
     @Autowired
     public void setPlayerService(PlayerService playerService, TeamService teamService, ManagerService managerService,
                                  ClubService clubService, LeagueService leagueService) {
@@ -31,14 +32,23 @@ public class Utility {
         Utility.leagueService = leagueService;
     }
 
+    // checks whether a player with the transferred id exists in database
+    public static boolean checkIfPlayerExists(Long playerId) {
+        return playerService.findPlayerById(playerId).isPresent();
+    }
+
+    // checks whether a team with the transferred id exists in database
+    public static boolean checkIfTeamExists(Long teamId) {
+        return teamService.findTeamById(teamId).isPresent();
+    }
+
+
     // checks whether the transferred player is already assigned to a team
-    // returns boolean
     public static boolean isPlayerAssignedToATeam(Long playerId) {
         return playerService.isPlayerAssignedToATeam(playerId);
     }
 
-    // checks whether a manager with the transferred id exists in database
-    // returns this if the check is successful
+    // checks whether a manager with the transferred id exists in database and returns it if the check is successful
     public static ManagerEntity returnManagerIfExists(Long managerId) {
         ManagerEntity managerEntity;
         Optional<ManagerEntity> managerOptional = managerService.getManagerById(managerId);
@@ -51,8 +61,7 @@ public class Utility {
         return managerEntity;
     }
 
-    // checks whether a club with the transferred id exists in database
-    // returns this if the check is successful
+    // checks whether a club with the transferred id exists in database and returns it if the check is successful
     public static ClubEntity returnClubIfExists(Long clubId) {
         ClubEntity clubEntity;
         Optional<ClubEntity> clubOptional = clubService.getClubById(clubId);
@@ -65,8 +74,7 @@ public class Utility {
         return clubEntity;
     }
 
-    // checks whether a league with the transferred id exists in database
-    // returns this if the check is successful
+    // checks whether a league with the transferred id exists in database and returns it if the check is successful
     public static LeagueEntity returnLeagueIfExists(Long leagueId) {
         LeagueEntity leagueEntity;
         Optional<LeagueEntity> leagueOptional = leagueService.getLeagueById(leagueId);
@@ -79,8 +87,7 @@ public class Utility {
         return leagueEntity;
     }
 
-    // checks whether a team with the transferred id exists in database
-    // returns this if the check is successful
+    // checks whether a team with the transferred id exists in database and returns it if the check is successful
     public static TeamEntity returnTeamIfExists(Long id) {
         TeamEntity teamEntity;
         Optional<TeamEntity> teamOptional = teamService.findTeamById(id);
@@ -93,8 +100,7 @@ public class Utility {
         return teamEntity;
     }
 
-    // checks whether a player with the transferred id exists in database
-    // returns this if the check is successful
+    // checks whether a player with the transferred id exists in database and returns it if the check is successful
     public static PlayerEntity returnPlayerIfExists(Long playerId) {
         PlayerEntity playerEntity;
         Optional<PlayerEntity> playerOptional = playerService.findPlayerById(playerId);

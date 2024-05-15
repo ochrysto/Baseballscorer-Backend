@@ -18,6 +18,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,18 +29,11 @@ public class TeamController {
 
     private final MappingService mappingService;
     private final TeamService teamService;
-    private final ManagerService managerService;
-    private final ClubService clubService;
-    private final LeagueService leagueService;
     private final TeamPlayerService teamPlayerService;
 
-    public TeamController(MappingService mappingService, TeamService teamService, ManagerService managerService,
-                          ClubService clubService, LeagueService leagueService, TeamPlayerService teamPlayerService) {
+    public TeamController(MappingService mappingService, TeamService teamService, TeamPlayerService teamPlayerService) {
         this.mappingService = mappingService;
         this.teamService = teamService;
-        this.managerService = managerService;
-        this.clubService = clubService;
-        this.leagueService = leagueService;
         this.teamPlayerService = teamPlayerService;
     }
 
@@ -198,8 +192,8 @@ public class TeamController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // Endpoint to add one or more players to an existing team
-    @Operation(summary = "saves a new team")
+    // Endpoint to add players to an existing team
+    @Operation(summary = "add players to an existing team")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "added player(s) to team",
                     content = {@Content(mediaType = "application/json",
@@ -238,5 +232,30 @@ public class TeamController {
         // mapping and returning the TeamEntity object
         GetTeamDto getTeamDto = this.mappingService.mapTeamEntityToGetTeamDto(teamEntity);
         return new ResponseEntity<>(getTeamDto, HttpStatus.CREATED);
+    }
+
+    // Endpoint to remove a player from a team
+    @Operation(summary = "remove player from an existing team")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "removed player from team",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetTeamInfoDto.class))}),
+            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content)
+    })
+    @DeleteMapping("{teamId}/{playerId}")
+    @Transactional
+    public ResponseEntity<GetTeamDto> removePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
+
+        if (Utility.checkIfPlayerExists(playerId) && Utility.checkIfTeamExists(teamId)) {
+            teamService.deletePlayerFromTeam(teamId, playerId);
+        } else {
+            throw new RessourceNotFoundException("Team with id: " + teamId + " or player with id: " + playerId + " not found");
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
