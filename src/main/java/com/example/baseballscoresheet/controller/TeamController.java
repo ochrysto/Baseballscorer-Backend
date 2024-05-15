@@ -62,33 +62,12 @@ public class TeamController {
         ManagerEntity managerEntity;
         ClubEntity clubEntity;
         LeagueEntity leagueEntity;
-        // searches for manager in DB using the managerId
-        Optional<ManagerEntity> managerOptional = managerService.getManagerById(addTeamInfoDto.getManagerId());
-        if (managerOptional.isPresent()) {
-            // adds ManagerEntity object to TeamEntity object if a DB entry is found
-            managerEntity = managerOptional.get();
-        } else {
-            // throws exception if no suitable manager was found in DB
-            throw new RessourceNotFoundException("Manager with id " + addTeamInfoDto.getManagerId() + " was not found.");
-        }
-        // searches for club in DB using the clubId
-        Optional<ClubEntity> clubOptional = clubService.getClubById(addTeamInfoDto.getClubId());
-        if (clubOptional.isPresent()) {
-            // adds ClubEntity object to TeamEntity object if a DB entry is found
-            clubEntity = clubOptional.get();
-        } else {
-            // throws exception if no suitable club was found in DB
-            throw new RessourceNotFoundException("Club with id " + addTeamInfoDto.getClubId() + "was not found.");
-        }
-        // searches for league in DB using the leagueId
-        Optional<LeagueEntity> leagueOptional = leagueService.getLeagueById(addTeamInfoDto.getLeagueId());
-        if (leagueOptional.isPresent()) {
-            // adds LeagueEntity object to TeamEntity object if a DB entry is found
-            leagueEntity = leagueOptional.get();
-        } else {
-            // throws exception if no suitable league was found in DB
-            throw new RessourceNotFoundException("League with id " + addTeamInfoDto.getLeagueId() + "was not found.");
-        }
+
+        // searches for club, manager and league and returns them if they are found in the database
+        managerEntity = Utility.returnManagerIfExists(addTeamInfoDto.getManagerId());
+        clubEntity = Utility.returnClubIfExists(addTeamInfoDto.getClubId());
+        leagueEntity = Utility.returnLeagueIfExists(addTeamInfoDto.getLeagueId());
+
         // maps TeamDto object to TeamEntity object and saves it in the database
         TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 addTeamInfoDto, managerEntity, clubEntity, leagueEntity);
