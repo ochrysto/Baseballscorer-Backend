@@ -10,7 +10,6 @@ public class TeamPlayerService {
     private final TeamPlayerRepository teamPlayerRepository;
 
     @Autowired
-
     public TeamPlayerService(TeamPlayerRepository teamPlayerRepository) {
         this.teamPlayerRepository = teamPlayerRepository;
     }
