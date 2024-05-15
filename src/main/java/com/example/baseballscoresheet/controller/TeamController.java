@@ -152,11 +152,9 @@ public class TeamController {
         ManagerEntity managerEntity;
         ClubEntity clubEntity;
         LeagueEntity leagueEntity;
-        // searches for manager in DB using the managerId
+        // searches for club, manager and league and returns them if they are found in the database
         managerEntity = Utility.returnManagerIfExists(updateTeamDto.getManagerId());
-        // searches for club in DB using the clubId
         clubEntity = Utility.returnClubIfExists(updateTeamDto.getClubId());
-        // searches for league in DB using the leagueId
         leagueEntity = Utility.returnLeagueIfExists(updateTeamDto.getLeagueId());
 
         // maps all information and the id to a TeamEntity object
@@ -216,33 +214,25 @@ public class TeamController {
     @PutMapping("{teamId}")
     public ResponseEntity<GetTeamDto> addPlayersToTeam(@PathVariable Long teamId,
                                                        @RequestBody List<Long> playerList) {
-        // searches for team data record with the passed id
-        // returns team when found
+        // searches for team data record with the passed id and return when found
         TeamEntity teamEntity = Utility.returnTeamIfExists(teamId);
-        // creates new set with PlayerEntity objects
         Set<PlayerEntity> players = new HashSet<>();
-        // iterates over the transferred list with player ids
+        // iterates over the list with ids, searches for the matching player objects in the database and returns when found
         for (Long playerId : playerList) {
-            // searches for PlayerEntity object in database using player id from list
-            // returns PlayerEntity object when found in database
             PlayerEntity playerEntity = Utility.returnPlayerIfExists(playerId);
             //checks whether the PlayerEntity object found is already assigned to a team
-            // if not, then adding it to the list of PlayerEntity objects
             if (!Utility.isPlayerAssignedToATeam(playerEntity.getId())) {
                 players.add(playerEntity);
             } else {
-                //if yes, then a PlayerIsPartOfATeamException is thrown
                 throw new PlayerIsPartOfATeamException("Player with the id: " + " is already assigned to another team.");
             }
         }
-        // it is iterated over the list currently filled with PlayerEntity objects
-        // each PlayerEntity is assigned to a new TeamPlayerEntity object
-        // the TeamEntity object is the team with the transferred teamId
+        // iterate over the list with PlayerEntity objects, each PlayerEntity is assigned to a new TeamPlayerEntity object
+        // saves new TeamPlayerEntity
         for (PlayerEntity playerEntity : players) {
             TeamPlayerEntity teamPlayerEntity = new TeamPlayerEntity();
             teamPlayerEntity.setPlayer(playerEntity);
             teamPlayerEntity.setTeam(teamEntity);
-            // the TeamPlayerEntity object is saved in database
             this.teamPlayerService.createTeamPlayer(teamPlayerEntity);
         }
         // mapping and returning the TeamEntity object
