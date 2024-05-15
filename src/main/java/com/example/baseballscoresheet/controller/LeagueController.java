@@ -30,7 +30,7 @@ public class LeagueController {
         this.mappingService = mappingService;
     }
 
-    // Endpunkt, um alle existierenden Leagues abzurufen
+    // End point for saving a new game
     @Operation(summary = "retrieve all existing leagues")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "leagues found",
@@ -48,7 +48,6 @@ public class LeagueController {
     public ResponseEntity<List<GetLeagueDto>> findAllLeagues() {
         List<LeagueEntity> allLeagueEntities = leagueService.readAll();
         List<GetLeagueDto> allLeagueDtos = new LinkedList<>();
-
         for (LeagueEntity leagueEntity : allLeagueEntities) {
             allLeagueDtos.add(mappingService.mapLeagueEntityToGetLeagueDto(leagueEntity));
         }

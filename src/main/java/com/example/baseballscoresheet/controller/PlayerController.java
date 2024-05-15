@@ -1,7 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.PlayerEntity;
 import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
@@ -17,6 +16,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -78,12 +78,11 @@ public class PlayerController {
         // creates list with all player objects from database
         List<PlayerEntity> playerEntities = this.playerService.findAllPlayers();
         List<GetPlayerInfoDto> playerDtos = new LinkedList<>();
-        // maps each PlayerEntity object to a GetPlayerInfoDto object
-        // and inserts each GetPlayerInfoDto object into a list
+        // maps each PlayerEntity object to a GetPlayerInfoDto object, adds each GetPlayerInfoDto object to list
         for (PlayerEntity playerEntity : playerEntities) {
             playerDtos.add(this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity));
         }
-        // returns the list of GetPlayerInfoDto objects
+        // returns list of GetPlayerInfoDto objects
         return new ResponseEntity<>(playerDtos, HttpStatus.OK);
     }
 
@@ -103,18 +102,8 @@ public class PlayerController {
     @GetMapping("/{id}")
     @RolesAllowed("user")
     public ResponseEntity<GetPlayerInfoDto> findPlayerById(@PathVariable Long id) {
-        PlayerEntity playerEntity;
-        GetPlayerInfoDto getPlayerInfoDto = null;
-        // searches for PlayerEntity object in database by player id
-        // if the search is successful, the PlayerEntity object found is returned
-        // otherwise a ResourceNotFoundException is thrown
-        // the PlayerEntity object found is mapped to a GetPlayerInfoDto object and returned
-        try {
-            playerEntity = Utility.returnPlayerIfExists(id);
-            getPlayerInfoDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
-        } catch (RessourceNotFoundException e) {
-            e.printStackTrace();
-        }
+        PlayerEntity playerEntity = Utility.returnPlayerIfExists(id);
+        GetPlayerInfoDto getPlayerInfoDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
         return new ResponseEntity<>(getPlayerInfoDto, HttpStatus.OK);
     }
 
@@ -174,7 +163,7 @@ public class PlayerController {
             this.playerService.delete(id);
         } else {
             // if not, then a ResourceNotFoundException is thrown
-            throw new RessourceNotFoundException("Player with id: " + id + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with id: " + id + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

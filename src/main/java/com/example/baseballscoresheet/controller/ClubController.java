@@ -30,7 +30,7 @@ public class ClubController {
         this.mappingService = mappingService;
     }
 
-    // Endpunkt, um alle existierenden Clubs abzurufen
+    // Endpoint to retrieve all existing clubs
     @Operation(summary = "retrieve all existing clubs")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "clubs found",
@@ -48,7 +48,6 @@ public class ClubController {
     public ResponseEntity<List<GetClubDto>> findAllClubs() {
         List<ClubEntity> allClubEntities = clubService.readAll();
         List<GetClubDto> allClubDtos = new LinkedList<>();
-
         for (ClubEntity clubEntity : allClubEntities) {
             allClubDtos.add(mappingService.mapClubEntityToGetClubDto(clubEntity));
         }

@@ -8,7 +8,9 @@ import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.model.ClubEntity;
 import com.example.baseballscoresheet.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -56,7 +58,7 @@ public class Utility {
             managerEntity = managerOptional.get();
         } else {
             // throws exception if no suitable manager was found in DB
-            throw new RessourceNotFoundException("Manager with id " + managerId + " was not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manager with id " + managerId + " was not found.");
         }
         return managerEntity;
     }
@@ -69,7 +71,7 @@ public class Utility {
             clubEntity = clubOptional.get();
         } else {
             // throws exception if no suitable club was found in DB
-            throw new RessourceNotFoundException("Club with id " + clubId + "was not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Club with id " + clubId + "was not found.");
         }
         return clubEntity;
     }
@@ -82,20 +84,19 @@ public class Utility {
             leagueEntity = leagueOptional.get();
         } else {
             // throws exception if no suitable league was found in DB
-            throw new RessourceNotFoundException("League with id " + leagueId + "was not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "League with id " + leagueId + "was not found.");
         }
         return leagueEntity;
     }
 
-    // checks whether a team with the transferred id exists in database and returns it if the check is successful
+    // checks if a team with the transferred id exists in database and returns it if the check is successful
     public static TeamEntity returnTeamIfExists(Long id) {
         TeamEntity teamEntity;
         Optional<TeamEntity> teamOptional = teamService.findTeamById(id);
         if (teamOptional.isPresent()) {
             teamEntity = teamOptional.get();
         } else {
-            // throws exception if no suitable team was found
-            throw new RessourceNotFoundException("Team with id " + id + " was not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id " + id + " was not found.");
         }
         return teamEntity;
     }
@@ -107,8 +108,7 @@ public class Utility {
         if (playerOptional.isPresent()) {
             playerEntity = playerOptional.get();
         } else {
-            // throws exception if no suitable player was found in DB
-            throw new RessourceNotFoundException("Player with id " + playerId + " was not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with id " + playerId + " was not found.");
         }
         return playerEntity;
     }

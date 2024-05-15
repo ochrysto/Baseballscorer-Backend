@@ -1,8 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
-import com.example.baseballscoresheet.exceptionHandling.PlayerIsPartOfATeamException;
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.*;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
@@ -20,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -155,11 +154,9 @@ public class TeamController {
         TeamEntity updatedTeamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
                 updateTeamDto, managerEntity, clubEntity, leagueEntity);
         updatedTeamEntity.setId(id);
-        // the mapped TeamEntity object is passed on to the TeamService
-        // the service checks whether the TeamEntity object that is to be updated in the database actually exists in the database
-        // if not, a ResourceNotFoundException is thrown
-        // if the corresponding TeamEntity object is found, its attribute values are updated with the attribute values of the transferred TeamEntity object
-        // the updated TeamEntity object is stored in the database
+        // service checks whether the TeamEntity object that is to be updated in the database actually exists in the database
+        // if its found, its attribute values are updated with the attribute values of the transferred TeamEntity object
+        // updated TeamEntity object is stored in the database
         updatedTeamEntity = this.teamService.update(updatedTeamEntity);
         // the mapped TeamEntity object is mapped to a GetTeamInfoDto object and returned
         GetTeamInfoDto updatedTeamDto = this.mappingService.mapTeamToGetTeamInfoDto(updatedTeamEntity);
@@ -181,13 +178,11 @@ public class TeamController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deleteTeamById(@PathVariable Long id) {
-        // check whether the id is present in the database
+        // checks if record with id is present in database and deletes it
         if (teamService.findTeamById(id).isPresent()) {
-            // if yes, then the data record with the id is deleted
             this.teamService.delete(id);
         } else {
-            // if not, then a ResourceNotFoundException is thrown
-            throw new RessourceNotFoundException("Team with id: " + id + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + id + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -218,7 +213,7 @@ public class TeamController {
             if (!Utility.isPlayerAssignedToATeam(playerEntity.getId())) {
                 players.add(playerEntity);
             } else {
-                throw new PlayerIsPartOfATeamException("Player with the id: " + " is already assigned to another team.");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with the id: " + " is already assigned to another team.");
             }
         }
         // iterate over the list with PlayerEntity objects, each PlayerEntity is assigned to a new TeamPlayerEntity object
@@ -250,11 +245,12 @@ public class TeamController {
     @DeleteMapping("{teamId}/{playerId}")
     @Transactional
     public ResponseEntity<GetTeamDto> removePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
-
+        // checks whether team and player exist
         if (Utility.checkIfPlayerExists(playerId) && Utility.checkIfTeamExists(teamId)) {
+            // deletes team in team
             teamService.deletePlayerFromTeam(teamId, playerId);
         } else {
-            throw new RessourceNotFoundException("Team with id: " + teamId + " or player with id: " + playerId + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + teamId + " or player with id: " + playerId + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

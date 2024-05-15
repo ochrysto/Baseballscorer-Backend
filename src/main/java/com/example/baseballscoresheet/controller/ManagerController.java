@@ -33,7 +33,7 @@ public class ManagerController {
     }
 
     // Endpoint to retrieve all managers who are not assigned to a team
-    @Operation(summary = "retrieve all information of a specific manager")
+    @Operation(summary = "retrieve all managers who are not assigned to a team")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "manager found",
                     content = {@Content(mediaType = "application/json",
@@ -48,11 +48,11 @@ public class ManagerController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetManagerDto>> findAllAvailableManagers() {
+        List<GetManagerDto> allAvailableManagers = new ArrayList<>();
         List<ManagerEntity> allManagers = managerService.readAll();
         List<ManagerEntity> listOfAllManagersInTeams = teamService.findAllManagersInTeams();
-        List<GetManagerDto> allAvailableManagers = new ArrayList<>();
 
-        // checks which managers are not yet assigned to a team
+        // checks if managers are yet assigned to a team
         for (ManagerEntity manager : allManagers) {
             if (!listOfAllManagersInTeams.contains(manager)) {
                 allAvailableManagers.add(mappingService.mapManagerEntityToGetManagerDto(manager));
@@ -62,48 +62,29 @@ public class ManagerController {
     }
 
     /*
-        // Endpoint to retrieve all existing managers
-        @Operation(summary = "retrieve all existing managers")
-        @ApiResponses(value = {
-                @ApiResponse(responseCode = "200", description = "managers found",
-                        content = {@Content(mediaType = "application/json",
-                                schema = @Schema(implementation = GetManagerDto.class))}),
-                @ApiResponse(responseCode = "401", description = "not authorized",
-                        content = @Content),
-                @ApiResponse(responseCode = "404", description = "managers not found",
-                        content = @Content),
-                @ApiResponse(responseCode = "500", description = "server error",
-                        content = @Content),
-        })
-        @GetMapping
-        @RolesAllowed("user")
-        public ResponseEntity<List<GetManagerDto>> findAllManagers() {
-            List<ManagerEntity> allManagerEntities = managerService.readAll();
-            List<GetManagerDto> allManagerDos = new LinkedList<>();
-
-            for (ManagerEntity manager : allManagerEntities) {
-                allManagerDos.add(mappingService.mapManagerEntityToGetManagerDto(manager));
-            }
-            return new ResponseEntity<>(allManagerDos, HttpStatus.OK);
-        }
-
-    // Endpoint to retrieve information about a specific manager
-    @Operation(summary = "retrieve all information of a specific manager")
+    // Endpoint to retrieve all existing managers
+    @Operation(summary = "retrieve all existing managers")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "manager found",
+            @ApiResponse(responseCode = "200", description = "managers found",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = GetManagerDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "manager not found",
+            @ApiResponse(responseCode = "404", description = "managers not found",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
+                    content = @Content),
     })
-    @GetMapping("/{id}")
+    @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<GetManagerDto> findManagerById(@PathVariable Long id) {
-        return null;
+    public ResponseEntity<List<GetManagerDto>> findAllManagers() {
+        List<ManagerEntity> allManagerEntities = managerService.readAll();
+        List<GetManagerDto> allManagerDos = new LinkedList<>();
+
+        for (ManagerEntity manager : allManagerEntities) {
+            allManagerDos.add(mappingService.mapManagerEntityToGetManagerDto(manager));
+        }
+        return new ResponseEntity<>(allManagerDos, HttpStatus.OK);
     }
- */
+    */
 }

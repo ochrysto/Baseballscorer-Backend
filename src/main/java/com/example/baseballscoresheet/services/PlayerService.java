@@ -5,7 +5,9 @@ import com.example.baseballscoresheet.model.PlayerEntity;
 import com.example.baseballscoresheet.repositories.PlayerRepository;
 import com.example.baseballscoresheet.repositories.TeamPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +39,7 @@ public class PlayerService {
     public PlayerEntity update(PlayerEntity updatedPlayerEntity) {
         PlayerEntity updatedPlayer;
         if (this.playerRepository.findById(updatedPlayerEntity.getId()).isEmpty()) {
-            throw new RessourceNotFoundException("Player with the id = " + updatedPlayerEntity.getId() + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with the id = " + updatedPlayerEntity.getId() + " not found");
         } else {
             updatedPlayer = this.findPlayerById(updatedPlayerEntity.getId()).get();
             updatedPlayer.setFirstName(updatedPlayerEntity.getFirstName());
