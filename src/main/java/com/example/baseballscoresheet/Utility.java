@@ -1,6 +1,5 @@
 package com.example.baseballscoresheet;
 
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.LeagueEntity;
 import com.example.baseballscoresheet.model.ManagerEntity;
 import com.example.baseballscoresheet.model.PlayerEntity;

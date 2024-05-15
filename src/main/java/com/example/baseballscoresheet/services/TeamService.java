@@ -1,6 +1,5 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.ManagerEntity;
 import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.model.TeamPlayerEntity;
@@ -72,7 +71,6 @@ public class TeamService {
     public void delete(Long id) {
         this.teamRepository.deleteById(id);
     }
-
     public void deletePlayerFromTeam(Long teamId, Long playerId) {
         teamPlayerRepository.deleteByPlayer_IdAndTeam_Id(playerId,teamId);
     }

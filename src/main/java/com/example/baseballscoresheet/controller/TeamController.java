@@ -247,7 +247,6 @@ public class TeamController {
     public ResponseEntity<GetTeamDto> removePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
         // checks whether team and player exist
         if (Utility.checkIfPlayerExists(playerId) && Utility.checkIfTeamExists(teamId)) {
-            // deletes team in team
             teamService.deletePlayerFromTeam(teamId, playerId);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + teamId + " or player with id: " + playerId + " not found");
