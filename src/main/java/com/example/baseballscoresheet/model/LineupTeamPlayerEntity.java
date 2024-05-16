@@ -1,6 +1,5 @@
 package com.example.baseballscoresheet.model;
 
-import com.example.baseballscoresheet.enums.POSITION;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -27,7 +26,9 @@ public class LineupTeamPlayerEntity {
     @JoinColumn(name = "lineup_id", nullable = false)
     private LineupEntity lineup;
 
-    private POSITION position;
+    @OneToOne
+    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    private PositionEntity position;
 
     @Column(name = "jersey_nr")
     @Size(max = 99, message = "Tricot Number must be between 0 and 99")

@@ -1,6 +1,27 @@
 INSERT INTO association(name)
 VALUES ('DBV');
 
+INSERT INTO position(id, description)
+VALUES (1,'Pitcher');
+INSERT INTO position(id, description)
+VALUES (2,'Catcher');
+INSERT INTO position(id, description)
+VALUES (3,'First Base');
+INSERT INTO position(id, description)
+VALUES (4,'Second Base');
+INSERT INTO position(id, description)
+VALUES (5,'Third Base');
+INSERT INTO position(id, description)
+VALUES (6,'Short Stop');
+INSERT INTO position(id, description)
+VALUES (7,'Leftfielder');
+INSERT INTO position(id, description)
+VALUES (8,'Centerfielder');
+INSERT INTO position(id, description)
+VALUES (9,'Rightfielder');
+INSERT INTO position(id, description)
+VALUES (10,'Designated Hitter');
+
 INSERT INTO club(name, city, association_id)
 VALUES ('Mannheim Tornados', 'Mannheim', 1);
 INSERT INTO club(name, city, association_id)

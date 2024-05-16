@@ -17,40 +17,23 @@ import java.util.Set;
 @Table(name = "player")
 public class PlayerEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Aktuelle Passnummer eines Spielers.
-     * Jeder Spieler hat eine eigene eindeutige Passnummer.
-     */
     @Column(name = "passnumber", unique = true)
     private Integer passnumber;
 
-    /**
-     * Vorname eines Spielers.
-     */
     @Column(name = "first_name")
     @NotBlank(message = "Players first name is mandatory")
     private String firstName;
 
-    /**
-     * Nachname eines Spielers.
-     */
     @Column(name = "last_name")
     @NotBlank(message = "Players last name is mandatory")
     private String lastName;
 
-    /**
-     *
-     */
     @OneToMany(mappedBy = "player")
     private Set<TeamPlayerEntity> teamPlayers;
-
 
     /**
      * PA = Plate Appearance

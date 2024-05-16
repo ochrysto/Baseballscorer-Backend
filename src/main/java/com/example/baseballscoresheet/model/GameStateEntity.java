@@ -1,6 +1,5 @@
 package com.example.baseballscoresheet.model;
 
-import com.example.baseballscoresheet.enums.POSITION;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,20 +31,18 @@ public class GameStateEntity {
      *
      */
     @ManyToOne
-    @JoinColumn(name="lineup_player_id", nullable = false)
+    @JoinColumn(name = "lineup_player_id", nullable = false)
     private LineupTeamPlayerEntity lineupPlayer;
 
     /**
      *
      */
     @ManyToOne
-    @JoinColumn(name="game_id", nullable = false)
+    @JoinColumn(name = "game_id", nullable = false)
     private GameEntity game;
 
-    @Enumerated(EnumType.STRING)
-    private POSITION position;
 
-    //
+
     private Integer pa;
 
     private Integer ab;
