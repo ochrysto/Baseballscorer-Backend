@@ -3,6 +3,8 @@ package com.example.baseballscoresheet.controller;
 import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.*;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoForLineUpDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
@@ -252,5 +254,36 @@ public class TeamController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + teamId + " or player with id: " + playerId + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // Endpoint to retrieve all existing teams
+    @Operation(summary = "retrieve all players from one existing teams")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "teams found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetPlayerInfoForLineUpDto.class))}),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "team not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content),
+    })
+    @GetMapping("/{teamId}/players")
+    @RolesAllowed("user")
+    public ResponseEntity<List<GetPlayerInfoForLineUpDto>> getAllPlayersFromTeam(@PathVariable Long teamId) {
+        List<GetPlayerInfoForLineUpDto> allPlayersDto = new ArrayList<>();
+        List<PlayerEntity> allPlayers = new ArrayList<>();
+        // prüft, ob das Team existiert
+        if (Utility.checkIfTeamExists(teamId)) {
+            // zieht sich alle Spieler des Teams
+            allPlayers = teamService.getAllPlayersFromTeam(teamId);
+            for (PlayerEntity player : allPlayers){
+                allPlayersDto.add(this.mappingService.mapPlayerEntityToGetPlayerInfoForLineUpDto(player));
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id " + teamId + " was not found.");
+        }
+        return new ResponseEntity<>(allPlayersDto, HttpStatus.OK);
     }
 }

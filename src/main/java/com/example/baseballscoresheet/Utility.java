@@ -56,7 +56,6 @@ public class Utility {
         if (managerOptional.isPresent()) {
             managerEntity = managerOptional.get();
         } else {
-            // throws exception if no suitable manager was found in DB
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manager with id " + managerId + " was not found.");
         }
         return managerEntity;

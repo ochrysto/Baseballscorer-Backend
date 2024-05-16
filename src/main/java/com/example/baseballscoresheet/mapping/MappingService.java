@@ -7,6 +7,7 @@ import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoForLineUpDto;
 import com.example.baseballscoresheet.model.dto.position.GetPositionDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
@@ -123,5 +124,14 @@ public class MappingService {
     // PositionEntity -> GetPositionDto
     public GetPositionDto mapPositionEntityToGetPositionDto(PositionEntity positionEntity) {
         return this.mapper.map(positionEntity, GetPositionDto.class);
+    }
+
+    // PlayerEntity -> GetPlayerInfoForLineUpDto
+    public GetPlayerInfoForLineUpDto mapPlayerEntityToGetPlayerInfoForLineUpDto(PlayerEntity player) {
+        GetPlayerInfoForLineUpDto playerDto = new GetPlayerInfoForLineUpDto();
+        playerDto.setId(player.getId());
+        playerDto.setName(player.getFirstName() + " " + player.getLastName());
+        playerDto.setPassnumber(player.getPassnumber());
+        return playerDto;
     }
 }

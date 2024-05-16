@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.services;
 
 import com.example.baseballscoresheet.model.ManagerEntity;
+import com.example.baseballscoresheet.model.PlayerEntity;
 import com.example.baseballscoresheet.model.TeamEntity;
 import com.example.baseballscoresheet.model.TeamPlayerEntity;
 import com.example.baseballscoresheet.repositories.TeamPlayerRepository;
@@ -71,7 +72,23 @@ public class TeamService {
     public void delete(Long id) {
         this.teamRepository.deleteById(id);
     }
+
     public void deletePlayerFromTeam(Long teamId, Long playerId) {
-        teamPlayerRepository.deleteByPlayer_IdAndTeam_Id(playerId,teamId);
+        teamPlayerRepository.deleteByPlayer_IdAndTeam_Id(playerId, teamId);
+    }
+
+    public List<PlayerEntity> getAllPlayersFromTeam(Long teamId) {
+        List<PlayerEntity> players = new ArrayList<>();
+        List<TeamPlayerEntity> teamPlayers = new ArrayList<>();
+
+        TeamEntity team = findTeamById(teamId).get();
+        if (!team.getTeamplayer().isEmpty()) {
+            for (TeamPlayerEntity teamPlayer : team.getTeamplayer()) {
+                players.add(teamPlayer.getPlayer());
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id " + teamId + " has no players.");
+        }
+        return players;
     }
 }
