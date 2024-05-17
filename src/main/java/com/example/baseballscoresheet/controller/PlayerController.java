@@ -1,6 +1,5 @@
 package com.example.baseballscoresheet.controller;
 
-import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.PlayerEntity;
 import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
@@ -16,7 +15,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.LinkedList;
 import java.util.List;

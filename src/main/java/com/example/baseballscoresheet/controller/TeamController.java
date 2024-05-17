@@ -121,7 +121,7 @@ public class TeamController {
             @ApiResponse(responseCode = "500", description = "server error",
                     content = @Content)
     })
-    @GetMapping("/{id}")
+    @GetMapping("/{teamId}")
     @RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long teamId) {
         TeamEntity teamEntity = this.teamService.findTeamById(teamId);
@@ -273,7 +273,7 @@ public class TeamController {
     @RolesAllowed("user")
     public ResponseEntity<List<GetPlayerInfoForLineUpDto>> getAllPlayersFromTeam(@PathVariable Long teamId) {
         List<GetPlayerInfoForLineUpDto> allPlayersDto = new ArrayList<>();
-        List<PlayerEntity> allPlayers = new ArrayList<>();
+        List<PlayerEntity> allPlayers;
         if (Utility.checkIfTeamExists(teamId)) {
             allPlayers = teamService.getAllPlayersFromTeam(teamId);
             for (PlayerEntity player : allPlayers) {

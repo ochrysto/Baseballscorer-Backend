@@ -60,7 +60,7 @@ public class LineupController {
         // beide lineups werden gemappt und gespeichert
         for (AddLineupDto addLineupDto : newLineups) {
             LineupEntity lineupEntity = this.mappingService.mapAddLineupDtoToLineupEntity(addLineupDto);
-            lineupEntity = this.lineupService.saveLineup(lineupEntity);
+            this.lineupService.saveLineup(lineupEntity);
         }
 
         // für jeden player, der im lineup zu finden ist, wir ein neues LineupTeamPlayerEntity Objekt angelegt
@@ -69,7 +69,7 @@ public class LineupController {
             for (AddPlayerToLineupDto addPlayerToLineupDto : addLineupDto.getPlayerDtoSet()) {
                 LineupEntity lineupEntity2 = lineupService.findLineupByTeamId(addLineupDto.getTeamId());
                 LineupTeamPlayerEntity lineupTeamPlayerEntity = this.mappingService.mapToLineupTeamPlayerEntity(addPlayerToLineupDto, lineupEntity2);
-                lineupTeamPlayerEntity = this.lineupTeamPlayerService.saveLineupTeamPlayerEntity(lineupTeamPlayerEntity);
+                this.lineupTeamPlayerService.saveLineupTeamPlayerEntity(lineupTeamPlayerEntity);
             }
         }
 

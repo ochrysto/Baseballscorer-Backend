@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -79,7 +78,6 @@ public class TeamService {
 
     public List<PlayerEntity> getAllPlayersFromTeam(Long teamId) {
         List<PlayerEntity> players = new ArrayList<>();
-        List<TeamPlayerEntity> teamPlayers = new ArrayList<>();
 
         TeamEntity team = findTeamById(teamId);
         if (!team.getTeamplayer().isEmpty()) {

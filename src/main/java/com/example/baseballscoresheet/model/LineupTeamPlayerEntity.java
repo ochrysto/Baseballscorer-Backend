@@ -1,7 +1,6 @@
 package com.example.baseballscoresheet.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Set;
@@ -32,6 +31,7 @@ public class LineupTeamPlayerEntity {
 
     @Column(name = "jersey_nr")
     //@Size(max = 99, message = "Tricot Number must be between 0 and 99")
+    //TODO annotation prüfen
     private Integer jerseyNr;
 
     /**
