@@ -4,6 +4,7 @@ import com.example.baseballscoresheet.model.*;
 import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
 import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
+import com.example.baseballscoresheet.model.dto.lineup.AddLineupDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
@@ -12,8 +13,11 @@ import com.example.baseballscoresheet.model.dto.position.GetPositionDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
+import com.example.baseballscoresheet.services.TeamService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,9 +26,11 @@ import java.util.Set;
 @Service
 public class MappingService {
     private final ModelMapper mapper;
+    private final TeamService teamService;
 
-    public MappingService() {
+    public MappingService(TeamService teamService) {
         this.mapper = new ModelMapper();
+        this.teamService = teamService;
     }
 
     // AddTeamInfoDto + ManagerEntity + ClubEntity + LeagueEntity -> TeamEntity
@@ -133,5 +139,16 @@ public class MappingService {
         playerDto.setName(player.getFirstName() + " " + player.getLastName());
         playerDto.setPassnumber(player.getPassnumber());
         return playerDto;
+    }
+
+    // AddLineupDto -> LineupEntity
+    public LineupEntity mapAddLineupDtoToLineupEntity(AddLineupDto addLineupDto) {
+        LineupEntity lineupEntity = new LineupEntity();
+        if (this.teamService.findTeamById(addLineupDto.getTeamId()).isPresent()) {
+            lineupEntity.setTeam(this.teamService.findTeamById(addLineupDto.getTeamId()).get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + addLineupDto.getTeamId() + " not found");
+        }
+        return lineupEntity;
     }
 }
