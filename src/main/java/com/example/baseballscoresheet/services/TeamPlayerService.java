@@ -3,7 +3,9 @@ package com.example.baseballscoresheet.services;
 import com.example.baseballscoresheet.model.TeamPlayerEntity;
 import com.example.baseballscoresheet.repositories.TeamPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class TeamPlayerService {
@@ -14,7 +16,15 @@ public class TeamPlayerService {
         this.teamPlayerRepository = teamPlayerRepository;
     }
 
-    public void createTeamPlayer(TeamPlayerEntity teamPlayerEntity) {
+    public void saveTeamPlayer(TeamPlayerEntity teamPlayerEntity) {
         this.teamPlayerRepository.save(teamPlayerEntity);
+    }
+
+    public TeamPlayerEntity findTeamPlayerEntityByTeamIdAndPlayerId(Long teamId, Long playerId) {
+        if (this.teamPlayerRepository.findTeamPlayerEntityByTeam_IdAndPlayer_Id(teamId, playerId) != null) {
+            return this.teamPlayerRepository.findTeamPlayerEntityByTeam_IdAndPlayer_Id(teamId, playerId);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamPlayerEntity not found");
+        }
     }
 }

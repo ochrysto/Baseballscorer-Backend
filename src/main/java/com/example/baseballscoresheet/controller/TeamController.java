@@ -3,7 +3,6 @@ package com.example.baseballscoresheet.controller;
 import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.*;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoForLineUpDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
@@ -31,11 +30,21 @@ public class TeamController {
     private final MappingService mappingService;
     private final TeamService teamService;
     private final TeamPlayerService teamPlayerService;
+    private final PlayerService playerService;
+    private final ManagerService managerService;
+    private final LeagueService leagueService;
+    private final ClubService clubService;
 
-    public TeamController(MappingService mappingService, TeamService teamService, TeamPlayerService teamPlayerService) {
+    public TeamController(MappingService mappingService, TeamService teamService, TeamPlayerService teamPlayerService,
+                          PlayerService playerService, ManagerService managerService, LeagueService leagueService,
+                          ClubService clubService) {
         this.mappingService = mappingService;
         this.teamService = teamService;
         this.teamPlayerService = teamPlayerService;
+        this.playerService = playerService;
+        this.managerService = managerService;
+        this.leagueService = leagueService;
+        this.clubService = clubService;
     }
 
     // Endpoint for saving a new team
@@ -59,9 +68,9 @@ public class TeamController {
         LeagueEntity leagueEntity;
 
         // searches for club, manager and league and returns them if they are found in the database
-        managerEntity = Utility.returnManagerIfExists(addTeamInfoDto.getManagerId());
-        clubEntity = Utility.returnClubIfExists(addTeamInfoDto.getClubId());
-        leagueEntity = Utility.returnLeagueIfExists(addTeamInfoDto.getLeagueId());
+        managerEntity = this.managerService.getManagerById(addTeamInfoDto.getManagerId());
+        clubEntity = this.clubService.getClubById(addTeamInfoDto.getClubId());
+        leagueEntity = this.leagueService.getLeagueById(addTeamInfoDto.getLeagueId());
 
         // maps TeamDto object to TeamEntity object and saves it in the database
         TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
@@ -114,13 +123,9 @@ public class TeamController {
     })
     @GetMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long id) {
-        TeamEntity teamEntity;
-        // search for team by id in the database
-        teamEntity = Utility.returnTeamIfExists(id);
-        // maps the found team entity object to a GetTeamInfoDto object
+    public ResponseEntity<GetTeamInfoDto> findTeamById(@PathVariable Long teamId) {
+        TeamEntity teamEntity = this.teamService.findTeamById(teamId);
         GetTeamInfoDto getTeamInfoDto = this.mappingService.mapTeamToGetTeamInfoDto(teamEntity);
-        // returns the mapped GetTeamInfoDto object
         return new ResponseEntity<>(getTeamInfoDto, HttpStatus.OK);
     }
 
@@ -148,9 +153,9 @@ public class TeamController {
         ClubEntity clubEntity;
         LeagueEntity leagueEntity;
         // searches for club, manager and league and returns them if they are found in the database
-        managerEntity = Utility.returnManagerIfExists(updateTeamDto.getManagerId());
-        clubEntity = Utility.returnClubIfExists(updateTeamDto.getClubId());
-        leagueEntity = Utility.returnLeagueIfExists(updateTeamDto.getLeagueId());
+        managerEntity = this.managerService.getManagerById(updateTeamDto.getManagerId());
+        clubEntity = this.clubService.getClubById(updateTeamDto.getClubId());
+        leagueEntity = this.leagueService.getLeagueById(updateTeamDto.getLeagueId());
 
         // maps all information and the id to a TeamEntity object
         TeamEntity updatedTeamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
@@ -180,12 +185,7 @@ public class TeamController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deleteTeamById(@PathVariable Long id) {
-        // checks if record with id is present in database and deletes it
-        if (teamService.findTeamById(id).isPresent()) {
-            this.teamService.delete(id);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + id + " not found");
-        }
+        this.teamService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -206,11 +206,11 @@ public class TeamController {
     public ResponseEntity<GetTeamDto> addPlayersToTeam(@PathVariable Long teamId,
                                                        @RequestBody List<Long> playerList) {
         // searches for team data record with the passed id and return when found
-        TeamEntity teamEntity = Utility.returnTeamIfExists(teamId);
+        TeamEntity teamEntity = teamService.findTeamById(teamId);
         Set<PlayerEntity> players = new HashSet<>();
         // iterates over the list with ids, searches for the matching player objects in the database and returns when found
         for (Long playerId : playerList) {
-            PlayerEntity playerEntity = Utility.returnPlayerIfExists(playerId);
+            PlayerEntity playerEntity = this.playerService.findPlayerById(playerId);
             //checks whether the PlayerEntity object found is already assigned to a team
             if (!Utility.isPlayerAssignedToATeam(playerEntity.getId())) {
                 players.add(playerEntity);
@@ -224,7 +224,7 @@ public class TeamController {
             TeamPlayerEntity teamPlayerEntity = new TeamPlayerEntity();
             teamPlayerEntity.setPlayer(playerEntity);
             teamPlayerEntity.setTeam(teamEntity);
-            this.teamPlayerService.createTeamPlayer(teamPlayerEntity);
+            this.teamPlayerService.saveTeamPlayer(teamPlayerEntity);
         }
         // mapping and returning the TeamEntity object
         GetTeamDto getTeamDto = this.mappingService.mapTeamEntityToGetTeamDto(teamEntity);
@@ -274,11 +274,9 @@ public class TeamController {
     public ResponseEntity<List<GetPlayerInfoForLineUpDto>> getAllPlayersFromTeam(@PathVariable Long teamId) {
         List<GetPlayerInfoForLineUpDto> allPlayersDto = new ArrayList<>();
         List<PlayerEntity> allPlayers = new ArrayList<>();
-        // prüft, ob das Team existiert
         if (Utility.checkIfTeamExists(teamId)) {
-            // zieht sich alle Spieler des Teams
             allPlayers = teamService.getAllPlayersFromTeam(teamId);
-            for (PlayerEntity player : allPlayers){
+            for (PlayerEntity player : allPlayers) {
                 allPlayersDto.add(this.mappingService.mapPlayerEntityToGetPlayerInfoForLineUpDto(player));
             }
         } else {

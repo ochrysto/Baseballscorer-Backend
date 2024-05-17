@@ -31,7 +31,7 @@ public class LineupTeamPlayerEntity {
     private PositionEntity position;
 
     @Column(name = "jersey_nr")
-    @Size(max = 99, message = "Tricot Number must be between 0 and 99")
+    //@Size(max = 99, message = "Tricot Number must be between 0 and 99")
     private Integer jerseyNr;
 
     /**

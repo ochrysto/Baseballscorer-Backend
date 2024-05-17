@@ -49,13 +49,9 @@ public class PlayerController {
     @RolesAllowed("user")
     @PostMapping
     public ResponseEntity<GetPlayerInfoDto> createPlayer(@RequestBody @Valid AddPlayerInfoDto newPlayer) {
-        // mapping AddPlayerInfoDto object to PlayerEntity object
         PlayerEntity playerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(newPlayer);
-        // saving PlayerEntity object in database
         playerEntity = this.playerService.createPlayer(playerEntity);
-        // mapping saved PlayerEntity object to GetPlayerInfoDto object
         GetPlayerInfoDto addedPlayer = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
-        // returning mapped GetPlayerInfoDto object
         return new ResponseEntity<>(addedPlayer, HttpStatus.CREATED);
     }
 
@@ -75,14 +71,11 @@ public class PlayerController {
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<GetPlayerInfoDto>> findAllPlayers() {
-        // creates list with all player objects from database
         List<PlayerEntity> playerEntities = this.playerService.findAllPlayers();
         List<GetPlayerInfoDto> playerDtos = new LinkedList<>();
-        // maps each PlayerEntity object to a GetPlayerInfoDto object, adds each GetPlayerInfoDto object to list
         for (PlayerEntity playerEntity : playerEntities) {
             playerDtos.add(this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity));
         }
-        // returns list of GetPlayerInfoDto objects
         return new ResponseEntity<>(playerDtos, HttpStatus.OK);
     }
 
@@ -99,10 +92,10 @@ public class PlayerController {
             @ApiResponse(responseCode = "500", description = "server error",
                     content = @Content)
     })
-    @GetMapping("/{id}")
+    @GetMapping("/{playerId}")
     @RolesAllowed("user")
-    public ResponseEntity<GetPlayerInfoDto> findPlayerById(@PathVariable Long id) {
-        PlayerEntity playerEntity = Utility.returnPlayerIfExists(id);
+    public ResponseEntity<GetPlayerInfoDto> findPlayerById(@PathVariable Long playerId) {
+        PlayerEntity playerEntity = this.playerService.findPlayerById(playerId);
         GetPlayerInfoDto getPlayerInfoDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
         return new ResponseEntity<>(getPlayerInfoDto, HttpStatus.OK);
     }
@@ -128,16 +121,9 @@ public class PlayerController {
     public ResponseEntity<GetPlayerInfoDto> updatePlayer(@PathVariable final Long id,
                                                          @Valid @RequestBody final AddPlayerInfoDto addPlayerInfoDto) {
         GetPlayerInfoDto updatedPlayerDto;
-        // the passed AddPlayerInfoDto and the id are mapped to a PlayerEntity object
         PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(addPlayerInfoDto);
         updatedPlayerEntity.setId(id);
-        // the mapped PlayerEntity object is passed on to the PlayerService
-        // the service checks whether the PlayerEntity object that is to be updated in the database actually exists in the database
-        // if not, a ResourceNotFoundException is thrown
-        // if the corresponding PlayerEntity object is found, its attribute values are updated with the attribute values of the transferred PlayerEntity object
-        // the updated PlayerEntity object is stored in the database
         updatedPlayerEntity = this.playerService.update(updatedPlayerEntity);
-        // the mapped PlayerEntity object is mapped to a GetPlayerInfoDto object and returned
         updatedPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(updatedPlayerEntity);
         return new ResponseEntity<>(updatedPlayerDto, HttpStatus.CREATED);
     }
@@ -157,14 +143,7 @@ public class PlayerController {
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deletePlayerById(@PathVariable Long id) {
-        // check whether the id is present in the database
-        if (playerService.findPlayerById(id).isPresent()) {
-            // if yes, then the data record with the id is deleted
-            this.playerService.delete(id);
-        } else {
-            // if not, then a ResourceNotFoundException is thrown
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with id: " + id + " not found");
-        }
+        this.playerService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

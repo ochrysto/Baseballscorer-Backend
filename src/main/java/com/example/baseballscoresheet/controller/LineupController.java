@@ -5,7 +5,9 @@ import com.example.baseballscoresheet.model.LineupEntity;
 import com.example.baseballscoresheet.model.LineupTeamPlayerEntity;
 import com.example.baseballscoresheet.model.dto.lineup.AddLineupDto;
 import com.example.baseballscoresheet.model.dto.lineup.GetLineupDto;
+import com.example.baseballscoresheet.model.dto.lineup.AddPlayerToLineupDto;
 import com.example.baseballscoresheet.services.LineupService;
+import com.example.baseballscoresheet.services.LineupTeamPlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,10 +31,12 @@ public class LineupController {
 
     private final MappingService mappingService;
     private final LineupService lineupService;
+    private final LineupTeamPlayerService lineupTeamPlayerService;
 
-    public LineupController(MappingService mappingService, LineupService lineupService) {
+    public LineupController(MappingService mappingService, LineupService lineupService, LineupTeamPlayerService lineupTeamPlayerService) {
         this.mappingService = mappingService;
         this.lineupService = lineupService;
+        this.lineupTeamPlayerService = lineupTeamPlayerService;
     }
 
     // Endpoint for saving lineups
@@ -53,14 +57,25 @@ public class LineupController {
     public ResponseEntity<List<GetLineupDto>> createLineups(@RequestBody @Valid List<AddLineupDto> newLineups) {
         List<GetLineupDto> addedLineup = new ArrayList<>();
 
-        // müssen beide gespeichert werden
-        LineupEntity lineupEntity;
-        LineupTeamPlayerEntity lineupTeamPlayerEntity = new LineupTeamPlayerEntity();
-
         // beide lineups werden gemappt und gespeichert
         for (AddLineupDto addLineupDto : newLineups) {
-            lineupEntity = this.mappingService.mapAddLineupDtoToLineupEntity(addLineupDto);
-            this.lineupService.saveLineup(lineupEntity);
+            LineupEntity lineupEntity = this.mappingService.mapAddLineupDtoToLineupEntity(addLineupDto);
+            lineupEntity = this.lineupService.saveLineup(lineupEntity);
+        }
+
+        // für jeden player, der im lineup zu finden ist, wir ein neues LineupTeamPlayerEntity Objekt angelegt
+        // dafür wir über einmal über jedes übergebene Lineup iteriert
+        for (AddLineupDto addLineupDto : newLineups) {
+            for (AddPlayerToLineupDto addPlayerToLineupDto : addLineupDto.getPlayerDtoSet()) {
+                LineupEntity lineupEntity2 = lineupService.findLineupByTeamId(addLineupDto.getTeamId());
+                LineupTeamPlayerEntity lineupTeamPlayerEntity = this.mappingService.mapToLineupTeamPlayerEntity(addPlayerToLineupDto, lineupEntity2);
+                lineupTeamPlayerEntity = this.lineupTeamPlayerService.saveLineupTeamPlayerEntity(lineupTeamPlayerEntity);
+            }
+        }
+
+        List<LineupTeamPlayerEntity> addedLineupTeamPlayers = this.lineupTeamPlayerService.findAll();
+        for (LineupTeamPlayerEntity lineupTeamPlayer : addedLineupTeamPlayers) {
+            addedLineup.add(this.mappingService.mapLineupTeamPlayerEntityToGetLineupDto(lineupTeamPlayer));
         }
         return new ResponseEntity<>(addedLineup, HttpStatus.CREATED);
     }

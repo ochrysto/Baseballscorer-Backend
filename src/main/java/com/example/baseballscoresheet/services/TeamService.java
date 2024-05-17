@@ -44,29 +44,29 @@ public class TeamService {
         return allManagersInTeams;
     }
 
-    public Optional<TeamEntity> findTeamById(Long id) {
-        return this.teamRepository.findById(id);
+    public TeamEntity findTeamById(Long id) {
+        if (this.teamRepository.findById(id).isPresent()) {
+            return this.teamRepository.findById(id).get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id " + id + " not found");
+        }
     }
 
     public TeamEntity update(TeamEntity updatedTeamEntity) {
         TeamEntity updatedTeam;
-        if (this.teamRepository.findById(updatedTeamEntity.getId()).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with the id = " + updatedTeamEntity.getId() + " not found");
-        } else {
-            updatedTeam = this.findTeamById(updatedTeamEntity.getId()).get();
-            updatedTeam.setName(updatedTeamEntity.getName());
-            updatedTeam.setManager(updatedTeamEntity.getManager());
-            updatedTeam.setClub(updatedTeamEntity.getClub());
-            updatedTeam.setLeague(updatedTeamEntity.getLeague());
-            updatedTeam.setTeamLogo(updatedTeamEntity.getTeamLogo());
-            if (updatedTeamEntity.getTeamplayer() != null) {
-                for (TeamPlayerEntity teamPlayerEntity : updatedTeamEntity.getTeamplayer()) {
-                    updatedTeam.getTeamplayer().add(teamPlayerEntity);
-                }
+        updatedTeam = this.findTeamById(updatedTeamEntity.getId());
+        updatedTeam.setName(updatedTeamEntity.getName());
+        updatedTeam.setManager(updatedTeamEntity.getManager());
+        updatedTeam.setClub(updatedTeamEntity.getClub());
+        updatedTeam.setLeague(updatedTeamEntity.getLeague());
+        updatedTeam.setTeamLogo(updatedTeamEntity.getTeamLogo());
+        if (updatedTeamEntity.getTeamplayer() != null) {
+            for (TeamPlayerEntity teamPlayerEntity : updatedTeamEntity.getTeamplayer()) {
+                updatedTeam.getTeamplayer().add(teamPlayerEntity);
             }
-            this.teamRepository.save(updatedTeam);
-            return updatedTeam;
         }
+        this.teamRepository.save(updatedTeam);
+        return updatedTeam;
     }
 
     public void delete(Long id) {
@@ -81,7 +81,7 @@ public class TeamService {
         List<PlayerEntity> players = new ArrayList<>();
         List<TeamPlayerEntity> teamPlayers = new ArrayList<>();
 
-        TeamEntity team = findTeamById(teamId).get();
+        TeamEntity team = findTeamById(teamId);
         if (!team.getTeamplayer().isEmpty()) {
             for (TeamPlayerEntity teamPlayer : team.getTeamplayer()) {
                 players.add(teamPlayer.getPlayer());

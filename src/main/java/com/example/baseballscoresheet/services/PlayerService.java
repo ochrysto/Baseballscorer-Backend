@@ -27,8 +27,12 @@ public class PlayerService {
         return this.playerRepository.save(newPlayer);
     }
 
-    public Optional<PlayerEntity> findPlayerById(Long playerId) {
-        return this.playerRepository.findById(playerId);
+    public PlayerEntity findPlayerById(Long playerId) {
+        if (this.playerRepository.findById(playerId).isPresent()) {
+            return this.playerRepository.findById(playerId).get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with id " + playerId + " not found");
+        }
     }
 
     public List<PlayerEntity> findAllPlayers() {
@@ -37,16 +41,13 @@ public class PlayerService {
 
     public PlayerEntity update(PlayerEntity updatedPlayerEntity) {
         PlayerEntity updatedPlayer;
-        if (this.playerRepository.findById(updatedPlayerEntity.getId()).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with the id = " + updatedPlayerEntity.getId() + " not found");
-        } else {
-            updatedPlayer = this.findPlayerById(updatedPlayerEntity.getId()).get();
-            updatedPlayer.setFirstName(updatedPlayerEntity.getFirstName());
-            updatedPlayer.setLastName(updatedPlayerEntity.getLastName());
-            updatedPlayer.setPassnumber(updatedPlayerEntity.getPassnumber());
-            this.playerRepository.save(updatedPlayer);
-            return updatedPlayer;
-        }
+        updatedPlayer = this.findPlayerById(updatedPlayerEntity.getId());
+        updatedPlayer.setFirstName(updatedPlayerEntity.getFirstName());
+        updatedPlayer.setLastName(updatedPlayerEntity.getLastName());
+        updatedPlayer.setPassnumber(updatedPlayerEntity.getPassnumber());
+        this.playerRepository.save(updatedPlayer);
+        return updatedPlayer;
+
     }
 
     public void delete(Long id) {

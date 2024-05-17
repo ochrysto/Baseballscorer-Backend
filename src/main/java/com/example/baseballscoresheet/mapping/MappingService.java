@@ -5,6 +5,9 @@ import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
 import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.lineup.AddLineupDto;
+import com.example.baseballscoresheet.model.dto.lineup.GetLineupDto;
+import com.example.baseballscoresheet.model.dto.lineup.AddPlayerToLineupDto;
+import com.example.baseballscoresheet.model.dto.lineup.GetPlayerFromLineupDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
 import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
@@ -13,12 +16,11 @@ import com.example.baseballscoresheet.model.dto.position.GetPositionDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
-import com.example.baseballscoresheet.services.TeamService;
+import com.example.baseballscoresheet.services.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,10 +29,17 @@ import java.util.Set;
 public class MappingService {
     private final ModelMapper mapper;
     private final TeamService teamService;
+    private final PositionService positionService;
+    private final LineupService lineupService;
+    private final TeamPlayerService teamPlayerService;
 
-    public MappingService(TeamService teamService) {
+    public MappingService(TeamService teamService, PositionService positionService, LineupService lineupService,
+                          TeamPlayerService teamPlayerService) {
         this.mapper = new ModelMapper();
         this.teamService = teamService;
+        this.positionService = positionService;
+        this.lineupService = lineupService;
+        this.teamPlayerService = teamPlayerService;
     }
 
     // AddTeamInfoDto + ManagerEntity + ClubEntity + LeagueEntity -> TeamEntity
@@ -144,11 +153,36 @@ public class MappingService {
     // AddLineupDto -> LineupEntity
     public LineupEntity mapAddLineupDtoToLineupEntity(AddLineupDto addLineupDto) {
         LineupEntity lineupEntity = new LineupEntity();
-        if (this.teamService.findTeamById(addLineupDto.getTeamId()).isPresent()) {
-            lineupEntity.setTeam(this.teamService.findTeamById(addLineupDto.getTeamId()).get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + addLineupDto.getTeamId() + " not found");
-        }
+        lineupEntity.setTeam(this.teamService.findTeamById(addLineupDto.getTeamId()));
         return lineupEntity;
+    }
+
+    // LineupPlayerDto + AddLineupDto -> LineupTeamPlayerEntity
+    public LineupTeamPlayerEntity mapToLineupTeamPlayerEntity(AddPlayerToLineupDto addPlayerToLineupDto, LineupEntity lineupEntity) {
+        LineupTeamPlayerEntity lineupTeamPlayerEntity = new LineupTeamPlayerEntity();
+        TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity.getTeam().getId(), addPlayerToLineupDto.getPlayerId());
+        lineupTeamPlayerEntity.setLineup(this.lineupService.findLineupById(lineupEntity.getId()));
+        lineupTeamPlayerEntity.setTeamPlayer(teamPlayer);
+        lineupTeamPlayerEntity.setJerseyNr(addPlayerToLineupDto.getJerseyNr());
+        lineupTeamPlayerEntity.setPosition(this.positionService.findById(addPlayerToLineupDto.getPosition()));
+
+        return lineupTeamPlayerEntity;
+    }
+
+    public GetLineupDto mapLineupTeamPlayerEntityToGetLineupDto(LineupTeamPlayerEntity lineupTeamPlayer) {
+        GetLineupDto getLineupDto = new GetLineupDto();
+        GetPlayerFromLineupDto getPlayerFromLineupDto = new GetPlayerFromLineupDto();
+
+        getLineupDto.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
+
+        getPlayerFromLineupDto.setPlayerName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName(),
+                lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
+        getPlayerFromLineupDto.setPosition(lineupTeamPlayer.getPosition().getDescription());
+        getPlayerFromLineupDto.setJerseyNr(lineupTeamPlayer.getJerseyNr());
+
+        getLineupDto.setPlayerList(new ArrayList<>());
+        getLineupDto.getPlayerList().add(getPlayerFromLineupDto);
+
+        return getLineupDto;
     }
 }
