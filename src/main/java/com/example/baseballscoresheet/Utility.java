@@ -12,8 +12,7 @@ public class Utility {
 
 
     @Autowired
-    public void setPlayerService(PlayerService playerService, TeamService teamService, ManagerService managerService,
-                                 ClubService clubService, LeagueService leagueService) {
+    public void setPlayerService(PlayerService playerService, TeamService teamService) {
         Utility.playerService = playerService;
         Utility.teamService = teamService;
     }

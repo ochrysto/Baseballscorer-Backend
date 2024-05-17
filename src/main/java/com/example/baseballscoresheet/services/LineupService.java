@@ -17,8 +17,8 @@ public class LineupService {
         this.lineupRepository = lineupRepository;
     }
 
-    public LineupEntity saveLineup(LineupEntity lineupEntity) {
-        return this.lineupRepository.save(lineupEntity);
+    public void saveLineup(LineupEntity lineupEntity) {
+        this.lineupRepository.save(lineupEntity);
     }
 
     public LineupEntity findLineupById(Long lineupId) {
@@ -30,9 +30,9 @@ public class LineupService {
     }
 
     public LineupEntity findLineupByTeamId(Long teamId) {
-        if (this.lineupRepository.findByTeam_Id(teamId) != null){
+        if (this.lineupRepository.findByTeam_Id(teamId) != null) {
             return lineupRepository.findByTeam_Id(teamId);
-        }else{
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lineup with team (teamID:) " + teamId + " not found");
         }
     }
