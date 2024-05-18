@@ -2,25 +2,25 @@ INSERT INTO association(name)
 VALUES ('DBV');
 
 INSERT INTO position(id, description)
-VALUES (1,'Pitcher');
+VALUES (1, 'Pitcher');
 INSERT INTO position(id, description)
-VALUES (2,'Catcher');
+VALUES (2, 'Catcher');
 INSERT INTO position(id, description)
-VALUES (3,'First Base');
+VALUES (3, 'First Base');
 INSERT INTO position(id, description)
-VALUES (4,'Second Base');
+VALUES (4, 'Second Base');
 INSERT INTO position(id, description)
-VALUES (5,'Third Base');
+VALUES (5, 'Third Base');
 INSERT INTO position(id, description)
-VALUES (6,'Short Stop');
+VALUES (6, 'Short Stop');
 INSERT INTO position(id, description)
-VALUES (7,'Leftfielder');
+VALUES (7, 'Leftfielder');
 INSERT INTO position(id, description)
-VALUES (8,'Centerfielder');
+VALUES (8, 'Centerfielder');
 INSERT INTO position(id, description)
-VALUES (9,'Rightfielder');
+VALUES (9, 'Rightfielder');
 INSERT INTO position(id, description)
-VALUES (10,'Designated Hitter');
+VALUES (10, 'Designated Hitter');
 
 INSERT INTO club(name, city, association_id)
 VALUES ('Mannheim Tornados', 'Mannheim', 1);
@@ -159,3 +159,17 @@ INSERT INTO team_player(team_id, player_id)
 VALUES (7, 13);
 INSERT INTO team_player(team_id, player_id)
 VALUES (7, 14);
+
+INSERT INTO lineup(team_id)
+VALUES (1);
+INSERT INTO lineup(team_id)
+VALUES (2);
+
+INSERT INTO lineup_team_player(lineup_id, team_player_id, jersey_nr, position_id)
+VALUES (1, 1, 1, 1);
+INSERT INTO lineup_team_player(lineup_id, team_player_id, jersey_nr, position_id)
+VALUES (1, 2, 2, 2);
+INSERT INTO lineup_team_player(lineup_id, team_player_id, jersey_nr, position_id)
+VALUES (2, 3, 3, 3);
+INSERT INTO lineup_team_player(lineup_id, team_player_id, jersey_nr, position_id)
+VALUES (2, 4, 4, 4)

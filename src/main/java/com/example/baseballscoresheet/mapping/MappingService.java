@@ -5,7 +5,6 @@ import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dto.club.GetClubDto;
 import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dto.lineup.AddLineupDto;
-import com.example.baseballscoresheet.model.dto.lineup.GetLineupDto;
 import com.example.baseballscoresheet.model.dto.lineup.AddPlayerToLineupDto;
 import com.example.baseballscoresheet.model.dto.lineup.GetPlayerFromLineupDto;
 import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
@@ -20,7 +19,6 @@ import com.example.baseballscoresheet.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -169,20 +167,13 @@ public class MappingService {
         return lineupTeamPlayerEntity;
     }
 
-    public GetLineupDto mapLineupTeamPlayerEntityToGetLineupDto(LineupTeamPlayerEntity lineupTeamPlayer) {
-        GetLineupDto getLineupDto = new GetLineupDto();
+    // LineupTeamPlayerEntity -> GetPlayerFromLineupDto
+    public GetPlayerFromLineupDto mapTeamPlayerEntityToGetPlayerFromLineUpDto(LineupTeamPlayerEntity lineupTeamPlayer) {
         GetPlayerFromLineupDto getPlayerFromLineupDto = new GetPlayerFromLineupDto();
-
-        getLineupDto.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
-
+        getPlayerFromLineupDto.setJerseyNr(lineupTeamPlayer.getJerseyNr());
+        getPlayerFromLineupDto.setPosition(lineupTeamPlayer.getPosition().getDescription());
         getPlayerFromLineupDto.setPlayerName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName(),
                 lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
-        getPlayerFromLineupDto.setPosition(lineupTeamPlayer.getPosition().getDescription());
-        getPlayerFromLineupDto.setJerseyNr(lineupTeamPlayer.getJerseyNr());
-
-        getLineupDto.setPlayerList(new ArrayList<>());
-        getLineupDto.getPlayerList().add(getPlayerFromLineupDto);
-
-        return getLineupDto;
+        return getPlayerFromLineupDto;
     }
 }

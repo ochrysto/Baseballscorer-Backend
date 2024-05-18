@@ -10,4 +10,6 @@ public interface TeamPlayerRepository extends JpaRepository<TeamPlayerEntity, Lo
     void deleteByPlayer_IdAndTeam_Id(Long player_id, Long team_id);
 
     TeamPlayerEntity findTeamPlayerEntityByTeam_IdAndPlayer_Id(Long team_id, Long player_id);
+
+    TeamPlayerEntity findByPlayer_Id(Long playerId);
 }

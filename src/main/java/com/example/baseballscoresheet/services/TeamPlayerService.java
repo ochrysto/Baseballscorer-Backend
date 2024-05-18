@@ -27,4 +27,12 @@ public class TeamPlayerService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamPlayerEntity not found");
         }
     }
+
+    public TeamPlayerEntity findTeamPlayerEntityByPlayerId(Long playerId) {
+        if (this.teamPlayerRepository.findByPlayer_Id(playerId) != null) {
+            return teamPlayerRepository.findByPlayer_Id(playerId);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamPlayerEntity not found");
+        }
+    }
 }

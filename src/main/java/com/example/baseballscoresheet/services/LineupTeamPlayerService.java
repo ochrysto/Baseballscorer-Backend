@@ -5,8 +5,6 @@ import com.example.baseballscoresheet.repositories.LineupTeamPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class LineupTeamPlayerService {
 
@@ -21,7 +19,7 @@ public class LineupTeamPlayerService {
         this.lineupTeamPlayerRepository.save(lineupTeamPlayerEntity);
     }
 
-    public List<LineupTeamPlayerEntity> findAll() {
-        return this.lineupTeamPlayerRepository.findAll();
+    public LineupTeamPlayerEntity findByTeamPlayerId(Long teamPlayerId) {
+        return this.lineupTeamPlayerRepository.findByTeamPlayerId(teamPlayerId);
     }
 }
