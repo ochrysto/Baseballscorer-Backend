@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class LeagueController {
         this.mappingService = mappingService;
     }
 
-    // End point for saving a new game
+    // Endpoint for getting all leagues
     @Operation(summary = "retrieve all existing leagues")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "leagues found",
@@ -47,7 +48,7 @@ public class LeagueController {
     @RolesAllowed("user")
     public ResponseEntity<List<GetLeagueDto>> findAllLeagues() {
         List<LeagueEntity> allLeagueEntities = leagueService.readAll();
-        List<GetLeagueDto> allLeagueDtos = new LinkedList<>();
+        List<GetLeagueDto> allLeagueDtos = new ArrayList<>();
         for (LeagueEntity leagueEntity : allLeagueEntities) {
             allLeagueDtos.add(mappingService.mapLeagueEntityToGetLeagueDto(leagueEntity));
         }
