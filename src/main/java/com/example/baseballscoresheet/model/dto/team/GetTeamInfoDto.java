@@ -10,6 +10,8 @@ import lombok.Setter;
 @Setter
 public class GetTeamInfoDto {
 
+    private Long teamId;
+
     private String name;
 
     private GetClubDto getClubDto;

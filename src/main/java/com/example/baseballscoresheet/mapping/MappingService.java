@@ -57,6 +57,7 @@ public class MappingService {
     // TeamEntity -> GetTeamInfoDto
     public GetTeamInfoDto mapTeamToGetTeamInfoDto(TeamEntity teamEntity) {
         GetTeamInfoDto teamInfoDto = new GetTeamInfoDto();
+        teamInfoDto.setTeamId(teamEntity.getId());
         teamInfoDto.setName(teamEntity.getName());
         teamInfoDto.setTeamLogo(teamEntity.getTeamLogo());
         teamInfoDto.setGetManagerDto(mapManagerEntityToGetManagerDto(teamEntity.getManager()));

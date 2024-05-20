@@ -63,14 +63,10 @@ public class TeamController {
     @PostMapping
     //@RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> createTeam(@RequestBody @Valid AddTeamInfoDto addTeamInfoDto) {
-        ManagerEntity managerEntity;
-        ClubEntity clubEntity;
-        LeagueEntity leagueEntity;
-
         // searches for club, manager and league and returns them if they are found in the database
-        managerEntity = this.managerService.getManagerById(addTeamInfoDto.getManagerId());
-        clubEntity = this.clubService.getClubById(addTeamInfoDto.getClubId());
-        leagueEntity = this.leagueService.getLeagueById(addTeamInfoDto.getLeagueId());
+        ManagerEntity managerEntity = this.managerService.getManagerById(addTeamInfoDto.getManagerId());
+        ClubEntity clubEntity = this.clubService.getClubById(addTeamInfoDto.getClubId());
+        LeagueEntity leagueEntity = this.leagueService.getLeagueById(addTeamInfoDto.getLeagueId());
 
         // maps TeamDto object to TeamEntity object and saves it in the database
         TeamEntity teamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
@@ -149,13 +145,10 @@ public class TeamController {
     @RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> updateTeamInfo(@PathVariable final Long id,
                                                          @Valid @RequestBody final AddTeamInfoDto updateTeamDto) {
-        ManagerEntity managerEntity;
-        ClubEntity clubEntity;
-        LeagueEntity leagueEntity;
         // searches for club, manager and league and returns them if they are found in the database
-        managerEntity = this.managerService.getManagerById(updateTeamDto.getManagerId());
-        clubEntity = this.clubService.getClubById(updateTeamDto.getClubId());
-        leagueEntity = this.leagueService.getLeagueById(updateTeamDto.getLeagueId());
+        ManagerEntity managerEntity = this.managerService.getManagerById(updateTeamDto.getManagerId());
+        ClubEntity clubEntity = this.clubService.getClubById(updateTeamDto.getClubId());
+        LeagueEntity leagueEntity = this.leagueService.getLeagueById(updateTeamDto.getLeagueId());
 
         // maps all information and the id to a TeamEntity object
         TeamEntity updatedTeamEntity = this.mappingService.mapAddTeamInfoDtoToTeamEntity(
