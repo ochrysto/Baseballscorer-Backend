@@ -1,15 +1,16 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.UmpireEntity;
-import com.example.baseballscoresheet.model.dto.umpire.GetUmpireDto;
-import com.example.baseballscoresheet.services.UmpireService;
+import com.example.baseballscoresheet.model.ScorerEntity;
+import com.example.baseballscoresheet.model.dto.scorer.GetScorerDto;
+import com.example.baseballscoresheet.services.ScorerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.security.RolesAllowed;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,38 +21,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/umpire")
-public class UmpireController {
+@RequestMapping("/scorer")
+public class ScorerController {
 
-    private final UmpireService umpireService;
+    private final ScorerService scorerService;
     private final MappingService mappingService;
 
-    public UmpireController(UmpireService umpireService, MappingService mappingService) {
-        this.umpireService = umpireService;
+    @Autowired
+    public ScorerController(ScorerService scorerService, MappingService mappingService) {
+        this.scorerService = scorerService;
         this.mappingService = mappingService;
     }
 
-    // Endpoint for getting all official umpires
-    @Operation(summary = "retrieve all official umpires")
+    // Endpoint for getting all official scorers
+    @Operation(summary = "retrieve all official scorers")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "umpires found",
+            @ApiResponse(responseCode = "200", description = "scorers found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetUmpireDto.class))}),
+                            schema = @Schema(implementation = GetScorerDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "umpires not found",
+            @ApiResponse(responseCode = "404", description = "scorers not found",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "server error",
                     content = @Content),
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetUmpireDto>> findAllUmpires() {
-        List<UmpireEntity> allUmpireEntities = umpireService.readAll();
-        List<GetUmpireDto> allUmpireDtos = new ArrayList<>();
-        for (UmpireEntity umpireEntity : allUmpireEntities) {
-            allUmpireDtos.add(mappingService.mapUmpireEntityToGetUmpireDto(umpireEntity));
+    public ResponseEntity<List<GetScorerDto>> findAllScorers() {
+        List<ScorerEntity> allScorersEntities = scorerService.readAll();
+        List<GetScorerDto> allScorersDtos = new ArrayList<>();
+        for (ScorerEntity scorerEntity : allScorersEntities) {
+            allScorersDtos.add(mappingService.mapScorerEntityToGetScorerDto(scorerEntity));
         }
-        return new ResponseEntity<>(allUmpireDtos, HttpStatus.OK);
+        return new ResponseEntity<>(allScorersDtos, HttpStatus.OK);
     }
 }

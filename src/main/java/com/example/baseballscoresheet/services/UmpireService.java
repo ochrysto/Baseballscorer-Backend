@@ -1,6 +1,5 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.model.AssociationEntity;
 import com.example.baseballscoresheet.model.UmpireEntity;
 import com.example.baseballscoresheet.repositories.UmpireRepository;
 import org.springframework.beans.factory.annotation.Autowired;

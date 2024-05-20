@@ -12,6 +12,7 @@ import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoForLineUpDto;
 import com.example.baseballscoresheet.model.dto.position.GetPositionDto;
+import com.example.baseballscoresheet.model.dto.scorer.GetScorerDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
@@ -185,5 +186,14 @@ public class MappingService {
         getUmpireDto.setPassnumber(umpireEntity.getPassnumber());
         getUmpireDto.setName(umpireEntity.getFirstName(), umpireEntity.getLastName());
         return getUmpireDto;
+    }
+
+    // ScorerEntity -> GetScorerDto
+    public GetScorerDto mapScorerEntityToGetScorerDto(ScorerEntity scorerEntity) {
+        GetScorerDto getScorerDto = new GetScorerDto();
+        getScorerDto.setScorerId(scorerEntity.getId());
+        getScorerDto.setPassnumber(scorerEntity.getPassnumber());
+        getScorerDto.setName(scorerEntity.getFirstName(), scorerEntity.getLastName());
+        return getScorerDto;
     }
 }
