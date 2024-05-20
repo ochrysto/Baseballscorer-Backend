@@ -15,6 +15,7 @@ import com.example.baseballscoresheet.model.dto.position.GetPositionDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
 import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
+import com.example.baseballscoresheet.model.dto.umpire.GetUmpireDto;
 import com.example.baseballscoresheet.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -175,5 +176,14 @@ public class MappingService {
         getPlayerFromLineupDto.setPlayerName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName(),
                 lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
         return getPlayerFromLineupDto;
+    }
+
+    // UmpireEntity -> GetUmpireDto
+    public GetUmpireDto mapUmpireEntityToGetUmpireDto(UmpireEntity umpireEntity) {
+        GetUmpireDto getUmpireDto = new GetUmpireDto();
+        getUmpireDto.setUmpireId(umpireEntity.getId());
+        getUmpireDto.setPassnumber(umpireEntity.getPassnumber());
+        getUmpireDto.setName(umpireEntity.getFirstName(), umpireEntity.getLastName());
+        return getUmpireDto;
     }
 }

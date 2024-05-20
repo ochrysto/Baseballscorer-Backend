@@ -16,16 +16,10 @@ import java.util.Set;
 @Table(name = "umpire")
 public class UmpireEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     *
-     */
     private Long passnumber;
 
     /**
@@ -38,9 +32,6 @@ public class UmpireEntity {
      */
     private String lastName;
 
-    /**
-     *
-     */
     @OneToMany(mappedBy = "umpire")
     private Set<GameUmpireEntity> gameUmpire;
 }
