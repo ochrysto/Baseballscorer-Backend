@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.UmpireEntity;
-import com.example.baseballscoresheet.model.dto.umpire.GetUmpireDto;
+import com.example.baseballscoresheet.model.entities.UmpireEntity;
+import com.example.baseballscoresheet.model.dtos.umpire.GetUmpireDto;
 import com.example.baseballscoresheet.services.UmpireService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

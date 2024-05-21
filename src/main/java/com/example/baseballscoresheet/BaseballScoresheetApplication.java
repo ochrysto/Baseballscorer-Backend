@@ -10,3 +10,4 @@ public class BaseballScoresheetApplication {
         SpringApplication.run(BaseballScoresheetApplication.class, args);
     }
 }
+

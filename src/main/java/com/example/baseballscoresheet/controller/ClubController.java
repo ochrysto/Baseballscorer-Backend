@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.ClubEntity;
-import com.example.baseballscoresheet.model.dto.club.GetClubDto;
+import com.example.baseballscoresheet.model.entities.ClubEntity;
+import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
 import com.example.baseballscoresheet.services.ClubService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

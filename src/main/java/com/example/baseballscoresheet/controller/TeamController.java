@@ -2,11 +2,11 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.*;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoForLineUpDto;
-import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
-import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
-import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerInfoForLineUpDto;
+import com.example.baseballscoresheet.model.dtos.team.AddTeamInfoDto;
+import com.example.baseballscoresheet.model.dtos.team.GetTeamDto;
+import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
+import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -61,7 +61,7 @@ public class TeamController {
                     content = @Content)
     })
     @PostMapping
-    //@RolesAllowed("user")
+    @RolesAllowed("user")
     public ResponseEntity<GetTeamInfoDto> createTeam(@RequestBody @Valid AddTeamInfoDto addTeamInfoDto) {
         // searches for club, manager and league and returns them if they are found in the database
         ManagerEntity managerEntity = this.managerService.getManagerById(addTeamInfoDto.getManagerId());

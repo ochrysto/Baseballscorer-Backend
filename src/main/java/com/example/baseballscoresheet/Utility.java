@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet;
 
-import com.example.baseballscoresheet.model.TeamPlayerEntity;
+import com.example.baseballscoresheet.model.entities.TeamPlayerEntity;
 import com.example.baseballscoresheet.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

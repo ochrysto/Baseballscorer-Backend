@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.repositories;
 
-import com.example.baseballscoresheet.model.TeamPlayerEntity;
+import com.example.baseballscoresheet.model.entities.TeamPlayerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TeamPlayerRepository extends JpaRepository<TeamPlayerEntity, Long> {

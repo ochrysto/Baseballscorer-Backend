@@ -1,9 +1,11 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.model.UmpireEntity;
+import com.example.baseballscoresheet.model.entities.UmpireEntity;
 import com.example.baseballscoresheet.repositories.UmpireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,5 +21,13 @@ public class UmpireService {
 
     public List<UmpireEntity> readAll() {
         return this.umpireRepository.findAll();
+    }
+
+    public UmpireEntity findById(Long umpireId) {
+        if (this.umpireRepository.findById(umpireId).isPresent()) {
+            return this.umpireRepository.findById(umpireId).get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Umpire with id " + umpireId + " not found");
+        }
     }
 }

@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.LeagueEntity;
-import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
+import com.example.baseballscoresheet.model.entities.LeagueEntity;
+import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
 import com.example.baseballscoresheet.services.LeagueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 

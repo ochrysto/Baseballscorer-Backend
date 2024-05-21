@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.PlayerEntity;
-import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.entities.PlayerEntity;
+import com.example.baseballscoresheet.model.dtos.player.AddPlayerInfoDto;
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerInfoDto;
 import com.example.baseballscoresheet.services.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.model.ManagerEntity;
-import com.example.baseballscoresheet.model.PlayerEntity;
-import com.example.baseballscoresheet.model.TeamEntity;
-import com.example.baseballscoresheet.model.TeamPlayerEntity;
+import com.example.baseballscoresheet.model.entities.ManagerEntity;
+import com.example.baseballscoresheet.model.entities.PlayerEntity;
+import com.example.baseballscoresheet.model.entities.TeamEntity;
+import com.example.baseballscoresheet.model.entities.TeamPlayerEntity;
 import com.example.baseballscoresheet.repositories.TeamPlayerRepository;
 import com.example.baseballscoresheet.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;

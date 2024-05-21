@@ -1,13 +1,13 @@
 package com.example.baseballscoresheet.mapping;
 
-import com.example.baseballscoresheet.model.ClubEntity;
-import com.example.baseballscoresheet.model.LeagueEntity;
-import com.example.baseballscoresheet.model.ManagerEntity;
-import com.example.baseballscoresheet.model.TeamEntity;
-import com.example.baseballscoresheet.model.dto.club.GetClubDto;
-import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
-import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
-import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
+import com.example.baseballscoresheet.model.entities.ClubEntity;
+import com.example.baseballscoresheet.model.entities.LeagueEntity;
+import com.example.baseballscoresheet.model.entities.ManagerEntity;
+import com.example.baseballscoresheet.model.entities.TeamEntity;
+import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
+import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
+import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
+import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;

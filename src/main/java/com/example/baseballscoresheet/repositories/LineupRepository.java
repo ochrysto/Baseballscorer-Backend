@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.repositories;
 
-import com.example.baseballscoresheet.model.LineupEntity;
+import com.example.baseballscoresheet.model.entities.LineupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LineupRepository extends JpaRepository<LineupEntity, Long> {

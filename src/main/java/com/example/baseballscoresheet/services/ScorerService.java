@@ -1,9 +1,11 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.model.ScorerEntity;
+import com.example.baseballscoresheet.model.entities.ScorerEntity;
 import com.example.baseballscoresheet.repositories.ScorerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,5 +21,13 @@ public class ScorerService {
 
     public List<ScorerEntity> readAll() {
         return this.scorerRepository.findAll();
+    }
+
+    public ScorerEntity findById(Long scorerId) {
+        if (this.scorerRepository.findById(scorerId).isPresent()) {
+            return this.scorerRepository.findById(scorerId).get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scorer with the id " + scorerId + " not found");
+        }
     }
 }

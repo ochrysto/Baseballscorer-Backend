@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.PositionEntity;
-import com.example.baseballscoresheet.model.dto.club.GetClubDto;
-import com.example.baseballscoresheet.model.dto.position.GetPositionDto;
+import com.example.baseballscoresheet.model.entities.PositionEntity;
+import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
+import com.example.baseballscoresheet.model.dtos.position.GetPositionDto;
 import com.example.baseballscoresheet.services.PositionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

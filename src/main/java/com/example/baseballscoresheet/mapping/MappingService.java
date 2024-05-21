@@ -1,27 +1,31 @@
 package com.example.baseballscoresheet.mapping;
 
-import com.example.baseballscoresheet.model.*;
-import com.example.baseballscoresheet.model.dto.association.GetAssociationDto;
-import com.example.baseballscoresheet.model.dto.club.GetClubDto;
-import com.example.baseballscoresheet.model.dto.league.GetLeagueDto;
-import com.example.baseballscoresheet.model.dto.lineup.AddLineupDto;
-import com.example.baseballscoresheet.model.dto.lineup.AddPlayerToLineupDto;
-import com.example.baseballscoresheet.model.dto.lineup.GetPlayerFromLineupDto;
-import com.example.baseballscoresheet.model.dto.manager.GetManagerDto;
-import com.example.baseballscoresheet.model.dto.player.AddPlayerInfoDto;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoDto;
-import com.example.baseballscoresheet.model.dto.player.GetPlayerInfoForLineUpDto;
-import com.example.baseballscoresheet.model.dto.position.GetPositionDto;
-import com.example.baseballscoresheet.model.dto.scorer.GetScorerDto;
-import com.example.baseballscoresheet.model.dto.team.GetTeamDto;
-import com.example.baseballscoresheet.model.dto.team.GetTeamInfoDto;
-import com.example.baseballscoresheet.model.dto.team.AddTeamInfoDto;
-import com.example.baseballscoresheet.model.dto.umpire.GetUmpireDto;
+import com.example.baseballscoresheet.model.dtos.association.GetAssociationDto;
+import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
+import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
+import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
+import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
+import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
+import com.example.baseballscoresheet.model.dtos.lineup.AddPlayerToLineupDto;
+import com.example.baseballscoresheet.model.dtos.lineup.GetPlayerFromLineupDto;
+import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
+import com.example.baseballscoresheet.model.dtos.player.AddPlayerInfoDto;
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerInfoForLineUpDto;
+import com.example.baseballscoresheet.model.dtos.position.GetPositionDto;
+import com.example.baseballscoresheet.model.dtos.scorer.GetScorerDto;
+import com.example.baseballscoresheet.model.dtos.team.GetTeamDto;
+import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
+import com.example.baseballscoresheet.model.dtos.team.AddTeamInfoDto;
+import com.example.baseballscoresheet.model.dtos.umpire.GetUmpireDto;
+import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -196,5 +200,57 @@ public class MappingService {
         getScorerDto.setPassnumber(scorerEntity.getPassnumber());
         getScorerDto.setName(scorerEntity.getFirstName(), scorerEntity.getLastName());
         return getScorerDto;
+    }
+
+    // AddGameDto -> GameEntity
+    public GameEntity mapInformationToGameEntity(AddGameDto addGameDto, AssociationEntity associationEntity,
+                                                 LeagueEntity leagueEntity, TeamEntity hostTeam, TeamEntity guestTeam,
+                                                 ScorerEntity scorerEntity) {
+        GameEntity gameEntity = new GameEntity();
+
+        gameEntity.setGameUmpire(new HashSet<>());
+        gameEntity.setGameNr(addGameDto.getGameNr());
+        gameEntity.setDate(addGameDto.getDate());
+        gameEntity.setLocation(addGameDto.getLocation());
+        gameEntity.setInnings(addGameDto.getInnings());
+        gameEntity.setAssociation(associationEntity);
+        gameEntity.setLeague(leagueEntity);
+        gameEntity.setHost(hostTeam);
+        gameEntity.setGuest(guestTeam);
+        gameEntity.setScorer(scorerEntity);
+        return gameEntity;
+    }
+
+    // GameEntity -> GetGameDto
+    public GetGameDto mapToGetGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntityList) {
+        GetGameDto getGameDto = new GetGameDto();
+
+        getGameDto.setGameNr(gameEntity.getGameNr());
+        getGameDto.setDate(gameEntity.getDate());
+        getGameDto.setLocation(gameEntity.getLocation());
+        getGameDto.setInnings(gameEntity.getInnings());
+        getGameDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
+        getGameDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
+        getGameDto.setHostTeam(mapTeamEntityToGetTeamDto(gameEntity.getHost()));
+        getGameDto.setGuestTeam(mapTeamEntityToGetTeamDto(gameEntity.getGuest()));
+        getGameDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
+        getGameDto.setUmpireList(new ArrayList<>());
+
+        for (GameUmpireEntity gameUmpire : gameUmpireEntityList) {
+            GetUmpireDto getUmpireDto = new GetUmpireDto();
+            getUmpireDto.setUmpireId(gameUmpire.getUmpire().getId());
+            getUmpireDto.setPassnumber(gameUmpire.getUmpire().getPassnumber());
+            getUmpireDto.setName(gameUmpire.getUmpire().getFirstName(), gameUmpire.getUmpire().getLastName());
+            getGameDto.getUmpireList().add(getUmpireDto);
+        }
+        return getGameDto;
+    }
+
+    // GameEntity + UmpireEntity -> GameUmpireEntity
+    public GameUmpireEntity mapUmpireEntityToGameUmpireEntity(GameEntity gameEntity, UmpireEntity umpire) {
+        GameUmpireEntity gameUmpireEntity = new GameUmpireEntity();
+        gameUmpireEntity.setGame(gameEntity);
+        gameUmpireEntity.setUmpire(umpire);
+        return gameUmpireEntity;
     }
 }

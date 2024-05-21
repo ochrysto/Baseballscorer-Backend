@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.model.LineupEntity;
+import com.example.baseballscoresheet.model.entities.LineupEntity;
 import com.example.baseballscoresheet.repositories.LineupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

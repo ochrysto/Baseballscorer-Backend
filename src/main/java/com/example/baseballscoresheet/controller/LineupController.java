@@ -2,11 +2,11 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.LineupEntity;
-import com.example.baseballscoresheet.model.LineupTeamPlayerEntity;
-import com.example.baseballscoresheet.model.dto.lineup.AddLineupDto;
-import com.example.baseballscoresheet.model.dto.lineup.GetLineupDto;
-import com.example.baseballscoresheet.model.dto.lineup.AddPlayerToLineupDto;
+import com.example.baseballscoresheet.model.entities.LineupEntity;
+import com.example.baseballscoresheet.model.entities.LineupTeamPlayerEntity;
+import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
+import com.example.baseballscoresheet.model.dtos.lineup.GetLineupDto;
+import com.example.baseballscoresheet.model.dtos.lineup.AddPlayerToLineupDto;
 import com.example.baseballscoresheet.services.LineupService;
 import com.example.baseballscoresheet.services.LineupTeamPlayerService;
 import io.swagger.v3.oas.annotations.Operation;

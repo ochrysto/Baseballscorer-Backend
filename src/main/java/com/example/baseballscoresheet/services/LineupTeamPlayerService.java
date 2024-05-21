@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.model.LineupTeamPlayerEntity;
+import com.example.baseballscoresheet.model.entities.LineupTeamPlayerEntity;
 import com.example.baseballscoresheet.repositories.LineupTeamPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
