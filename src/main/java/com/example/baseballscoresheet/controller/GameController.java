@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +36,7 @@ public class GameController {
     private final TeamService teamService;
     private final GameUmpireService gameUmpireService;
 
-    public GameController(GameService gameService, MappingService mappingService,
-                          AssociationService associationService, LeagueService leagueService,
-                          UmpireService umpireService, ScorerService scorerService,
-                          TeamService teamService, GameUmpireService gameUmpireService) {
+    public GameController(GameService gameService, MappingService mappingService, AssociationService associationService, LeagueService leagueService, UmpireService umpireService, ScorerService scorerService, TeamService teamService, GameUmpireService gameUmpireService) {
         this.gameService = gameService;
         this.mappingService = mappingService;
         this.associationService = associationService;
@@ -51,17 +49,7 @@ public class GameController {
 
     // Endpoint for saving a new game
     @Operation(summary = "saves a new game")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "created game",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetGameDto.class))}),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created game", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetGameDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PostMapping
     @RolesAllowed("user")
     public ResponseEntity<GetGameDto> createGame(@RequestBody @Valid AddGameDto addGameDto) {
@@ -70,25 +58,31 @@ public class GameController {
         ScorerEntity scorerEntity = this.scorerService.findById(addGameDto.getScorerId());
         TeamEntity hostTeam = this.teamService.findTeamById(addGameDto.getHostTeamId());
         TeamEntity guestTeam = this.teamService.findTeamById(addGameDto.getGuestTeamId());
+        GameEntity gameEntity;
 
-        // Speichert Spiel
-        GameEntity gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity,
-                leagueEntity, hostTeam, guestTeam, scorerEntity);
-        gameEntity = this.gameService.createGame(gameEntity);
+        // saving game
+        if (!hostTeam.equals(guestTeam)) {
+            gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
+            gameEntity = this.gameService.createGame(gameEntity);
+        } else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Host team and guest team must not be the same");
+        }
 
-        // speichert Liste der Umpires in Game_Umpire Tabelle ab
+        // maps transferred umpires to UmpireEntities and adds them to a list
         List<UmpireEntity> umpires = new ArrayList<>();
-        List<GameUmpireEntity> gameUmpireEntities = new ArrayList<>();
         for (Long umpireId : addGameDto.getUmpireIdsList()) {
             umpires.add(this.umpireService.findById(umpireId));
         }
+
+        // maps each UmpireEntity from the list to a GameUmpireEntity and saves it in db
+        // adds these to a new list
+        List<GameUmpireEntity> gameUmpireEntities = new ArrayList<>();
         for (UmpireEntity umpire : umpires) {
             GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpire);
             gameUmpireEntities.add(gameUmpire);
             this.gameUmpireService.save(gameUmpire);
         }
-
-        GetGameDto addedGame = this.mappingService.mapToGetGameDto(gameEntity,gameUmpireEntities);
+        GetGameDto addedGame = this.mappingService.mapToGetGameDto(gameEntity, gameUmpireEntities);
         return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
     }
 }
