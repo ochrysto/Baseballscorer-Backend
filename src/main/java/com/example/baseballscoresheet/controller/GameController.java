@@ -60,14 +60,6 @@ public class GameController {
         TeamEntity guestTeam = this.teamService.findTeamById(addGameDto.getGuestTeamId());
         GameEntity gameEntity;
 
-        // saving game
-        if (!hostTeam.equals(guestTeam)) {
-            gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
-            gameEntity = this.gameService.createGame(gameEntity);
-        } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Host team and guest team must not be the same");
-        }
-
         // maps transferred umpires to UmpireEntities and adds them to a list
         List<UmpireEntity> umpires = new ArrayList<>();
         for (Long umpireId : addGameDto.getUmpireIdsList()) {
@@ -77,8 +69,32 @@ public class GameController {
         // maps each UmpireEntity from the list to a GameUmpireEntity and saves it in db
         // adds these to a new list
         List<GameUmpireEntity> gameUmpireEntities = new ArrayList<>();
-        for (UmpireEntity umpire : umpires) {
-            GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpire);
+        if (umpires.size() == 2) {
+            if (umpires.getFirst().equals(umpires.get(1))) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "First und second umpire must not be the same");
+            } else {
+                // saving game
+                if (!hostTeam.equals(guestTeam)) {
+                    gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
+                    gameEntity = this.gameService.createGame(gameEntity);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Host team and guest team must not be the same");
+                }
+                for (UmpireEntity umpire : umpires) {
+                    GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpire);
+                    gameUmpireEntities.add(gameUmpire);
+                    this.gameUmpireService.save(gameUmpire);
+                }
+            }
+        } else {
+            // saving game
+            if (!hostTeam.equals(guestTeam)) {
+                gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
+                gameEntity = this.gameService.createGame(gameEntity);
+            } else {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Host team and guest team must not be the same");
+            }
+            GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpires.getFirst());
             gameUmpireEntities.add(gameUmpire);
             this.gameUmpireService.save(gameUmpire);
         }
