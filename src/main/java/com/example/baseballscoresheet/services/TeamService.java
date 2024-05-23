@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.ManagerEntity;
 import com.example.baseballscoresheet.model.entities.PlayerEntity;
 import com.example.baseballscoresheet.model.entities.TeamEntity;
@@ -47,7 +48,7 @@ public class TeamService {
         if (this.teamRepository.findById(id).isPresent()) {
             return this.teamRepository.findById(id).get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id " + id + " not found");
+            throw new RessourceNotFoundException("TeamEntity with team id = " + id + " not found");
         }
     }
 
@@ -84,7 +85,7 @@ public class TeamService {
                 players.add(teamPlayer.getPlayer());
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id " + teamId + " has no players.");
+            throw new RessourceNotFoundException("Team with id " + teamId + " has no players.");
         }
         return players;
     }

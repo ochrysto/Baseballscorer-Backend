@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.exceptionHandling.DoubleInputException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
 import com.example.baseballscoresheet.model.dtos.game.GetEndedGameDto;
@@ -79,14 +80,14 @@ public class GameController {
         List<GameUmpireEntity> gameUmpireEntities = new ArrayList<>();
         if (umpires.size() == 2) {
             if (umpires.getFirst().equals(umpires.get(1))) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "First und second umpire must not be the same");
+                throw new DoubleInputException("First und second umpire must not be the same");
             } else {
                 // saving game
                 if (!hostTeam.equals(guestTeam)) {
                     gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
                     gameEntity = this.gameService.createGame(gameEntity);
                 } else {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Host team and guest team must not be the same");
+                    throw new DoubleInputException("Host team and guest team must not be the same");
                 }
                 for (UmpireEntity umpire : umpires) {
                     GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpire);
@@ -100,7 +101,7 @@ public class GameController {
                 gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
                 gameEntity = this.gameService.createGame(gameEntity);
             } else {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Host team and guest team must not be the same");
+                throw new DoubleInputException("Host team and guest team must not be the same");
             }
             GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpires.getFirst());
             gameUmpireEntities.add(gameUmpire);

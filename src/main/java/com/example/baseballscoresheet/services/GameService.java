@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.GameEntity;
 import com.example.baseballscoresheet.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class GameService {
         if (this.gameRepository.findByGameNr(gameNr).isPresent()) {
             return this.gameRepository.findByGameNr(gameNr).get();
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game with GameNr " + gameNr + " not found");
+        throw new RessourceNotFoundException("Game with game number: " + gameNr + " not found");
     }
 
     public GameEntity update(GameEntity updatedGameEntity) {
@@ -43,7 +44,7 @@ public class GameService {
         if (this.gameRepository.findById(id).isPresent()) {
             return this.gameRepository.findById(id).get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game with id " + id + " not found");
+            throw new RessourceNotFoundException("Game with id: " + id + " not found");
         }
     }
 }

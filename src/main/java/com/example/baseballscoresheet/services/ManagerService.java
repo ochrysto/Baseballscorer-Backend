@@ -1,11 +1,10 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.ManagerEntity;
 import com.example.baseballscoresheet.repositories.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class ManagerService {
         if (this.managerRepository.findById(id).isPresent()) {
             return this.managerRepository.findById(id).get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manager with id " + id + " not found");
+            throw new RessourceNotFoundException("Manager with id: " + id + " not found");
         }
     }
 

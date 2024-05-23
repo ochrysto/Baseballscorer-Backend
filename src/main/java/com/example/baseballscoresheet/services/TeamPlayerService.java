@@ -1,11 +1,10 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.TeamPlayerEntity;
 import com.example.baseballscoresheet.repositories.TeamPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class TeamPlayerService {
@@ -24,7 +23,7 @@ public class TeamPlayerService {
         if (this.teamPlayerRepository.findTeamPlayerEntityByTeam_IdAndPlayer_Id(teamId, playerId) != null) {
             return this.teamPlayerRepository.findTeamPlayerEntityByTeam_IdAndPlayer_Id(teamId, playerId);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamPlayerEntity not found");
+            throw new RessourceNotFoundException("TeamPlayerEntity with team id = " + teamId + " and player id = " + playerId + " not found");
         }
     }
 
@@ -32,7 +31,7 @@ public class TeamPlayerService {
         if (this.teamPlayerRepository.findByPlayer_Id(playerId) != null) {
             return teamPlayerRepository.findByPlayer_Id(playerId);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamPlayerEntity not found");
+            throw new RessourceNotFoundException("TeamPlayerEntity with player id = " + playerId + " not found");
         }
     }
 }

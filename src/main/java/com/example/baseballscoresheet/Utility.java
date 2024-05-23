@@ -40,7 +40,7 @@ public class Utility {
 
 
     // checks whether the transferred player is already assigned to a team
-    public static boolean isPlayerAssignedToATeam(Long playerId) {
+    public static boolean isPlayerAssignedToTeam(Long playerId) {
         return playerService.isPlayerAssignedToATeam(playerId);
     }
 }

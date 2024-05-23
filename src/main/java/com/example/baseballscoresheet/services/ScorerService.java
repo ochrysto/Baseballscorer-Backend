@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.ScorerEntity;
 import com.example.baseballscoresheet.repositories.ScorerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ScorerService {
         if (this.scorerRepository.findById(scorerId).isPresent()) {
             return this.scorerRepository.findById(scorerId).get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scorer with the id " + scorerId + " not found");
+            throw new RessourceNotFoundException("Scorer with id: " + scorerId + " not found");
         }
     }
 }

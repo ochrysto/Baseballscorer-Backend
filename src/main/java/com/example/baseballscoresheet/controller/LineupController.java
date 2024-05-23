@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
+import com.example.baseballscoresheet.exceptionHandling.PlayerIsNotAvailableException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
@@ -77,7 +78,7 @@ public class LineupController {
                     addedLineupTeamPlayers.add(lineupTeamPlayerEntity);
                     this.lineupTeamPlayerService.saveLineupTeamPlayerEntity(lineupTeamPlayerEntity);
                 } else {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Player with id " + addPlayerToLineupDto.getPlayerId() + " already assigned to lineup");
+                    throw new PlayerIsNotAvailableException("Player with id " + addPlayerToLineupDto.getPlayerId() + " already assigned to lineup");
                 }
             }
         }

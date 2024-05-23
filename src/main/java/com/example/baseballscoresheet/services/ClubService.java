@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.ClubEntity;
 import com.example.baseballscoresheet.repositories.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class ClubService {
         if (clubRepository.findById(clubId).isPresent()) {
             return clubRepository.findById(clubId).get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Club with id " + clubId + " not found");
+            throw new RessourceNotFoundException("Club with id: " + clubId + " not found");
         }
     }
 

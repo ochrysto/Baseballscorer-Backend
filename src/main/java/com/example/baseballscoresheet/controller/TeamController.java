@@ -1,6 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
+import com.example.baseballscoresheet.exceptionHandling.PlayerIsNotAvailableException;
+import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerInfoForLineUpDto;
 import com.example.baseballscoresheet.model.dtos.team.AddTeamInfoDto;
@@ -19,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -205,10 +206,10 @@ public class TeamController {
         for (Long playerId : playerList) {
             PlayerEntity playerEntity = this.playerService.findPlayerById(playerId);
             //checks whether the PlayerEntity object found is already assigned to a team
-            if (!Utility.isPlayerAssignedToATeam(playerEntity.getId())) {
+            if (!Utility.isPlayerAssignedToTeam(playerEntity.getId())) {
                 players.add(playerEntity);
             } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player with the id: " + " is already assigned to another team.");
+                throw new PlayerIsNotAvailableException("Player with id: " + " is already assigned to a team.");
             }
         }
         // iterate over the list with PlayerEntity objects, each PlayerEntity is assigned to a new TeamPlayerEntity object
@@ -244,7 +245,7 @@ public class TeamController {
         if (Utility.checkIfPlayerExists(playerId) && Utility.checkIfTeamExists(teamId)) {
             teamService.deletePlayerFromTeam(teamId, playerId);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id: " + teamId + " or player with id: " + playerId + " not found");
+            throw new RessourceNotFoundException("Team with id: " + teamId + " or player with id: " + playerId + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -273,7 +274,7 @@ public class TeamController {
                 allPlayersDto.add(this.mappingService.mapPlayerEntityToGetPlayerInfoForLineUpDto(player));
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id " + teamId + " was not found.");
+            throw new RessourceNotFoundException("Team with id: " + teamId + " not found");
         }
         return new ResponseEntity<>(allPlayersDto, HttpStatus.OK);
     }
