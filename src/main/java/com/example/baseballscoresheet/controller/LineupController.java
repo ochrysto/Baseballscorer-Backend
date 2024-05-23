@@ -6,7 +6,7 @@ import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.GetLineupDto;
-import com.example.baseballscoresheet.model.dtos.lineup.AddPlayerToLineupDto;
+import com.example.baseballscoresheet.model.dtos.player.PlayerForLineupDto;
 import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,24 +60,24 @@ public class LineupController {
         // both lineups are mapped and saved
         for (AddLineupDto addLineupDto : newLineups) {
             TeamEntity teamEntity = this.teamService.findTeamById(addLineupDto.getTeamId());
-            LineupEntity lineupEntity = this.mappingService.mapAddLineupDtoToLineupEntity(teamEntity);
+            LineupEntity lineupEntity = this.mappingService.mapTeamEntityToLineupEntity(teamEntity);
             this.lineupService.saveLineup(lineupEntity);
         }
 
         // a new LineupTeamPlayerEntity object is created for each player that can be found in the lineup
         // for this, we iterate over each transferred lineup once
         for (AddLineupDto addLineupDto : newLineups) {
-            for (AddPlayerToLineupDto addPlayerToLineupDto : addLineupDto.getPlayerDtoSet()) {
-                if (!Utility.checkIfPlayerIsAlreadyAssignedToLineup(addPlayerToLineupDto.getPlayerId())) {
+            for (PlayerForLineupDto playerForLineupDto : addLineupDto.getPlayerList()) {
+                if (!Utility.checkIfPlayerIsAlreadyAssignedToLineup(playerForLineupDto.getPlayerId())) {
                     LineupEntity lineupEntity2 = lineupService.findLineupByTeamId(addLineupDto.getTeamId());
-                    TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity2.getTeam().getId(), addPlayerToLineupDto.getPlayerId());
-                    PositionEntity position = this.positionService.findById(addPlayerToLineupDto.getPosition());
+                    TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity2.getTeam().getId(), playerForLineupDto.getPlayerId());
+                    PositionEntity position = this.positionService.findById(playerForLineupDto.getPosition());
                     LineupTeamPlayerEntity lineupTeamPlayerEntity = this.mappingService.mapToLineupTeamPlayerEntity(
-                            addPlayerToLineupDto, lineupEntity2, teamPlayer, position);
+                            playerForLineupDto, lineupEntity2, teamPlayer, position);
                     addedLineupTeamPlayers.add(lineupTeamPlayerEntity);
                     this.lineupTeamPlayerService.saveLineupTeamPlayerEntity(lineupTeamPlayerEntity);
                 } else {
-                    throw new PlayerIsNotAvailableException("Player with id " + addPlayerToLineupDto.getPlayerId() + " already assigned to lineup");
+                    throw new PlayerIsNotAvailableException("Player with id " + playerForLineupDto.getPlayerId() + " already assigned to lineup");
                 }
             }
         }
@@ -88,10 +88,10 @@ public class LineupController {
         for (LineupTeamPlayerEntity lineupTeamPlayer : addedLineupTeamPlayers) {
             if (Objects.equals(lineupTeamPlayer.getTeamPlayer().getTeam().getId(), newLineups.getFirst().getTeamId())) {
                 getLineupDto1.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
-                getLineupDto1.getPlayerList().add(this.mappingService.mapTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
+                getLineupDto1.getPlayerList().add(this.mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
             } else {
                 getLineupDto2.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
-                getLineupDto2.getPlayerList().add(this.mappingService.mapTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
+                getLineupDto2.getPlayerList().add(this.mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
             }
         }
         addedLineup.add(getLineupDto1);

@@ -3,7 +3,7 @@ package com.example.baseballscoresheet.controller;
 import com.example.baseballscoresheet.exceptionHandling.DoubleInputException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
-import com.example.baseballscoresheet.model.dtos.game.GetEndedGameDto;
+import com.example.baseballscoresheet.model.dtos.game.GetFinishedGameDto;
 import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
 import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
 import com.example.baseballscoresheet.model.entities.*;
@@ -83,13 +83,13 @@ public class GameController {
             } else {
                 // saving game
                 if (!hostTeam.equals(guestTeam)) {
-                    gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
+                    gameEntity = this.mappingService.mapToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
                     gameEntity = this.gameService.createGame(gameEntity);
                 } else {
                     throw new DoubleInputException("Host team and guest team must not be the same");
                 }
                 for (UmpireEntity umpire : umpires) {
-                    GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpire);
+                    GameUmpireEntity gameUmpire = this.mappingService.mapToGameUmpireEntity(gameEntity, umpire);
                     gameUmpireEntities.add(gameUmpire);
                     this.gameUmpireService.save(gameUmpire);
                 }
@@ -97,12 +97,12 @@ public class GameController {
         } else {
             // saving game
             if (!hostTeam.equals(guestTeam)) {
-                gameEntity = this.mappingService.mapInformationToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
+                gameEntity = this.mappingService.mapToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
                 gameEntity = this.gameService.createGame(gameEntity);
             } else {
                 throw new DoubleInputException("Host team and guest team must not be the same");
             }
-            GameUmpireEntity gameUmpire = this.mappingService.mapUmpireEntityToGameUmpireEntity(gameEntity, umpires.getFirst());
+            GameUmpireEntity gameUmpire = this.mappingService.mapToGameUmpireEntity(gameEntity, umpires.getFirst());
             gameUmpireEntities.add(gameUmpire);
             this.gameUmpireService.save(gameUmpire);
         }
@@ -116,7 +116,7 @@ public class GameController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "game found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetEndedGameDto.class))}),
+                            schema = @Schema(implementation = GetFinishedGameDto.class))}),
             @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
@@ -128,18 +128,18 @@ public class GameController {
     })
     @PutMapping("/{gameNr}")
     @RolesAllowed("user")
-    public ResponseEntity<GetGameDto> updateGameInfo(@PathVariable final Integer gameNr,
+    public ResponseEntity<GetFinishedGameDto> finishGame(@PathVariable final Integer gameNr,
                                                      @Valid @RequestBody final UpdateGameDto updateGameDto) {
 
         GameEntity updatedGameEntity = this.mappingService.mapUpdateGameDtoToGameEntity(updateGameDto);
         GameEntity foundGameEntity = this.gameService.findGameByGameNr(gameNr);
         updatedGameEntity.setId(foundGameEntity.getId());
-        updatedGameEntity = this.gameService.update(updatedGameEntity);
+        updatedGameEntity = this.gameService.finish(updatedGameEntity);
 
         List<GameUmpireEntity> gameUmpireEntities = gameUmpireService.findAllByGameId(foundGameEntity.getId());
 
-        // TODO GetGameDto Struktur anpassen
-        GetGameDto updatedGameDto = this.mappingService.mapToGetGameDto(updatedGameEntity, gameUmpireEntities);
-        return new ResponseEntity<>(updatedGameDto, HttpStatus.CREATED);
+
+        GetFinishedGameDto finishedGameDto = this.mappingService.mapToGetFinishedGameDto(updatedGameEntity, gameUmpireEntities);
+        return new ResponseEntity<>(finishedGameDto, HttpStatus.CREATED);
     }
 }

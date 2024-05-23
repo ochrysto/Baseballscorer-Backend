@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.model.dtos.lineup;
 
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
 import lombok.Getter;
 import lombok.Setter;
 

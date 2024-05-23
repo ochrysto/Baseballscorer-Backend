@@ -9,11 +9,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Setter
 @Getter
-public class GetGameDto {
+public class GetFinishedGameDto {
 
     private Integer gameNr;
 
@@ -34,4 +35,12 @@ public class GetGameDto {
     private List<GetUmpireDto> umpireList;
 
     private GetScorerDto scorer;
+
+    private Integer attendance;
+
+    private LocalTime startTime;
+
+    private LocalTime endTime;
+
+    private Long durationInMinutes;
 }

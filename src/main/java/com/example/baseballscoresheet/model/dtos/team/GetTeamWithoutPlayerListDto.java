@@ -8,17 +8,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetTeamInfoDto {
+public class GetTeamWithoutPlayerListDto {
 
     private Long teamId;
 
     private String name;
 
-    private GetClubDto getClubDto;
+    private GetClubDto club;
 
-    private GetManagerDto getManagerDto;
+    private GetManagerDto manager;
 
-    private GetLeagueDto getLeagueDto;
+    private GetLeagueDto league;
 
     private String teamLogo;
 }

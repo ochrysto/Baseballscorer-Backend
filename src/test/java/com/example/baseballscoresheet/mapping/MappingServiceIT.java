@@ -7,7 +7,7 @@ import com.example.baseballscoresheet.model.entities.TeamEntity;
 import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
 import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
-import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
+import com.example.baseballscoresheet.model.dtos.team.GetTeamWithoutPlayerListDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -81,7 +81,7 @@ public class MappingServiceIT {
 
     @Test
     public void whenMapTeamEntityToGetTeamInfoDto_thenReturnTeamDto(){
-        GetTeamInfoDto teamDto = this.mapper.map(teamEntity, GetTeamInfoDto.class);
+        GetTeamWithoutPlayerListDto teamDto = this.mapper.map(teamEntity, GetTeamWithoutPlayerListDto.class);
 
         assertEquals(teamEntity.getName(), teamDto.getName());
         assertEquals(teamEntity.getTeamLogo(), teamDto.getTeamLogo());

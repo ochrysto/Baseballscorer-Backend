@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
 import com.example.baseballscoresheet.model.entities.PlayerEntity;
-import com.example.baseballscoresheet.model.dtos.player.AddPlayerInfoDto;
-import com.example.baseballscoresheet.model.dtos.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.dtos.player.AddPlayerDto;
 import com.example.baseballscoresheet.services.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,7 +36,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created player",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
+                            schema = @Schema(implementation = GetPlayerDto.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "not authorized",
@@ -46,10 +46,10 @@ public class PlayerController {
     })
     @RolesAllowed("user")
     @PostMapping
-    public ResponseEntity<GetPlayerInfoDto> createPlayer(@RequestBody @Valid AddPlayerInfoDto newPlayer) {
-        PlayerEntity playerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(newPlayer);
+    public ResponseEntity<GetPlayerDto> createPlayer(@RequestBody @Valid AddPlayerDto newPlayer) {
+        PlayerEntity playerEntity = this.mappingService.mapAddPlayerDtoToPlayerEntity(newPlayer);
         playerEntity = this.playerService.createPlayer(playerEntity);
-        GetPlayerInfoDto addedPlayer = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
+        GetPlayerDto addedPlayer = this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity);
         return new ResponseEntity<>(addedPlayer, HttpStatus.CREATED);
     }
 
@@ -58,7 +58,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "players found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
+                            schema = @Schema(implementation = GetPlayerDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "players not found",
@@ -68,11 +68,11 @@ public class PlayerController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetPlayerInfoDto>> findAllPlayers() {
+    public ResponseEntity<List<GetPlayerDto>> findAllPlayers() {
         List<PlayerEntity> playerEntities = this.playerService.findAllPlayers();
-        List<GetPlayerInfoDto> playerDtos = new LinkedList<>();
+        List<GetPlayerDto> playerDtos = new ArrayList<>();
         for (PlayerEntity playerEntity : playerEntities) {
-            playerDtos.add(this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity));
+            playerDtos.add(this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity));
         }
         return new ResponseEntity<>(playerDtos, HttpStatus.OK);
     }
@@ -82,7 +82,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "player found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
+                            schema = @Schema(implementation = GetPlayerDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "player not found",
@@ -92,10 +92,10 @@ public class PlayerController {
     })
     @GetMapping("/{playerId}")
     @RolesAllowed("user")
-    public ResponseEntity<GetPlayerInfoDto> findPlayerById(@PathVariable Long playerId) {
+    public ResponseEntity<GetPlayerDto> findPlayerById(@PathVariable Long playerId) {
         PlayerEntity playerEntity = this.playerService.findPlayerById(playerId);
-        GetPlayerInfoDto getPlayerInfoDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(playerEntity);
-        return new ResponseEntity<>(getPlayerInfoDto, HttpStatus.OK);
+        GetPlayerDto getPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity);
+        return new ResponseEntity<>(getPlayerDto, HttpStatus.OK);
     }
 
     // Endpoint for updating an existing player
@@ -104,7 +104,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "player found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerInfoDto.class))}),
+                            schema = @Schema(implementation = GetPlayerDto.class))}),
             @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
@@ -116,13 +116,13 @@ public class PlayerController {
     })
     @PutMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetPlayerInfoDto> updatePlayer(@PathVariable final Long id,
-                                                         @Valid @RequestBody final AddPlayerInfoDto addPlayerInfoDto) {
-        GetPlayerInfoDto updatedPlayerDto;
-        PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerInfoDtoToPlayerEntity(addPlayerInfoDto);
+    public ResponseEntity<GetPlayerDto> updatePlayer(@PathVariable final Long id,
+                                                     @Valid @RequestBody final AddPlayerDto addPlayerDto) {
+        GetPlayerDto updatedPlayerDto;
+        PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerDtoToPlayerEntity(addPlayerDto);
         updatedPlayerEntity.setId(id);
         updatedPlayerEntity = this.playerService.update(updatedPlayerEntity);
-        updatedPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerInfoDto(updatedPlayerEntity);
+        updatedPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerDto(updatedPlayerEntity);
         return new ResponseEntity<>(updatedPlayerDto, HttpStatus.CREATED);
     }
 

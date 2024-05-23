@@ -16,5 +16,5 @@ public class GetClubDto {
 
     private String email;
 
-    private GetAssociationDto associationDto;
+    private GetAssociationDto association;
 }

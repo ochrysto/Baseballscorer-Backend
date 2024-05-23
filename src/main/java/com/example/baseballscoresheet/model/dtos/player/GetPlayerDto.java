@@ -5,12 +5,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetPlayerInfoForLineUpDto {
+public class GetPlayerDto {
 
     private Long id;
 
-    // vorname + nachname
-    private String name;
+    private String firstName;
+
+    private String lastName;
 
     private Integer passnumber;
 }

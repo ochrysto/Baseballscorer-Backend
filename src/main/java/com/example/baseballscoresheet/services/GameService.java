@@ -27,7 +27,15 @@ public class GameService {
         throw new RessourceNotFoundException("Game with game number: " + gameNr + " not found");
     }
 
-    public GameEntity update(GameEntity updatedGameEntity) {
+    private GameEntity findGameById(Long id) {
+        if (this.gameRepository.findById(id).isPresent()) {
+            return this.gameRepository.findById(id).get();
+        } else {
+            throw new RessourceNotFoundException("Game with id: " + id + " not found");
+        }
+    }
+
+    public GameEntity finish(GameEntity updatedGameEntity) {
         GameEntity gameEntity = this.findGameById(updatedGameEntity.getId());
         gameEntity.setInnings(updatedGameEntity.getInnings());
         gameEntity.setAttendance(updatedGameEntity.getAttendance());
@@ -36,13 +44,5 @@ public class GameService {
         gameEntity.setDurationInMinutes(updatedGameEntity.getDurationInMinutes());
         this.gameRepository.save(gameEntity);
         return gameEntity;
-    }
-
-    private GameEntity findGameById(Long id) {
-        if (this.gameRepository.findById(id).isPresent()) {
-            return this.gameRepository.findById(id).get();
-        } else {
-            throw new RessourceNotFoundException("Game with id: " + id + " not found");
-        }
     }
 }

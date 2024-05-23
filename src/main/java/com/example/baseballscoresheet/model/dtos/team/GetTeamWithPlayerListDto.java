@@ -3,24 +3,27 @@ package com.example.baseballscoresheet.model.dtos.team;
 import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
 import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
-import com.example.baseballscoresheet.model.dtos.player.GetPlayerInfoDto;
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
-public class GetTeamDto {
+public class GetTeamWithPlayerListDto {
+
+    private Long teamId;
+
     private String name;
 
-    private GetClubDto getClubDto;
+    private GetClubDto club;
 
-    private GetManagerDto getManagerDto;
+    private GetManagerDto manager;
 
-    private GetLeagueDto getLeagueDto;
+    private GetLeagueDto league;
 
     private String teamLogo;
 
-    private Set<GetPlayerInfoDto> players;
+    private List<GetPlayerDto> playerList;
 }
