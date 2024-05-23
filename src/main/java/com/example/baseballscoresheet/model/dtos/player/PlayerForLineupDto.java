@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 public class PlayerForLineupDto {
 
-    @NotNull
+    @NotNull (message = "Player id is mandatory")
     private Long playerId;
 
     @Size(max = 99, message = "Jersey number must be between 0 and 99")
     private Integer jerseyNr;
 
-    @NotNull
-    private Long position;
+    @NotNull (message = "Position id is mandatory")
+    private Long positionId;
 }

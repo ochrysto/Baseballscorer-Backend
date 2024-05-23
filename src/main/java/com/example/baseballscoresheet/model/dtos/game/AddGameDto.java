@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 public class AddGameDto {
 
-    @NotNull
+    @NotNull(message = "Number for game name is mandatory")
     private Integer gameNr;
 
     private LocalDate date;
@@ -22,25 +22,25 @@ public class AddGameDto {
     @NotEmpty
     private String location;
 
-    @NotNull
+    @NotNull(message = "Number of innings is mandatory")
     @Min(value = 5)
     @Max(value = 35)
     private Integer innings;
 
-    @NotNull
+    @NotNull(message = "Association id is mandatory")
     private Long associationId;
 
-    @NotNull
+    @NotNull(message = "League id is mandatory")
     private Long leagueId;
 
-    @NotNull
+    @NotNull(message = "Host team id is mandatory")
     private Long hostTeamId;
 
-    @NotNull
+    @NotNull(message = "Guest team id is mandatory")
     private Long guestTeamId;
 
     private List<Long> umpireIdsList;
 
-    @NotNull
+    @NotNull(message = "Scorer id is mandatory")
     private Long scorerId;
 }

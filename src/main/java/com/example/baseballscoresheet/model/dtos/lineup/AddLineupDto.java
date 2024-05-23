@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class AddLineupDto {
 
-    @NotNull
+    @NotNull (message = "Team id is mandatory")
     private Long teamId;
 
     private List<PlayerForLineupDto> playerList;

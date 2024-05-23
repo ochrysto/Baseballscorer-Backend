@@ -12,12 +12,11 @@ import java.time.LocalTime;
 @Setter
 public class UpdateGameDto {
 
-    @NotNull
     @Min(value = 2)
     @Max(value = 35)
     private Integer innings;
 
-    @NotNull
+    @NotNull(message = "Number of attendance is mandatory")
     private Integer attendance;
 
     // HH:MM:ss.ffffff
@@ -26,7 +25,6 @@ public class UpdateGameDto {
 
     private LocalTime endTime;
 
-    @NotNull
     private Long durationInMinutes;
 
 }

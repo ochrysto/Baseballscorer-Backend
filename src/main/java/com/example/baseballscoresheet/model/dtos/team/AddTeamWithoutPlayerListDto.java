@@ -10,17 +10,17 @@ import lombok.Setter;
 @Setter
 public class AddTeamWithoutPlayerListDto {
 
-    @NotBlank(message = "Name is obligatory")
+    @NotBlank(message = "Name is mandatory")
     @Size(max = 70, message = "Name must not exceed 70 characters")
     private String name;
 
-    @NotNull
+    @NotNull (message = "Manager id is mandatory")
     private Long managerId;
 
-    @NotNull
+    @NotNull (message = "Club id is mandatory")
     private Long clubId;
 
-    @NotNull
+    @NotNull (message = "League id is mandatory")
     private Long leagueId;
 
     private String teamLogo;
