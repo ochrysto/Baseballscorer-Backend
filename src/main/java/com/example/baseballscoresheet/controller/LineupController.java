@@ -71,7 +71,7 @@ public class LineupController {
                 if (!Utility.checkIfPlayerIsAlreadyAssignedToLineup(playerForLineupDto.getPlayerId())) {
                     LineupEntity lineupEntity2 = lineupService.findLineupByTeamId(addLineupDto.getTeamId());
                     TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity2.getTeam().getId(), playerForLineupDto.getPlayerId());
-                    PositionEntity position = this.positionService.findById(playerForLineupDto.getPosition());
+                    PositionEntity position = this.positionService.findById(playerForLineupDto.getPositionId());
                     LineupTeamPlayerEntity lineupTeamPlayerEntity = this.mappingService.mapToLineupTeamPlayerEntity(
                             playerForLineupDto, lineupEntity2, teamPlayer, position);
                     addedLineupTeamPlayers.add(lineupTeamPlayerEntity);
