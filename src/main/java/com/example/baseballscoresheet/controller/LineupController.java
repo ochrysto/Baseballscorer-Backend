@@ -2,15 +2,11 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.entities.LineupEntity;
-import com.example.baseballscoresheet.model.entities.LineupTeamPlayerEntity;
+import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.GetLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.AddPlayerToLineupDto;
-import com.example.baseballscoresheet.model.entities.TeamEntity;
-import com.example.baseballscoresheet.services.LineupService;
-import com.example.baseballscoresheet.services.LineupTeamPlayerService;
-import com.example.baseballscoresheet.services.TeamService;
+import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,13 +34,18 @@ public class LineupController {
     private final LineupService lineupService;
     private final LineupTeamPlayerService lineupTeamPlayerService;
     private final TeamService teamService;
+    private final TeamPlayerService teamPlayerService;
+    private final PositionService positionService;
 
-    public LineupController(MappingService mappingService, LineupService lineupService, LineupTeamPlayerService lineupTeamPlayerService,
-                            TeamService teamService) {
+    public LineupController(MappingService mappingService, LineupService lineupService,
+                            LineupTeamPlayerService lineupTeamPlayerService, TeamService teamService,
+                            TeamPlayerService teamPlayerService, PositionService positionService) {
         this.mappingService = mappingService;
         this.lineupService = lineupService;
         this.lineupTeamPlayerService = lineupTeamPlayerService;
         this.teamService = teamService;
+        this.teamPlayerService = teamPlayerService;
+        this.positionService = positionService;
     }
 
     // Endpoint for saving lineups
@@ -69,7 +70,10 @@ public class LineupController {
             for (AddPlayerToLineupDto addPlayerToLineupDto : addLineupDto.getPlayerDtoSet()) {
                 if (!Utility.checkIfPlayerIsAlreadyAssignedToLineup(addPlayerToLineupDto.getPlayerId())) {
                     LineupEntity lineupEntity2 = lineupService.findLineupByTeamId(addLineupDto.getTeamId());
-                    LineupTeamPlayerEntity lineupTeamPlayerEntity = this.mappingService.mapToLineupTeamPlayerEntity(addPlayerToLineupDto, lineupEntity2);
+                    TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity2.getTeam().getId(), addPlayerToLineupDto.getPlayerId());
+                    PositionEntity position = this.positionService.findById(addPlayerToLineupDto.getPosition());
+                    LineupTeamPlayerEntity lineupTeamPlayerEntity = this.mappingService.mapToLineupTeamPlayerEntity(
+                            addPlayerToLineupDto, lineupEntity2, teamPlayer, position);
                     addedLineupTeamPlayers.add(lineupTeamPlayerEntity);
                     this.lineupTeamPlayerService.saveLineupTeamPlayerEntity(lineupTeamPlayerEntity);
                 } else {

@@ -19,8 +19,6 @@ import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dtos.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dtos.umpire.GetUmpireDto;
 import com.example.baseballscoresheet.model.entities.*;
-import com.example.baseballscoresheet.services.PositionService;
-import com.example.baseballscoresheet.services.TeamPlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +31,9 @@ import java.util.Set;
 @Service
 public class MappingService {
     private final ModelMapper mapper;
-    TeamPlayerService teamPlayerService;
-    PositionService positionService;
 
-    public MappingService(TeamPlayerService teamPlayerService, PositionService positionService) {
+    public MappingService() {
         this.mapper = new ModelMapper();
-        this.teamPlayerService = teamPlayerService;
-        this.positionService = positionService;
     }
 
     // AddTeamInfoDto + ManagerEntity + ClubEntity + LeagueEntity -> TeamEntity
@@ -159,13 +153,14 @@ public class MappingService {
     }
 
     // LineupPlayerDto + AddLineupDto -> LineupTeamPlayerEntity
-    public LineupTeamPlayerEntity mapToLineupTeamPlayerEntity(AddPlayerToLineupDto addPlayerToLineupDto, LineupEntity lineupEntity) {
+    public LineupTeamPlayerEntity mapToLineupTeamPlayerEntity(AddPlayerToLineupDto addPlayerToLineupDto,
+                                                              LineupEntity lineupEntity, TeamPlayerEntity teamPlayer,
+                                                              PositionEntity position) {
         LineupTeamPlayerEntity lineupTeamPlayerEntity = new LineupTeamPlayerEntity();
-        TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity.getTeam().getId(), addPlayerToLineupDto.getPlayerId());
         lineupTeamPlayerEntity.setLineup(lineupEntity);
         lineupTeamPlayerEntity.setTeamPlayer(teamPlayer);
         lineupTeamPlayerEntity.setJerseyNr(addPlayerToLineupDto.getJerseyNr());
-        lineupTeamPlayerEntity.setPosition(this.positionService.findById(addPlayerToLineupDto.getPosition()));
+        lineupTeamPlayerEntity.setPosition(position);
 
         return lineupTeamPlayerEntity;
     }
