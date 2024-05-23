@@ -52,8 +52,7 @@ public class TeamService {
     }
 
     public TeamEntity update(TeamEntity updatedTeamEntity) {
-        TeamEntity updatedTeam;
-        updatedTeam = this.findTeamById(updatedTeamEntity.getId());
+        TeamEntity updatedTeam = this.findTeamById(updatedTeamEntity.getId());
         updatedTeam.setName(updatedTeamEntity.getName());
         updatedTeam.setManager(updatedTeamEntity.getManager());
         updatedTeam.setClub(updatedTeamEntity.getClub());

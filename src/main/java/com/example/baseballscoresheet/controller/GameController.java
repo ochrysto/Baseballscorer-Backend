@@ -2,7 +2,11 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
+import com.example.baseballscoresheet.model.dtos.game.GetEndedGameDto;
 import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
+import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
+import com.example.baseballscoresheet.model.dtos.team.AddTeamInfoDto;
+import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,10 +18,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -49,7 +50,16 @@ public class GameController {
 
     // Endpoint for saving a new game
     @Operation(summary = "saves a new game")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created game", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetGameDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "created game",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetGameDto.class))}),
+            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content)})
     @PostMapping
     @RolesAllowed("user")
     public ResponseEntity<GetGameDto> createGame(@RequestBody @Valid AddGameDto addGameDto) {
@@ -100,5 +110,38 @@ public class GameController {
         }
         GetGameDto addedGame = this.mappingService.mapToGetGameDto(gameEntity, gameUmpireEntities);
         return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
+    }
+
+    // Endpoint for updating an existing game after it is finished
+    @Operation(summary = "updates an existing game after it is finished",
+            description = "game must exist")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "game found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetEndedGameDto.class))}),
+            @ApiResponse(responseCode = "204", description = "no content"),
+            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "game not found"),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content)
+    })
+    @PutMapping("/{gameNr}")
+    @RolesAllowed("user")
+    public ResponseEntity<GetGameDto> updateGameInfo(@PathVariable final Integer gameNr,
+                                                     @Valid @RequestBody final UpdateGameDto updateGameDto) {
+
+        GameEntity updatedGameEntity = this.mappingService.mapUpdateGameDtoToGameEntity(updateGameDto);
+        GameEntity foundGameEntity = this.gameService.findGameByGameNr(gameNr);
+        updatedGameEntity.setId(foundGameEntity.getId());
+        updatedGameEntity = this.gameService.update(updatedGameEntity);
+
+        List<GameUmpireEntity> gameUmpireEntities = gameUmpireService.findAllByGameId(foundGameEntity.getId());
+
+        // TODO GetGameDto Struktur anpassen
+        GetGameDto updatedGameDto = this.mappingService.mapToGetGameDto(updatedGameEntity, gameUmpireEntities);
+        return new ResponseEntity<>(updatedGameDto, HttpStatus.CREATED);
     }
 }

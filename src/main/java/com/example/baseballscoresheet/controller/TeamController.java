@@ -195,9 +195,9 @@ public class TeamController {
             @ApiResponse(responseCode = "500", description = "server error",
                     content = @Content)
     })
-    @PutMapping("{teamId}")
+    @PutMapping("{teamId}/players")
     public ResponseEntity<GetTeamDto> addPlayersToTeam(@PathVariable Long teamId,
-                                                       @RequestBody List<Long> playerList) {
+                                                       @RequestBody @Valid List<Long> playerList) {
         // searches for team data record with the passed id and return when found
         TeamEntity teamEntity = teamService.findTeamById(teamId);
         Set<PlayerEntity> players = new HashSet<>();

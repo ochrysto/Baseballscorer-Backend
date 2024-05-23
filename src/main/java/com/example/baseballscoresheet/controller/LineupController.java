@@ -7,8 +7,10 @@ import com.example.baseballscoresheet.model.entities.LineupTeamPlayerEntity;
 import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.GetLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.AddPlayerToLineupDto;
+import com.example.baseballscoresheet.model.entities.TeamEntity;
 import com.example.baseballscoresheet.services.LineupService;
 import com.example.baseballscoresheet.services.LineupTeamPlayerService;
+import com.example.baseballscoresheet.services.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,11 +37,14 @@ public class LineupController {
     private final MappingService mappingService;
     private final LineupService lineupService;
     private final LineupTeamPlayerService lineupTeamPlayerService;
+    private final TeamService teamService;
 
-    public LineupController(MappingService mappingService, LineupService lineupService, LineupTeamPlayerService lineupTeamPlayerService) {
+    public LineupController(MappingService mappingService, LineupService lineupService, LineupTeamPlayerService lineupTeamPlayerService,
+                            TeamService teamService) {
         this.mappingService = mappingService;
         this.lineupService = lineupService;
         this.lineupTeamPlayerService = lineupTeamPlayerService;
+        this.teamService = teamService;
     }
 
     // Endpoint for saving lineups
@@ -51,14 +56,15 @@ public class LineupController {
         List<GetLineupDto> addedLineup = new ArrayList<>();
         List<LineupTeamPlayerEntity> addedLineupTeamPlayers = new ArrayList<>();
 
-        // beide lineups werden gemappt und gespeichert
+        // both lineups are mapped and saved
         for (AddLineupDto addLineupDto : newLineups) {
-            LineupEntity lineupEntity = this.mappingService.mapAddLineupDtoToLineupEntity(addLineupDto);
+            TeamEntity teamEntity = this.teamService.findTeamById(addLineupDto.getTeamId());
+            LineupEntity lineupEntity = this.mappingService.mapAddLineupDtoToLineupEntity(teamEntity);
             this.lineupService.saveLineup(lineupEntity);
         }
 
-        // für jeden player, der im lineup zu finden ist, wir ein neues LineupTeamPlayerEntity Objekt angelegt
-        // dafür wir über einmal über jedes übergebene Lineup iteriert
+        // a new LineupTeamPlayerEntity object is created for each player that can be found in the lineup
+        // for this, we iterate over each transferred lineup once
         for (AddLineupDto addLineupDto : newLineups) {
             for (AddPlayerToLineupDto addPlayerToLineupDto : addLineupDto.getPlayerDtoSet()) {
                 if (!Utility.checkIfPlayerIsAlreadyAssignedToLineup(addPlayerToLineupDto.getPlayerId())) {

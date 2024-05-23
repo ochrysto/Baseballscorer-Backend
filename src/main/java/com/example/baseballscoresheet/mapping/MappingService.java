@@ -4,6 +4,7 @@ import com.example.baseballscoresheet.model.dtos.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
 import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
 import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
+import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
 import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.AddPlayerToLineupDto;
@@ -19,7 +20,8 @@ import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.dtos.team.AddTeamInfoDto;
 import com.example.baseballscoresheet.model.dtos.umpire.GetUmpireDto;
 import com.example.baseballscoresheet.model.entities.*;
-import com.example.baseballscoresheet.services.*;
+import com.example.baseballscoresheet.services.PositionService;
+import com.example.baseballscoresheet.services.TeamPlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +34,13 @@ import java.util.Set;
 @Service
 public class MappingService {
     private final ModelMapper mapper;
-    private final TeamService teamService;
-    private final PositionService positionService;
-    private final LineupService lineupService;
-    private final TeamPlayerService teamPlayerService;
+    TeamPlayerService teamPlayerService;
+    PositionService positionService;
 
-    public MappingService(TeamService teamService, PositionService positionService, LineupService lineupService,
-                          TeamPlayerService teamPlayerService) {
+    public MappingService(TeamPlayerService teamPlayerService, PositionService positionService) {
         this.mapper = new ModelMapper();
-        this.teamService = teamService;
-        this.positionService = positionService;
-        this.lineupService = lineupService;
         this.teamPlayerService = teamPlayerService;
+        this.positionService = positionService;
     }
 
     // AddTeamInfoDto + ManagerEntity + ClubEntity + LeagueEntity -> TeamEntity
@@ -156,9 +153,9 @@ public class MappingService {
     }
 
     // AddLineupDto -> LineupEntity
-    public LineupEntity mapAddLineupDtoToLineupEntity(AddLineupDto addLineupDto) {
+    public LineupEntity mapAddLineupDtoToLineupEntity(TeamEntity teamEntity) {
         LineupEntity lineupEntity = new LineupEntity();
-        lineupEntity.setTeam(this.teamService.findTeamById(addLineupDto.getTeamId()));
+        lineupEntity.setTeam(teamEntity);
         return lineupEntity;
     }
 
@@ -166,7 +163,7 @@ public class MappingService {
     public LineupTeamPlayerEntity mapToLineupTeamPlayerEntity(AddPlayerToLineupDto addPlayerToLineupDto, LineupEntity lineupEntity) {
         LineupTeamPlayerEntity lineupTeamPlayerEntity = new LineupTeamPlayerEntity();
         TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity.getTeam().getId(), addPlayerToLineupDto.getPlayerId());
-        lineupTeamPlayerEntity.setLineup(this.lineupService.findLineupById(lineupEntity.getId()));
+        lineupTeamPlayerEntity.setLineup(lineupEntity);
         lineupTeamPlayerEntity.setTeamPlayer(teamPlayer);
         lineupTeamPlayerEntity.setJerseyNr(addPlayerToLineupDto.getJerseyNr());
         lineupTeamPlayerEntity.setPosition(this.positionService.findById(addPlayerToLineupDto.getPosition()));
@@ -224,7 +221,6 @@ public class MappingService {
     // GameEntity -> GetGameDto
     public GetGameDto mapToGetGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntityList) {
         GetGameDto getGameDto = new GetGameDto();
-
         getGameDto.setGameNr(gameEntity.getGameNr());
         getGameDto.setDate(gameEntity.getDate());
         getGameDto.setLocation(gameEntity.getLocation());
@@ -252,5 +248,16 @@ public class MappingService {
         gameUmpireEntity.setGame(gameEntity);
         gameUmpireEntity.setUmpire(umpire);
         return gameUmpireEntity;
+    }
+
+    // UpdateGameDto -> GameEntity
+    public GameEntity mapUpdateGameDtoToGameEntity(UpdateGameDto updateGameDto) {
+        GameEntity gameEntity = new GameEntity();
+        gameEntity.setInnings(updateGameDto.getInnings());
+        gameEntity.setAttendance(updateGameDto.getAttendance());
+        gameEntity.setStartTime(updateGameDto.getStartTime());
+        gameEntity.setEndTime(updateGameDto.getEndTime());
+        gameEntity.setDurationInMinutes(updateGameDto.getDurationInMinutes());
+        return gameEntity;
     }
 }

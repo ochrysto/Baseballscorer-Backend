@@ -22,6 +22,7 @@ public class GameEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private Integer gameNr;
 
     private LocalDate date;
@@ -32,7 +33,8 @@ public class GameEntity {
 
     private LocalTime endTime;
 
-    private Double timeOfGame;
+    @Column(name = "duration_in_minutes")
+    private Long durationInMinutes;
 
     private Integer attendance;
 
@@ -42,6 +44,7 @@ public class GameEntity {
      * An inning is over when both teams have batted once and been on defense once.
      * This changes after every three 'Outs'.
      */
+    @Column(nullable = false)
     private Integer innings;
 
     @OneToMany(mappedBy = "game")

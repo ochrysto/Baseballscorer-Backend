@@ -1,9 +1,12 @@
 package com.example.baseballscoresheet.services;
 
 import com.example.baseballscoresheet.model.entities.GameEntity;
+import com.example.baseballscoresheet.model.entities.GameUmpireEntity;
 import com.example.baseballscoresheet.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class GameService {
@@ -17,5 +20,31 @@ public class GameService {
 
     public GameEntity createGame(GameEntity gameEntity) {
         return this.gameRepository.save(gameEntity);
+    }
+
+    public GameEntity findGameByGameNr(Integer gameNr) {
+        if (this.gameRepository.findByGameNr(gameNr).isPresent()) {
+            return this.gameRepository.findByGameNr(gameNr).get();
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game with GameNr " + gameNr + " not found");
+    }
+
+    public GameEntity update(GameEntity updatedGameEntity) {
+        GameEntity gameEntity = this.findGameById(updatedGameEntity.getId());
+        gameEntity.setInnings(updatedGameEntity.getInnings());
+        gameEntity.setAttendance(updatedGameEntity.getAttendance());
+        gameEntity.setEndTime(updatedGameEntity.getEndTime());
+        gameEntity.setStartTime(updatedGameEntity.getStartTime());
+        gameEntity.setDurationInMinutes(updatedGameEntity.getDurationInMinutes());
+        this.gameRepository.save(gameEntity);
+        return gameEntity;
+    }
+
+    private GameEntity findGameById(Long id) {
+        if (this.gameRepository.findById(id).isPresent()) {
+            return this.gameRepository.findById(id).get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game with id " + id + " not found");
+        }
     }
 }
