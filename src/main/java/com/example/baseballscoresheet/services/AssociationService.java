@@ -3,9 +3,7 @@ package com.example.baseballscoresheet.services;
 import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.AssociationEntity;
 import com.example.baseballscoresheet.repositories.AssociationRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

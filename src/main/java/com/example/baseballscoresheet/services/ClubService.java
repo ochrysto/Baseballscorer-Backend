@@ -4,9 +4,7 @@ import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundExcepti
 import com.example.baseballscoresheet.model.entities.ClubEntity;
 import com.example.baseballscoresheet.repositories.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
