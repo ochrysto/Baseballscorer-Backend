@@ -22,11 +22,7 @@ public class AssociationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Name of the association.
-     */
     @Column
-    @NotBlank(message = "the name of the association is mandatory")
     private String name;
 
     @Column

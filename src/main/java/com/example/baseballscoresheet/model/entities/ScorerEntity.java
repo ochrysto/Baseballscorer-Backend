@@ -14,31 +14,16 @@ import lombok.*;
 @Table(name = "scorer")
 public class ScorerEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     *
-     */
     private Long passnumber;
 
-    /**
-     * Vorname des Scorers.
-     */
     private String firstName;
 
-    /**
-     * Nachname des Scorers.
-     */
     private String lastName;
 
-    /**
-     *
-     */
     @OneToOne(mappedBy = "scorer")
     private GameEntity game;
 }

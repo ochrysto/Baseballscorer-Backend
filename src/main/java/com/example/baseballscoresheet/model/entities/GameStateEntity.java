@@ -14,9 +14,6 @@ import lombok.*;
 @Table(name = "game_state")
 public class GameStateEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,21 +24,13 @@ public class GameStateEntity {
 
     private Integer battingOrder;
 
-    /**
-     *
-     */
     @ManyToOne
     @JoinColumn(name = "lineup_player_id", nullable = false)
     private LineupTeamPlayerEntity lineupPlayer;
 
-    /**
-     *
-     */
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
     private GameEntity game;
-
-
 
     private Integer pa;
 

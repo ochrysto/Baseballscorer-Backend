@@ -13,9 +13,6 @@ import lombok.*;
 @Table(name = "team_player")
 public class TeamPlayerEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

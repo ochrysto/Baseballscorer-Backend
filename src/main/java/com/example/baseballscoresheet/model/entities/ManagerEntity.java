@@ -15,26 +15,14 @@ import lombok.*;
 @Table(name = "manager")
 public class ManagerEntity {
 
-    /**
-     *
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Vorname des Managers.
-     */
     private String firstName;
 
-    /**
-     * Nachname des Managers.
-     */
     private String lastName;
 
-    /**
-     * E-Mailadresse des Managers.
-     */
     private String email;
 
     @OneToOne(mappedBy = "manager")

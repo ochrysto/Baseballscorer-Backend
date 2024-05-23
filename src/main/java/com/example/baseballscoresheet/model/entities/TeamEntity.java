@@ -15,41 +15,24 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "team")
 public class TeamEntity {
-    /**
-     * Attribut, das zur eindeutigen Identifikation eines Team-Objekts dient.
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Name des Teams.
-     */
     private String name;
 
-    /**
-     * Liste aller Teammitglieder.
-     */
     @OneToMany(mappedBy = "team")
     private Set<TeamPlayerEntity> teamplayer;
 
-    /**
-     * Manager des Teams.
-     */
     @OneToOne
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private ManagerEntity manager;
 
-    /**
-     * Verein des Teams.
-     */
     @ManyToOne
     @JoinColumn(name = "club_id", nullable = false)
     private ClubEntity club;
 
-    /**
-     * Liga, in der das Team spielt.
-     */
     @ManyToOne
     @JoinColumn(name = "league_id", nullable = false)
     private LeagueEntity league;

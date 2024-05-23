@@ -1,7 +1,6 @@
 package com.example.baseballscoresheet.model.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.Set;
@@ -25,11 +24,9 @@ public class PlayerEntity {
     private Integer passnumber;
 
     @Column(name = "first_name")
-    @NotBlank(message = "Players first name is mandatory")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank(message = "Players last name is mandatory")
     private String lastName;
 
     @OneToMany(mappedBy = "player")
@@ -66,10 +63,8 @@ public class PlayerEntity {
      */
     private Integer h;
 
-    // TODO
     private Integer twoB;
 
-    // TODO
     private Integer threeB;
 
     /**

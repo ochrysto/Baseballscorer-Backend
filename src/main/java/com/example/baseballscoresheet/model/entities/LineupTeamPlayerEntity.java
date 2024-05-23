@@ -11,9 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "lineup_team_player")
 public class LineupTeamPlayerEntity {
-    /**
-     *
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,13 +28,9 @@ public class LineupTeamPlayerEntity {
     private PositionEntity position;
 
     @Column(name = "jersey_nr")
-    //@Size(max = 99, message = "Tricot Number must be between 0 and 99")
-    //TODO annotation prüfen
     private Integer jerseyNr;
 
-    /**
-     *
-     */
     @OneToMany(mappedBy = "lineupPlayer")
     private Set<GameStateEntity> gameStateSet;
+
 }

@@ -8,11 +8,11 @@ import lombok.Setter;
 @Setter
 public class AddPlayerInfoDto {
 
-    @NotBlank(message = "Firstname is obligatory")
+    @NotBlank(message = "Players first name is mandatory")
     @Size(max = 70, message = "Firstname must not exceed 70 characters")
     private String firstName;
 
-    @NotBlank(message = "Lastname is obligatory")
+    @NotBlank(message = "Players last name is mandatory")
     @Size(max = 70, message = "Lastname must not exceed 70 characters")
     private String lastName;
 

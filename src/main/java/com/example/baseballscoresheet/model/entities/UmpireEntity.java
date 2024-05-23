@@ -22,14 +22,8 @@ public class UmpireEntity {
 
     private Long passnumber;
 
-    /**
-     * Vorname des Schiedsrichters.
-     */
     private String firstName;
 
-    /**
-     * Nachname des Schiedsrichters.
-     */
     private String lastName;
 
     @OneToMany(mappedBy = "umpire")
