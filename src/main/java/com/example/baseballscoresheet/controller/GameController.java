@@ -5,8 +5,6 @@ import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
 import com.example.baseballscoresheet.model.dtos.game.GetEndedGameDto;
 import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
 import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
-import com.example.baseballscoresheet.model.dtos.team.AddTeamInfoDto;
-import com.example.baseballscoresheet.model.dtos.team.GetTeamInfoDto;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;

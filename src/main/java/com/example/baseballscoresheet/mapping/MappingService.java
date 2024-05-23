@@ -6,7 +6,6 @@ import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
 import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
 import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
 import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
-import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.AddPlayerToLineupDto;
 import com.example.baseballscoresheet.model.dtos.lineup.GetPlayerFromLineupDto;
 import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
