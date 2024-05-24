@@ -1,10 +1,31 @@
 package com.example.baseballscoresheet.model.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class ActionEntity {
+    public ActionEntity(TurnEntity turn, String type) {
+        this.turn = turn;
+        this.type = type;
+    }
+
+    public ActionEntity(TurnEntity turn, String type, String place, int distance, ActionEntity linkedAction, boolean isStandalone) {
+        this.turn = turn;
+        this.type = type;
+        this.place = place;
+        this.distance = distance;
+        this.linkedAction = linkedAction;
+        this.isStandalone = isStandalone;
+    }
+
     public enum Type {
         BALL, STRIKE, FOUL, BASE_ON_BALLS, HIT_SINGLE, HIT_DOUBLE, HIT_TRIPLE, HOME_RUN,
         STOLEN_BASE, WILD_PITCH, PASSED_BALL, ADVANCED_BY_RULE, ADVANCED_BY_BATTER,

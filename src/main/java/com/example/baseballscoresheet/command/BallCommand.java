@@ -1,10 +1,13 @@
 package com.example.baseballscoresheet.command;
 
+import com.example.baseballscoresheet.model.entities.TurnEntity;
+import com.example.baseballscoresheet.services.TurnService;
+
 public class BallCommand implements Command {
     private final TurnService service;
-    private final Turn turn;
+    private final TurnEntity turn;
 
-    public BallCommand(TurnService service, Turn turn) {
+    public BallCommand(TurnService service, TurnEntity turn) {
         this.service = service;
         this.turn = turn;
     }
@@ -12,31 +15,7 @@ public class BallCommand implements Command {
     @Override
     public void execute() {
         if (turn.getBalls() >= TurnService.MAX_BALLS) {
-            throw new BadRequestException("The maximum number of balls has already been reached.");
+//            throw new Exception("The maximum number of balls has already been reached.");  # FIXME
         }
-
-        service.executeWithTransaction(() -> {
-            turn.setBalls(turn.getBalls() + 1);
-            turn.save();
-            Action action = new Action(turn, Action.Type.BALL);
-            action.save();
-            service.advanceRunners(turn.getFrame().getGame(), action);
-        });
     }
-}
-
-public class StrikeCommand implements Command {
-    private final TurnService service;
-    private final Turn turn;
-
-    public StrikeCommand(TurnService service, Turn turn) {
-        this.service = service;
-        this.turn = turn;
-    }
-
-    @Override
-    public void execute() {
-        service.increaseStrikeCount(turn);
-    }
-}{
 }

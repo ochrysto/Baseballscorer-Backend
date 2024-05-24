@@ -2,6 +2,7 @@ package com.example.baseballscoresheet.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class TurnEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,14 @@ public class TurnEntity {
     private int balls = 0;
     @OneToMany(mappedBy = "turn", cascade = CascadeType.ALL)
     private List<ActionEntity> actions;
+
+    public TurnEntity(PlayerEntity player, InningEntity inning, int base, String currentStatus) {
+        this.player = player;
+        this.inning = inning;
+        this.base = base;
+        this.currentStatus = currentStatus;
+    }
+
     public enum Base {
         BATTER(0), FIRST_BASE(1), SECOND_BASE(2), THIRD_BASE(3), HOME_BASE(4);
 
