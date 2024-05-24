@@ -54,5 +54,49 @@ public class ActionEntity {
     @OneToMany(mappedBy = "action", cascade = CascadeType.ALL)
     private List<ResponsibleEntity> sequence;
 
+    static public boolean isResponsibleRequired(ActionEntity.Type actionType) {
+        return true;
+    }
+
+    static public boolean areMultipleResponsibleRequired(ActionEntity.Type actionType) {
+        return true;
+    }
+
+    static public List<ActionEntity.Type> outBatter(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> safeBatter(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> errorBatter(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> outRunnerHold(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> safeRunnerHold(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> errorRunnerHold(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> outRunnerAdvance(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> safeRunnerAdvance(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> errorRunnerAdvance(){
+        return List.of();
+    }
+
     // Getters and Setters
 }
