@@ -78,7 +78,7 @@ public class GameController {
         // adds these to a new list
         List<GameUmpireEntity> gameUmpireEntities = new ArrayList<>();
         if (umpires.size() == 2) {
-            if (umpires.getFirst().equals(umpires.get(1))) {
+            if (umpires.get(0).equals(umpires.get(1))) {
                 throw new DoubleInputException("First und second umpire must not be the same");
             } else {
                 // saving game
@@ -102,7 +102,7 @@ public class GameController {
             } else {
                 throw new DoubleInputException("Host team and guest team must not be the same");
             }
-            GameUmpireEntity gameUmpire = this.mappingService.mapToGameUmpireEntity(gameEntity, umpires.getFirst());
+            GameUmpireEntity gameUmpire = this.mappingService.mapToGameUmpireEntity(gameEntity, umpires.get(0));
             gameUmpireEntities.add(gameUmpire);
             this.gameUmpireService.save(gameUmpire);
         }
