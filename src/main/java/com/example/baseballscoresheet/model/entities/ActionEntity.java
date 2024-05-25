@@ -83,7 +83,19 @@ public class ActionEntity {
         return true;
     }
 
-    static public List<ActionEntity.Type> outBatter(){
+    static public List<ActionEntity.Type> atBat() {
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> out(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> safe(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> error(){
         return List.of();
     }
 
