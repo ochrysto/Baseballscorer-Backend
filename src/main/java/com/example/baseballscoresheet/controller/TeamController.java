@@ -2,7 +2,7 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.exceptionHandling.PlayerIsNotAvailableException;
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
+import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
 import com.example.baseballscoresheet.model.dtos.team.AddTeamWithoutPlayerListDto;
@@ -245,7 +245,7 @@ public class TeamController {
         if (Utility.checkIfPlayerExists(playerId) && Utility.checkIfTeamExists(teamId)) {
             teamService.deletePlayerFromTeam(teamId, playerId);
         } else {
-            throw new RessourceNotFoundException("Team with id: " + teamId + " or player with id: " + playerId + " not found");
+            throw new ResourceNotFoundException("Team with id: " + teamId + " or player with id: " + playerId + " not found");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -274,7 +274,7 @@ public class TeamController {
                 allPlayersDto.add(this.mappingService.mapPlayerEntityToGetPlayerDto(player));
             }
         } else {
-            throw new RessourceNotFoundException("Team with id: " + teamId + " not found");
+            throw new ResourceNotFoundException("Team with id: " + teamId + " not found");
         }
         return new ResponseEntity<>(allPlayersDto, HttpStatus.OK);
     }

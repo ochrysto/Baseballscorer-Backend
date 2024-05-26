@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
+@Table(name = "turn")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,13 +23,14 @@ public class TurnEntity {
     @JoinColumn(name = "inning_id", nullable = false)
     private InningEntity inning;
     private int base = 0;  // Use Base enum if desired
-    private String currentStatus = Status.AT_BAT.name();
+    @Enumerated(EnumType.STRING)
+    private Status currentStatus = Status.AT_BAT;
     private int strikes = 0;
     private int balls = 0;
     @OneToMany(mappedBy = "turn", cascade = CascadeType.ALL)
     private List<ActionEntity> actions;
 
-    public TurnEntity(PlayerEntity player, InningEntity inning, int base, String currentStatus) {
+    public TurnEntity(PlayerEntity player, InningEntity inning, int base, Status currentStatus) {
         this.player = player;
         this.inning = inning;
         this.base = base;

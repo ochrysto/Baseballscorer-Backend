@@ -8,16 +8,17 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
+@Table(name = "action")
 @Getter
 @Setter
 @NoArgsConstructor
 public class ActionEntity {
-    public ActionEntity(TurnEntity turn, String type) {
+    public ActionEntity(TurnEntity turn, Type type) {
         this.turn = turn;
         this.type = type;
     }
 
-    public ActionEntity(TurnEntity turn, String type, String place, int distance, ActionEntity linkedAction, boolean isStandalone) {
+    public ActionEntity(TurnEntity turn, Type type, Place place, int distance, ActionEntity linkedAction, boolean isStandalone) {
         this.turn = turn;
         this.type = type;
         this.place = place;
@@ -60,9 +61,10 @@ public class ActionEntity {
     @ManyToOne
     @JoinColumn(name = "turn_id", nullable = false)
     private TurnEntity turn;
-
-    private String type;
-    private String place;
+    @Enumerated(EnumType.STRING)
+    private Type type;
+    @Enumerated(EnumType.STRING)
+    private Place place;
     private int distance = 0;
 
     @ManyToOne
@@ -96,6 +98,10 @@ public class ActionEntity {
     }
 
     static public List<ActionEntity.Type> error(){
+        return List.of();
+    }
+
+    static public List<ActionEntity.Type> outBatter(){
         return List.of();
     }
 

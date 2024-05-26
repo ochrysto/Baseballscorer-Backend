@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,15 @@ public class TurnService {
     private static final int THIRD_BASE = 3;
     private static final int HOME_BASE = 4;
 
-    public GameEntity getGame(Long gameId) throws Exception {
+    public GameEntity getGame(Long gameId) {
         return gameRepository.findById(gameId).orElseThrow(() ->
-                new Exception("Game with id `" + gameId + "` not found")
+                new ResourceNotFoundException("Game with id `" + gameId + "` not found")
         );
     }
 
-    public TurnEntity getLastTurn(GameEntity game) throws Exception {
+    public TurnEntity getLastTurn(GameEntity game){
         return turnRepository.findFirstByInningGameOrderByIdDesc(game)
-                .orElseThrow(() -> new Exception("No turn for the game with id `" + game.getId() + "` found"));
+                .orElseThrow(() -> new ResourceNotFoundException("No turn for the game with id `" + game.getId() + "` found"));
     }
 
     public ActionEntity getLastAction(TurnEntity turn) {
@@ -56,11 +57,9 @@ public class TurnService {
         return lastAction;
     }
 
-    public TurnEntity getRunnerByBase(TurnEntity turn, int base) throws Exception {
-        return turnRepository.findByInningAndBaseAndCurrentStatus(
-                        turn.getInning(), base, TurnEntity.Status.ON_BASE.toString())
-                .orElseThrow(() -> new Exception(
-                        "No turn for the inning with id `" + turn.getInning().getId() + "` and the base " + base + " found"));
+    public TurnEntity getRunnerByBase(TurnEntity turn, int base) {
+        return turnRepository.findByInningAndBaseAndCurrentStatus(turn.getInning(), base, TurnEntity.Status.ON_BASE)
+                .orElseThrow(() -> new ResourceNotFoundException("No runner for the inning with id `" + turn.getInning().getId() + "` and the base " + base + " found"));
     }
 
     @Transactional
@@ -70,8 +69,8 @@ public class TurnService {
         }
         turn.setStrikes(turn.getStrikes() + 1);
         if (turn.getStrikes() == MAX_STRIKES) {
-            turn.setCurrentStatus(TurnEntity.Status.IS_OUT.toString());
-            actionRepository.save(new ActionEntity(turn, ActionEntity.Type.STRIKEOUT.toString()));
+            turn.setCurrentStatus(TurnEntity.Status.IS_OUT);
+            actionRepository.save(new ActionEntity(turn, ActionEntity.Type.STRIKEOUT));
         }
         turnRepository.save(turn);
     }
@@ -82,40 +81,45 @@ public class TurnService {
             turn.setStrikes(turn.getStrikes() + 1);
         }
         turnRepository.save(turn);
-        actionRepository.save(new ActionEntity(turn, ActionEntity.Type.FOUL.toString()));
+        actionRepository.save(new ActionEntity(turn, ActionEntity.Type.FOUL));
     }
 
     @Transactional
     public void moveBatterToBase(TurnEntity turn, int base) {
         turn.setBase(base);
-        turn.setCurrentStatus(TurnEntity.Status.ON_BASE.toString());
+        turn.setCurrentStatus(TurnEntity.Status.ON_BASE);
         turnRepository.save(turn);
     }
 
     @Transactional
     public void batterHomeRun(TurnEntity turn) {
         moveBatterToBase(turn, HOME_BASE);
-        turn.setCurrentStatus(TurnEntity.Status.RUN.toString());
+        turn.setCurrentStatus(TurnEntity.Status.RUN);
         turnRepository.save(turn);
     }
 
-    public List<TurnEntity> getActiveRunners(GameEntity game) throws Exception {
+    public TurnEntity getBatter(TurnEntity turn) {
+        return turnRepository.findByInningAndBaseAndCurrentStatus(turn.getInning(), 0, TurnEntity.Status.AT_BAT)
+                .orElseThrow(() -> new ResourceNotFoundException("No batter for the inning with id `" + turn.getInning().getId() + "` found"));
+    }
+
+    public List<TurnEntity> getActiveRunners(GameEntity game) {
         InningEntity activeInning = inningRepository.findFirstByGameOrderByIdDesc(game)
-                .orElseThrow(() -> new Exception("No active inning for the game with id `" + game.getId() + "` found"));
-        return turnRepository.findByInningAndCurrentStatus(activeInning, TurnEntity.Status.ON_BASE.toString());
+                .orElseThrow(() -> new ResourceNotFoundException("No active inning for the game with id `" + game.getId() + "` found"));
+        return turnRepository.findByInningAndCurrentStatus(activeInning, TurnEntity.Status.ON_BASE);
     }
 
     @Transactional
-    public void createNewTurn(TurnEntity turn) throws Exception {
+    public void createNewTurn(TurnEntity turn) {
         InningEntity inning = turn.getInning();
         long nextId = turnRepository.countByInning(inning) + 1;
         PlayerEntity batter = playerRepository.findById(nextId)
-                .orElseThrow(() -> new Exception("Batter with id `" + nextId + "` not found"));
-        turnRepository.save(new TurnEntity(batter, inning, 0, TurnEntity.Status.AT_BAT.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("Batter with id `" + nextId + "` not found"));
+        turnRepository.save(new TurnEntity(batter, inning, 0, TurnEntity.Status.AT_BAT));
     }
 
     @Transactional
-    public void advanceRunners(GameEntity game, ActionEntity baseAction) throws Exception {
+    public void advanceRunners(GameEntity game, ActionEntity baseAction) {
         List<TurnEntity> runners = getActiveRunners(game);
         if (!runners.isEmpty()) {
             baseAction.setStandalone(false);
@@ -128,7 +132,7 @@ public class TurnService {
                         .orElse(null);
                 if (previousRunner != null) {
                     prevAction = actionRepository.save(new ActionEntity(
-                            runner, ActionEntity.Type.ADVANCED_BY_BATTER.toString(), ActionEntity.Place.forBase(runner.getBase()).toString(), 1, prevAction, false));
+                            runner, ActionEntity.Type.ADVANCED_BY_BATTER, ActionEntity.Place.forBase(runner.getBase()), 1, prevAction, false));
                 }
             }
         }

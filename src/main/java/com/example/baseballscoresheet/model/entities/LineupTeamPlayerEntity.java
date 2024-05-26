@@ -31,6 +31,6 @@ public class LineupTeamPlayerEntity {
     private Integer jerseyNr;
 
     @OneToMany(mappedBy = "lineupPlayer")
-    private Set<GameStateEntity> gameStateSet;
+    private Set<LineupPlayerStateEntity> lineupPlayerStateSet;
 
 }

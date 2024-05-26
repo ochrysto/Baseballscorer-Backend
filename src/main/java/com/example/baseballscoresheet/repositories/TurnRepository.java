@@ -10,9 +10,7 @@ import java.util.Optional;
 
 public interface TurnRepository extends JpaRepository<TurnEntity, Long> {
     Optional<TurnEntity> findFirstByInningGameOrderByIdDesc(GameEntity game);
-    Optional<TurnEntity> findByInningAndBaseAndCurrentStatus(InningEntity inning, int base, String currentStatus);
-
+    Optional<TurnEntity> findByInningAndBaseAndCurrentStatus(InningEntity inning, int base, TurnEntity.Status currentStatus);
     int countByInning(InningEntity inning);
-
-    List<TurnEntity> findByInningAndCurrentStatus(InningEntity activeInning, String status);
+    List<TurnEntity> findByInningAndCurrentStatus(InningEntity activeInning, TurnEntity.Status status);
 }

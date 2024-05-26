@@ -3,13 +3,9 @@ package com.example.baseballscoresheet.command;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
 import com.example.baseballscoresheet.services.TurnService;
 
-public class BallCommand implements Command {
-    private final TurnService service;
-    private final TurnEntity turn;
-
-    public BallCommand(TurnService service, TurnEntity turn) {
-        this.service = service;
-        this.turn = turn;
+public class BallCommand extends Command {
+    public BallCommand(TurnService turnService, TurnEntity turn) {
+        super(turnService, turn);
     }
 
     @Override

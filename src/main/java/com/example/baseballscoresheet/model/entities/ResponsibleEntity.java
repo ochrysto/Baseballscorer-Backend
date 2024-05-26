@@ -3,6 +3,7 @@ package com.example.baseballscoresheet.model.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "responsible")
 public class ResponsibleEntity {
     public enum Place {
         PITCHER, CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP,
@@ -18,7 +19,8 @@ public class ResponsibleEntity {
     private ActionEntity action;
 
     private int counter;
-    private String defencePosition;  // Use Place enum if desired
+    @Enumerated(EnumType.STRING)
+    private Place defencePosition;  // Use Place enum if desired
 
     // Getters and Setters
 }
