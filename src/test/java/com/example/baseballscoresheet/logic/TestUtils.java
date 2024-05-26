@@ -1,13 +1,16 @@
 package com.example.baseballscoresheet.logic;
 
 import com.example.baseballscoresheet.model.entities.ActionEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,14 +18,12 @@ import java.util.Map;
 
 @Component
 public class TestUtils {
-    final private String HOST = "http://localhost:8080";
-    final private RestTemplate restTemplate;
 
     @Autowired
-    public TestUtils(RestTemplateBuilder builder) {
-        this.restTemplate = builder.build();
-    }
+    private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
 
     public void compareDicts(Map<String, Object> expected, Map<String, Object> actual) {
         for (String key : expected.keySet()) {
@@ -37,19 +38,29 @@ public class TestUtils {
         }
     }
 
-    public void checkGameState(Long gameId, Map<String, Object> expectedData) {
-        ResponseEntity<Map> response = restTemplate.getForEntity(HOST + "/game/" + gameId + "/state", Map.class);
-        Map<String, Object> actualData = response.getBody();
+    public void checkGameState(Long gameId, Map<String, Object> expectedData) throws Exception {
+        MvcResult result = mockMvc.perform(get("/game/" + gameId + "/state")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+        Map<String, Object> actualData = objectMapper.readValue(responseBody, Map.class);
         compareDicts(expectedData, actualData);
     }
 
-    public void checkAvailableActions(Long gameId, Map<String, Object> expectedActions) {
-        ResponseEntity<Map> response = restTemplate.getForEntity(HOST + "/game/" + gameId + "/action", Map.class);
-        Map<String, Object> actualActions = response.getBody();
+    public void checkAvailableActions(Long gameId, Map<String, Object> expectedActions) throws Exception {
+        MvcResult result = mockMvc.perform(get("/game/" + gameId + "/action")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+        Map<String, Object> actualActions = objectMapper.readValue(responseBody, Map.class);
         compareDicts(expectedActions, actualActions);
     }
 
-    public void createAction(Long gameId, int base, ActionEntity.Type action, Integer distance, List<Map<String, Object>> responsible) {
+    public void createAction(Long gameId, int base, ActionEntity.Type action, Integer distance, List<Map<String, Object>> responsible) throws Exception {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("base", base);
         requestBody.put("type", action);
@@ -60,10 +71,19 @@ public class TestUtils {
             requestBody.put("responsible", responsible);
         }
 
-        ResponseEntity<Map> response = restTemplate.postForEntity(HOST + "/game/" + gameId + "/action", requestBody, Map.class);
-        assertEquals(200, response.getStatusCodeValue(), "Something went wrong");
-        assertNotNull(response.getBody(), "Response JSON must have action data");
-        assertEquals(1, response.getBody().size(), "Response JSON must have 1 field");
-        assertTrue(response.getBody().containsKey("msg"), "Response JSON must have `msg` field");
+        String requestJson = objectMapper.writeValueAsString(requestBody);
+
+        MvcResult result = mockMvc.perform(post("/game/" + gameId + "/action")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+        Map<String, Object> responseMap = objectMapper.readValue(responseBody, Map.class);
+
+        assertNotNull(responseMap, "Response JSON must have action data");
+        assertEquals(1, responseMap.size(), "Response JSON must have 1 field");
+        assertTrue(responseMap.containsKey("msg"), "Response JSON must have `msg` field");
     }
 }

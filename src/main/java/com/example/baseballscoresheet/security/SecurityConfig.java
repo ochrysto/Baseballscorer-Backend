@@ -47,6 +47,8 @@ class SecurityConfig {
                         .permitAll()
                         .requestMatchers(new AntPathRequestMatcher( "/team"))
                         .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher( "/game/**"))
+                        .permitAll()
                         .anyRequest()
                         .authenticated())
                 .csrf((csrf) -> csrf.disable())

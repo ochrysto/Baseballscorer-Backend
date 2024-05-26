@@ -70,6 +70,8 @@ public class GameEntity {
     @JoinColumn(name = "league_id", nullable = false)
     private LeagueEntity league;
 
-    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    // CascadeType.MERGE because of an error "detached entity passed to persist"
+    // See: https://www.baeldung.com/hibernate-detached-entity-passed-to-persist
+    @OneToOne(mappedBy = "game", cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
     private GameStateEntity gameState;
 }

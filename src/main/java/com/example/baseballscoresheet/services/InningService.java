@@ -14,7 +14,7 @@ public class InningService {
         this.inningRepository = inningRepository;
     }
 
-    public void create(InningEntity inning) {
-        this.inningRepository.save(inning);
+    public InningEntity create(InningEntity inning) {
+        return this.inningRepository.save(inning);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.mapping.PlayerMapper;
 import com.example.baseballscoresheet.model.dtos.gamestate.GameStateDto;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
@@ -7,6 +8,11 @@ import com.example.baseballscoresheet.model.entities.GameEntity;
 import com.example.baseballscoresheet.model.entities.PlayerEntity;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
 import com.example.baseballscoresheet.services.TurnService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +26,32 @@ import java.util.Optional;
 public class StateController {
 
     private final TurnService turnService;
+    private final MappingService mappingService;
 
-    public StateController(TurnService turnService) {
+    public StateController(TurnService turnService, MappingService mappingService) {
         this.turnService = turnService;
+        this.mappingService = mappingService;
     }
 
     @GetMapping("/game/{gid}/state")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "game state found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GameStateDto.class))}),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "game not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content),
+    })
+    @RolesAllowed("user")
     public ResponseEntity<GameStateDto> getGameState(@PathVariable long gid) {
         GameEntity game = turnService.getGame(gid);
         TurnEntity turn = turnService.getLastTurn(game);
 
         PlayerEntity batter = turnService.getBatter(turn).getPlayer();
-        GetPlayerDto batterDto = PlayerMapper.INSTANCE.playerEntityToGetPlayerDto(batter);
+        GetPlayerDto batterDto = mappingService.mapPlayerEntityToGetPlayerDto(batter);
 
         List<TurnEntity> activeRunners = turnService.getActiveRunners(game);
         Optional<TurnEntity> first_runner = activeRunners.stream().filter(turnEntity -> turnEntity.getBase() == TurnEntity.Base.FIRST_BASE.getValue()).findFirst();

@@ -3,9 +3,13 @@ package com.example.baseballscoresheet.model.dtos.gamestate;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
 import com.example.baseballscoresheet.model.entities.InningEntity;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 @AllArgsConstructor
 public class GameStateDto {
     private Long game;

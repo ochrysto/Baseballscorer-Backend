@@ -159,6 +159,16 @@ INSERT INTO team_player(team_id, player_id)
 VALUES (7, 13);
 INSERT INTO team_player(team_id, player_id)
 VALUES (7, 14);
+
+INSERT INTO game(game_nr, innings, association_id, league_id)
+VALUES (1, 9, 1, 1);
+
+INSERT INTO inning(game_id, inning, outs, batting_team)
+VALUES (1, 1, 0, 'AWAY');
+
+INSERT INTO turn(balls, base, strikes, inning_id, player_id, current_status)
+VALUES (0, 0, 0, 1, 1, 'AT_BAT');
+
 /*
 INSERT INTO lineup(team_id)
 VALUES (1);
@@ -172,4 +182,5 @@ VALUES (1, 2, 2, 2);
 INSERT INTO lineup_team_player(lineup_id, team_player_id, jersey_nr, position_id)
 VALUES (2, 3, 3, 3);
 INSERT INTO lineup_team_player(lineup_id, team_player_id, jersey_nr, position_id)
-VALUES (2, 4, 4, 4)*/
+VALUES (2, 4, 4, 4)
+*/
