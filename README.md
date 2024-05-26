@@ -121,9 +121,8 @@ Use `GetBearerToken.http` file to make requests to KeyCloak.
 
 **Note**: you must change credentials in this file
 
+## Known issues
 
-
-
-
-
-
+If you cannot run tests with an error message `Could not find a valid Docker environment. Please check configuration.`
+check that you can run docker without `sudo` with the command `docker ps`.
+If you see `permission denied` you should enable to run `docker` without `sudo`

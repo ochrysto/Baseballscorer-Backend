@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.logic;
 
 import com.example.baseballscoresheet.model.entities.*;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -73,7 +76,7 @@ public class LogicTests extends TestConfiguration {
         this.checkGameState(game.getId(), expectedData);
 
         Map<String, Object> expectedActions = Map.of("batter", List.of("out", "safe", "error"));
-        this.checkAvailableActions(game.getId(), expectedActions);
+        this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         // Step 2: Three Balls and a Triple Hit
         for (int i = 1; i <= 3; i++) {
@@ -92,7 +95,7 @@ public class LogicTests extends TestConfiguration {
         this.createAction(game.getId(), 0, ActionEntity.Type.HIT_SINGLE, null, null);
 
         expectedActions = Map.of("third_base_runner", List.of("third_base", "home_base"));
-        this.checkAvailableActions(game.getId(), expectedActions);
+        this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         this.createAction(game.getId(), 3, ActionEntity.Type.HOLD, null, null);
 
@@ -101,18 +104,18 @@ public class LogicTests extends TestConfiguration {
                 "first_base_runner", List.of("second_base"),
                 "third_base_runner", List.of("home_base")
         );
-        this.checkAvailableActions(game.getId(), expectedActions);
+        this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         // Step 4: Second Single Hit and Assisted Out
         this.createAction(game.getId(), 0, ActionEntity.Type.HIT_SINGLE, null, null);
 
         expectedActions = Map.of("third_base_runner", List.of("third_base", "home_base"));
-        this.checkAvailableActions(game.getId(), expectedActions);
+        this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         this.createAction(game.getId(), 3, ActionEntity.Type.HOLD, null, null);
 
         expectedActions = Map.of("first_base_runner", List.of("second_base"));
-        this.checkAvailableActions(game.getId(), expectedActions);
+        this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         this.createAction(game.getId(), 1, ActionEntity.Type.ASSISTED_OUT, null,
                 List.of(
@@ -158,7 +161,7 @@ public class LogicTests extends TestConfiguration {
         this.checkGameState(game.getId(), expectedData);
 
         Map<String, Object> expectedActions = Map.of("batter", List.of("out", "safe", "error"));
-        this.checkAvailableActions(game.getId(), expectedActions);
+        this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         // Step 2: Three Balls and a Triple Hit
         for (int i = 1; i <= 3; i++) {
@@ -180,7 +183,7 @@ public class LogicTests extends TestConfiguration {
                 "batter", List.of("out", "safe", "error"),
                 "third_base_runner", List.of("home_base")
         );
-        this.checkAvailableActions(game.getId(), expectedActions);
+        this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
     }
 
     @Autowired
@@ -210,15 +213,46 @@ public class LogicTests extends TestConfiguration {
         compareDicts(expectedData, actualData);
     }
 
-    public void checkAvailableActions(Long gameId, Map<String, Object> expectedActions) throws Exception {
+//    public void checkAvailableActions(Long gameId, Map<String, Object> expectedActions) throws Exception {
+//        MvcResult result = mockMvc.perform(get("/game/" + gameId + "/action")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andReturn();
+//
+//        String responseBody = result.getResponse().getContentAsString();
+//        Map<String, Object> actualActions = objectMapper.readValue(responseBody, Map.class);
+//        compareDicts(expectedActions, actualActions);
+//    }
+
+    public void checkAvailableActions(Long gameId, JsonNode expectedActions) throws Exception {
+        // Perform the GET request to the endpoint
         MvcResult result = mockMvc.perform(get("/game/" + gameId + "/action")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String responseBody = result.getResponse().getContentAsString();
-        Map<String, Object> actualActions = objectMapper.readValue(responseBody, Map.class);
-        compareDicts(expectedActions, actualActions);
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode data = objectMapper.readTree(jsonResponse);
+
+        // General checks
+        assertThat(data).withFailMessage("Response JSON must have available actions").isNotNull();
+
+        // Perform the recursive check
+        recursiveCheck(data, expectedActions);
+    }
+
+    private static void recursiveCheck(JsonNode data, JsonNode expectedActions) {
+        data.fieldNames().forEachRemaining(fieldName -> {
+            boolean isRedundant = !expectedActions.has(fieldName) && data.get(fieldName) != null;  // FIXME: `has()` doesnt work with arrays
+            boolean isEmpty = expectedActions.has(fieldName) && data.get(fieldName) == null;
+
+            assertThat(isRedundant).withFailMessage("No need of `%s` with value", fieldName).isFalse();
+            assertThat(isEmpty).withFailMessage("`%s` is None but must be provided", fieldName).isFalse();
+
+            if (expectedActions.has(fieldName) && data.get(fieldName).isContainerNode()) {
+                recursiveCheck(data.get(fieldName), expectedActions.get(fieldName));
+            }
+        });
     }
 
     public void createAction(Long gameId, int base, ActionEntity.Type action, Integer distance, List<Map<String, Object>> responsible) throws Exception {
