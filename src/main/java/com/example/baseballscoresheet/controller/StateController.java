@@ -77,9 +77,9 @@ public class StateController {
                 turn.getStrikes(),
                 null, // onDeck
                 batterDto, // batter
-                first_runner.isPresent() ? PlayerMapper.INSTANCE.playerEntityToGetPlayerDto(first_runner.get().getPlayer()) : null, // firstBase
-                second_runner.isPresent() ? PlayerMapper.INSTANCE.playerEntityToGetPlayerDto(second_runner.get().getPlayer()) : null, // secondBase
-                third_runner.isPresent() ? PlayerMapper.INSTANCE.playerEntityToGetPlayerDto(third_runner.get().getPlayer()) : null  // thirdBase
+                first_runner.isPresent() ? mappingService.mapPlayerEntityToGetPlayerDto(first_runner.get().getPlayer()) : null, // firstBase
+                second_runner.isPresent() ? mappingService.mapPlayerEntityToGetPlayerDto(second_runner.get().getPlayer()) : null, // secondBase
+                third_runner.isPresent() ? mappingService.mapPlayerEntityToGetPlayerDto(third_runner.get().getPlayer()) : null  // thirdBase
         );
 
         return ResponseEntity.ok(gameState);

@@ -281,43 +281,37 @@ public class ActionController {
      * @param turn        the current turn
      */
     private void executeAction(ActionEntity.Type actionType, int base, List<ResponsibleDto> responsible, TurnEntity turn) {
-        if (ActionEntity.atBat().contains(actionType)) {
-            if (ActionEntity.Type.BALL.equals(actionType)) {
-                ballCommand.setTurn(turn);
-                ballCommand.execute();
-            } else if (ActionEntity.Type.STRIKE.equals(actionType)) {
-                strikeCommand.setTurn(turn);
-                strikeCommand.execute();
-            } else if (ActionEntity.Type.FOUL.equals(actionType)) {
-                foulCommand.setTurn(turn);
-                foulCommand.execute();
-            }
-        } else if (ActionEntity.out().contains(actionType)) {
-            if (ActionEntity.Type.ASSISTED_OUT.equals(actionType)) {
-                assistedOutCommand.setBase(base);
-                assistedOutCommand.setResponsible(responsible);
-                assistedOutCommand.execute();
-            }
-        } else if (ActionEntity.safe().contains(actionType)) {
-            if (ActionEntity.Type.BASE_ON_BALLS.equals(actionType)) {
-                baseOnBallsCommand.setTurn(turn);
-                baseOnBallsCommand.execute();
-            } else if (ActionEntity.Type.HIT_SINGLE.equals(actionType)) {
-                hitSingleCommand.setTurn(turn);
-                hitSingleCommand.execute();
-            } else if (ActionEntity.Type.HIT_DOUBLE.equals(actionType)) {
-                hitDoubleCommand.setTurn(turn);
-                hitDoubleCommand.execute();
-            } else if (ActionEntity.Type.HIT_TRIPLE.equals(actionType)) {
-                hitTripleCommand.setTurn(turn);
-                hitTripleCommand.execute();
-            } else if (ActionEntity.Type.HOME_RUN.equals(actionType)) {
-                homeRunCommand.setTurn(turn);
-                homeRunCommand.execute();
-            } else if (ActionEntity.Type.HOLD.equals(actionType)) {
-                holdCommand.setBase(base);
-                holdCommand.execute();
-            }
+        if (ActionEntity.Type.BALL.equals(actionType)) {
+            ballCommand.setTurn(turn);
+            ballCommand.execute();
+        } else if (ActionEntity.Type.STRIKE.equals(actionType)) {
+            strikeCommand.setTurn(turn);
+            strikeCommand.execute();
+        } else if (ActionEntity.Type.FOUL.equals(actionType)) {
+            foulCommand.setTurn(turn);
+            foulCommand.execute();
+        } else if (ActionEntity.Type.ASSISTED_OUT.equals(actionType)) {
+            assistedOutCommand.setBase(base);
+            assistedOutCommand.setResponsible(responsible);
+            assistedOutCommand.execute();
+        } else if (ActionEntity.Type.BASE_ON_BALLS.equals(actionType)) {
+            baseOnBallsCommand.setTurn(turn);
+            baseOnBallsCommand.execute();
+        } else if (ActionEntity.Type.HIT_SINGLE.equals(actionType)) {
+            hitSingleCommand.setTurn(turn);
+            hitSingleCommand.execute();
+        } else if (ActionEntity.Type.HIT_DOUBLE.equals(actionType)) {
+            hitDoubleCommand.setTurn(turn);
+            hitDoubleCommand.execute();
+        } else if (ActionEntity.Type.HIT_TRIPLE.equals(actionType)) {
+            hitTripleCommand.setTurn(turn);
+            hitTripleCommand.execute();
+        } else if (ActionEntity.Type.HOME_RUN.equals(actionType)) {
+            homeRunCommand.setTurn(turn);
+            homeRunCommand.execute();
+        } else if (ActionEntity.Type.HOLD.equals(actionType)) {
+            holdCommand.setBase(base);
+            holdCommand.execute();
         } else {
             throw new BadRequestError("Invalid action type `" + actionType + "`");
         }

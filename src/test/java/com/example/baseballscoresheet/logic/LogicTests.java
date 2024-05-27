@@ -92,8 +92,8 @@ public class LogicTests extends TestConfiguration {
         this.createAction(game.getId(), 0, ActionEntity.Type.HIT_TRIPLE, null, null);
 
         expectedData.put("balls", 0);
-        expectedData.put("batter", Map.of("number", 22, "firstName", "Jack", "lastName", "Sluggard"));
-        expectedData.put("third_base", Map.of("number", 11, "firstName", "Bas", "lastName", "Topiac"));
+        expectedData.put("batter", Map.of("passnumber", 22, "firstName", "Jack", "lastName", "Sluggard"));
+        expectedData.put("thirdBase", Map.of("passnumber", 11, "firstName", "Bas", "lastName", "Topiac"));
         this.checkGameState(game.getId(), expectedData);
 
         // Step 3: Single Hit and Hold Action
