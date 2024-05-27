@@ -2,7 +2,7 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.ActionUtils;
 import com.example.baseballscoresheet.command.*;
-import com.example.baseballscoresheet.mapping.ResponsibleMapper;
+import com.example.baseballscoresheet.exceptionHandling.BadRequestError;
 import com.example.baseballscoresheet.model.dtos.action.ActionGetDto;
 import com.example.baseballscoresheet.model.dtos.action.ActionPostDto;
 import com.example.baseballscoresheet.model.dtos.action.RunnerActionDto;
@@ -12,8 +12,8 @@ import com.example.baseballscoresheet.model.dtos.responsible.ResponsibleDto;
 import com.example.baseballscoresheet.model.entities.ActionEntity;
 import com.example.baseballscoresheet.model.entities.GameEntity;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
-import com.example.baseballscoresheet.model.entities.ResponsibleEntity;
 import com.example.baseballscoresheet.services.TurnService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +25,28 @@ import java.util.List;
 @RequestMapping("/game/{gid}/action")
 public class ActionController {
 
-    private final TurnService turnService;
-
-    public ActionController(TurnService turnService) {
-        this.turnService = turnService;
-    }
+    @Autowired
+    private BallCommand ballCommand;
+    @Autowired
+    private StrikeCommand strikeCommand;
+    @Autowired
+    private FoulCommand foulCommand;
+    @Autowired
+    private AssistedOutCommand assistedOutCommand;
+    @Autowired
+    private BaseOnBallsCommand baseOnBallsCommand;
+    @Autowired
+    private HitSingleCommand hitSingleCommand;
+    @Autowired
+    private HitDoubleCommand hitDoubleCommand;
+    @Autowired
+    private HitTripleCommand hitTripleCommand;
+    @Autowired
+    private HomeRunCommand homeRunCommand;
+    @Autowired
+    private HoldCommand holdCommand;
+    @Autowired
+    private TurnService turnService;
 
     /**
      * Get allowed actions at the current step.
@@ -48,7 +65,7 @@ public class ActionController {
     /**
      * Register an action.
      *
-     * @param gid the game ID
+     * @param gid           the game ID
      * @param actionPostDto the action to be registered
      * @return ResponseEntity containing a success message or error message
      */
@@ -199,8 +216,8 @@ public class ActionController {
     /**
      * Check if the action type is allowed.
      *
-     * @param base the base involved in the action
-     * @param actionType the type of action
+     * @param base           the base involved in the action
+     * @param actionType     the type of action
      * @param allowedActions the allowed actions for the current turn
      * @return true if the action is allowed, false otherwise
      */
@@ -258,50 +275,51 @@ public class ActionController {
     /**
      * Execute the given action.
      *
-     * @param actionType the type of action to be executed
-     * @param base the base involved in the action
+     * @param actionType  the type of action to be executed
+     * @param base        the base involved in the action
      * @param responsible the entity(ies) of defence player that was involved in the action
-     * @param turn the current turn
+     * @param turn        the current turn
      */
     private void executeAction(ActionEntity.Type actionType, int base, List<ResponsibleDto> responsible, TurnEntity turn) {
-        TurnService service = new TurnService();
-
         if (ActionEntity.atBat().contains(actionType)) {
             if (ActionEntity.Type.BALL.equals(actionType)) {
-                BallCommand command = new BallCommand(service, turn);
-                command.execute();
+                ballCommand.setTurn(turn);
+                ballCommand.execute();
             } else if (ActionEntity.Type.STRIKE.equals(actionType)) {
-                StrikeCommand command = new StrikeCommand(service, turn);
-                command.execute();
+                strikeCommand.setTurn(turn);
+                strikeCommand.execute();
             } else if (ActionEntity.Type.FOUL.equals(actionType)) {
-                FoulCommand command = new FoulCommand(service, turn);
-                command.execute();
+                foulCommand.setTurn(turn);
+                foulCommand.execute();
             }
         } else if (ActionEntity.out().contains(actionType)) {
             if (ActionEntity.Type.ASSISTED_OUT.equals(actionType)) {
-                AssistedOutCommand command = new AssistedOutCommand(service, turn, base, responsible);
-                command.execute();
+                assistedOutCommand.setBase(base);
+                assistedOutCommand.setResponsible(responsible);
+                assistedOutCommand.execute();
             }
         } else if (ActionEntity.safe().contains(actionType)) {
             if (ActionEntity.Type.BASE_ON_BALLS.equals(actionType)) {
-                BaseOnBallsCommand command = new BaseOnBallsCommand(service, turn);
-                command.execute();
+                baseOnBallsCommand.setTurn(turn);
+                baseOnBallsCommand.execute();
             } else if (ActionEntity.Type.HIT_SINGLE.equals(actionType)) {
-                HitSingleCommand command = new HitSingleCommand(service, turn);
-                command.execute();
+                hitSingleCommand.setTurn(turn);
+                hitSingleCommand.execute();
             } else if (ActionEntity.Type.HIT_DOUBLE.equals(actionType)) {
-                HitDoubleCommand command = new HitDoubleCommand(service, turn);
-                command.execute();
+                hitDoubleCommand.setTurn(turn);
+                hitDoubleCommand.execute();
             } else if (ActionEntity.Type.HIT_TRIPLE.equals(actionType)) {
-                HitTripleCommand command = new HitTripleCommand(service, turn);
-                command.execute();
+                hitTripleCommand.setTurn(turn);
+                hitTripleCommand.execute();
             } else if (ActionEntity.Type.HOME_RUN.equals(actionType)) {
-                HomeRunCommand command = new HomeRunCommand(service, turn);
-                command.execute();
+                homeRunCommand.setTurn(turn);
+                homeRunCommand.execute();
             } else if (ActionEntity.Type.HOLD.equals(actionType)) {
-                HoldCommand command = new HoldCommand(service, turn, base);
-                command.execute();
+                holdCommand.setBase(base);
+                holdCommand.execute();
             }
+        } else {
+            throw new BadRequestError("Invalid action type `" + actionType + "`");
         }
     }
 }

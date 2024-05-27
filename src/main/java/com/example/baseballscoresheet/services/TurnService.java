@@ -27,12 +27,12 @@ public class TurnService {
     @Autowired
     private PlayerRepository playerRepository;
 
-    private static final int MAX_STRIKES = 3;
+    public static final int MAX_STRIKES = 3;
     public static final int MAX_BALLS = 4;
-    private static final int FIRST_BASE = 1;
-    private static final int SECOND_BASE = 2;
-    private static final int THIRD_BASE = 3;
-    private static final int HOME_BASE = 4;
+    public static final int FIRST_BASE = 1;
+    public static final int SECOND_BASE = 2;
+    public static final int THIRD_BASE = 3;
+    public static final int HOME_BASE = 4;
 
     public GameEntity getGame(Long gameId) {
         return gameRepository.findById(gameId).orElseThrow(() ->
@@ -60,6 +60,12 @@ public class TurnService {
     public TurnEntity getRunnerByBase(TurnEntity turn, int base) {
         return turnRepository.findByInningAndBaseAndCurrentStatus(turn.getInning(), base, TurnEntity.Status.ON_BASE)
                 .orElseThrow(() -> new ResourceNotFoundException("No runner for the inning with id `" + turn.getInning().getId() + "` and the base " + base + " found"));
+    }
+
+    @Transactional
+    public TurnEntity increaseBallsCount(TurnEntity turn) {
+        turn.setBalls(turn.getBalls() + 1);
+        return turnRepository.save(turn);
     }
 
     @Transactional
@@ -109,13 +115,24 @@ public class TurnService {
         return turnRepository.findByInningAndCurrentStatus(activeInning, TurnEntity.Status.ON_BASE);
     }
 
+    /**
+     * Create new turn in the current inning, also new better comes in the game.
+     *
+     * @param turn the current turn
+     */
     @Transactional
-    public void createNewTurn(TurnEntity turn) {
+    public TurnEntity createNewTurn(TurnEntity turn) {
+        // TODO: check if more than 3 outs
         InningEntity inning = turn.getInning();
         long nextId = turnRepository.countByInning(inning) + 1;
         PlayerEntity batter = playerRepository.findById(nextId)
                 .orElseThrow(() -> new ResourceNotFoundException("Batter with id `" + nextId + "` not found"));
-        turnRepository.save(new TurnEntity(batter, inning, 0, TurnEntity.Status.AT_BAT));
+        return turnRepository.save(new TurnEntity(batter, inning, 0, TurnEntity.Status.AT_BAT));
+    }
+
+    @Transactional
+    public ActionEntity createNewAction(ActionEntity action) {
+        return actionRepository.save(action);
     }
 
     @Transactional

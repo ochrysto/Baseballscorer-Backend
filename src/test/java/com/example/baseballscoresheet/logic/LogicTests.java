@@ -75,7 +75,12 @@ public class LogicTests extends TestConfiguration {
 
         this.checkGameState(game.getId(), expectedData);
 
-        Map<String, Object> expectedActions = Map.of("batter", List.of("out", "safe", "error"));
+        Map<String, Object> expectedActions = Map.of(
+                "batter", Map.of("out", List.of(), "safe", List.of(), "error", List.of()),
+                "firstBaseRunner", List.of(),
+                "secondBaseRunner", List.of(),
+                "thirdBaseRunner", List.of()
+        );
         this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         // Step 2: Three Balls and a Triple Hit
@@ -87,8 +92,8 @@ public class LogicTests extends TestConfiguration {
         this.createAction(game.getId(), 0, ActionEntity.Type.HIT_TRIPLE, null, null);
 
         expectedData.put("balls", 0);
-        expectedData.put("batter", Map.of("number", 22, "name", "Jack Sluggard"));
-        expectedData.put("third_base", Map.of("number", 11, "name", "Bas Topiac"));
+        expectedData.put("batter", Map.of("number", 22, "firstName", "Jack", "lastName", "Sluggard"));
+        expectedData.put("third_base", Map.of("number", 11, "firstName", "Bas", "lastName", "Topiac"));
         this.checkGameState(game.getId(), expectedData);
 
         // Step 3: Single Hit and Hold Action
@@ -160,7 +165,7 @@ public class LogicTests extends TestConfiguration {
 
         this.checkGameState(game.getId(), expectedData);
 
-        Map<String, Object> expectedActions = Map.of("batter", List.of("out", "safe", "error"));
+        Map<String, Object> expectedActions = Map.of("batter", Map.of("out", List.of(), "safe", List.of(), "error", List.of()));
         this.checkAvailableActions(game.getId(), objectMapper.valueToTree(expectedActions));
 
         // Step 2: Three Balls and a Triple Hit

@@ -86,55 +86,71 @@ public class ActionEntity {
     }
 
     static public List<ActionEntity.Type> atBat() {
-        return List.of();
+        return List.of(
+                Type.BALL, Type.STRIKE, Type.FOUL
+        );
     }
 
-    static public List<ActionEntity.Type> out(){
-        return List.of();
+    static public List<ActionEntity.Type> out() {
+        return List.of(
+                Type.FLYOUT, Type.GROUND_OUT, Type.OUT_BY_RULE, Type.APPEAL_PLAY, Type.PICKED_OFF, Type.CAUGHT_BASE,
+                Type.ASSISTED_OUT, Type.UNASSISTED_OUT, Type.STRIKEOUT, Type.SACRIFICE_HIT, Type.SACRIFICE_FLY
+        );
     }
 
-    static public List<ActionEntity.Type> safe(){
-        return List.of();
+    static public List<ActionEntity.Type> safe() {
+        return List.of(
+                Type.BASE_ON_BALLS, Type.HIT_SINGLE, Type.HIT_DOUBLE, Type.HIT_TRIPLE, Type.HOME_RUN,
+                Type.STOLEN_BASE, Type.WILD_PITCH, Type.PASSED_BALL, Type.ADVANCED_BY_RULE, Type.ADVANCED_BY_BATTER,
+                Type.HOLD
+        );
     }
 
-    static public List<ActionEntity.Type> error(){
-        return List.of();
+    static public List<ActionEntity.Type> error() {
+        return List.of(
+                Type.ERROR, Type.ASSISTED_ERROR
+        );
     }
 
-    static public List<ActionEntity.Type> outBatter(){
-        return List.of();
+    static public List<ActionEntity.Type> outBatter() {
+        return List.of(
+                Type.FLYOUT, Type.GROUND_OUT, Type.OUT_BY_RULE, Type.APPEAL_PLAY, Type.PICKED_OFF, Type.CAUGHT_BASE,
+                Type.ASSISTED_OUT, Type.UNASSISTED_OUT, Type.STRIKEOUT, Type.SACRIFICE_HIT, Type.SACRIFICE_FLY
+        );
     }
 
-    static public List<ActionEntity.Type> safeBatter(){
-        return List.of();
+    static public List<ActionEntity.Type> safeBatter() {
+        return List.of(
+                Type.BALL, Type.STRIKE, Type.FOUL, Type.BASE_ON_BALLS, Type.HIT_SINGLE, Type.HIT_DOUBLE, Type.HIT_TRIPLE, Type.HOME_RUN
+        );
     }
 
-    static public List<ActionEntity.Type> errorBatter(){
-        return List.of();
+    static public List<ActionEntity.Type> errorBatter() {
+        return List.of(Type.ERROR, Type.ASSISTED_ERROR);
     }
 
-    static public List<ActionEntity.Type> outRunnerHold(){
-        return List.of();
+    static public List<ActionEntity.Type> outRunnerHold() {
+        return List.of(Type.GROUND_OUT, Type.OUT_BY_RULE, Type.APPEAL_PLAY, Type.PICKED_OFF, Type.CAUGHT_BASE, Type.ASSISTED_OUT, Type.UNASSISTED_OUT);
     }
 
-    static public List<ActionEntity.Type> safeRunnerHold(){
-        return List.of();
+    static public List<ActionEntity.Type> safeRunnerHold() {
+        return List.of(Type.HOLD);
     }
 
-    static public List<ActionEntity.Type> errorRunnerHold(){
-        return List.of();
+    static public List<ActionEntity.Type> errorRunnerHold() {
+        return List.of(Type.ERROR, Type.ASSISTED_ERROR);
     }
 
-    static public List<ActionEntity.Type> outRunnerAdvance(){
-        return List.of();
+    static public List<ActionEntity.Type> outRunnerAdvance() {
+        return List.of(Type.GROUND_OUT, Type.OUT_BY_RULE, Type.APPEAL_PLAY, Type.PICKED_OFF, Type.CAUGHT_BASE, Type.ASSISTED_OUT, Type.UNASSISTED_OUT);
     }
 
-    static public List<ActionEntity.Type> safeRunnerAdvance(){
-        return List.of();
+    static public List<ActionEntity.Type> safeRunnerAdvance() {
+        return List.of(Type.STOLEN_BASE, Type.WILD_PITCH, Type.PASSED_BALL, Type.ADVANCED_BY_RULE, Type.ADVANCED_BY_BATTER);
     }
 
-    static public List<ActionEntity.Type> errorRunnerAdvance(){
-        return List.of();
+    static public List<ActionEntity.Type> errorRunnerAdvance() {
+        return List.of(Type.ERROR, Type.ASSISTED_ERROR);
     }
 
     // Getters and Setters

@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.logic;
 
 import com.example.baseballscoresheet.model.entities.*;
+import com.example.baseballscoresheet.repositories.*;
 import com.example.baseballscoresheet.services.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import com.example.baseballscoresheet.testcontainers.PostgresContextInitializer;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +45,65 @@ public abstract class TestConfiguration {
     @Autowired
     protected GameStateService gameStateService;
 
+    @Autowired
+    protected ActionRepository actionRepository;
+    @Autowired
+    protected AssociationRepository associationRepository;
+    @Autowired
+    protected ClubRepository clubRepository;
+    @Autowired
+    protected GameRepository gameRepository;
+    @Autowired
+    protected GameStateRepository gameStateRepository;
+    @Autowired
+    protected GameUmpireRepository gameUmpireRepository;
+    @Autowired
+    protected InningRepository inningRepository;
+    @Autowired
+    protected LeagueRepository leagueRepository;
+    @Autowired
+    protected LineupRepository lineupRepository;
+    @Autowired
+    protected LineupTeamPlayerRepository lineupTeamPlayerRepository;
+    @Autowired
+    protected ManagerRepository managerRepository;
+    @Autowired
+    protected PlayerRepository playerRepository;
+    @Autowired
+    protected PositionRepository positionRepository;
+    @Autowired
+    protected ScorerRepository scorerRepository;
+    @Autowired
+    protected TeamPlayerRepository teamPlayerRepository;
+    @Autowired
+    protected TeamRepository teamRepository;
+    @Autowired
+    protected TurnRepository turnRepository;
+    @Autowired
+    protected UmpireRepository umpireRepository;
+
     @BeforeEach
+    @Transactional
     public void setUp() {
+        actionRepository.deleteAll();
+        associationRepository.deleteAll();
+        clubRepository.deleteAll();
+        gameRepository.deleteAll();
+        gameStateRepository.deleteAll();
+        gameUmpireRepository.deleteAll();
+        inningRepository.deleteAll();
+        leagueRepository.deleteAll();
+        lineupRepository.deleteAll();
+        lineupTeamPlayerRepository.deleteAll();
+        managerRepository.deleteAll();
+        playerRepository.deleteAll();
+        positionRepository.deleteAll();
+        scorerRepository.deleteAll();
+        teamPlayerRepository.deleteAll();
+        teamRepository.deleteAll();
+        turnRepository.deleteAll();
+        umpireRepository.deleteAll();
+
         // Initialize the database with required entities
         // Create association
         AssociationEntity association = new AssociationEntity();

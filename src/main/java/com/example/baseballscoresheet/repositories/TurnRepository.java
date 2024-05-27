@@ -4,10 +4,12 @@ import com.example.baseballscoresheet.model.entities.GameEntity;
 import com.example.baseballscoresheet.model.entities.InningEntity;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface TurnRepository extends JpaRepository<TurnEntity, Long> {
     Optional<TurnEntity> findFirstByInningGameOrderByIdDesc(GameEntity game);
     Optional<TurnEntity> findByInningAndBaseAndCurrentStatus(InningEntity inning, int base, TurnEntity.Status currentStatus);
