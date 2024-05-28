@@ -136,6 +136,16 @@ public class TurnService {
     }
 
     @Transactional
+    public TurnEntity updateTurn(TurnEntity turn) {
+        return this.turnRepository.save(turn);
+    }
+
+    @Transactional
+    public ActionEntity updateAction(ActionEntity action) {
+        return this.actionRepository.save(action);
+    }
+
+    @Transactional
     public void advanceRunners(GameEntity game, ActionEntity baseAction) {
         List<TurnEntity> runners = getActiveRunners(game);
         if (!runners.isEmpty()) {
@@ -152,6 +162,38 @@ public class TurnService {
                             runner, ActionEntity.Type.ADVANCED_BY_BATTER, ActionEntity.Place.forBase(runner.getBase()), 1, prevAction, false));
                 }
             }
+        }
+    }
+
+    public void updateTurnsAndActions(ActionEntity lastAction, TurnEntity currentTurn) {
+        List<TurnEntity> offence = this.getActiveRunners(currentTurn.getInning().getGame());
+        boolean is_first_runner = offence.stream().anyMatch(turnEntity -> turnEntity.getBase() == TurnEntity.Base.FIRST_BASE.getValue());
+        boolean is_second_runner = offence.stream().anyMatch(turnEntity -> turnEntity.getBase() == TurnEntity.Base.SECOND_BASE.getValue());
+        if (!is_first_runner && !is_second_runner) {
+            saveLinkedActions(lastAction);
+            this.createNewTurn(currentTurn);
+        }
+    }
+
+    private void saveLinkedActions(ActionEntity action) {
+        while (action != null) {
+            TurnEntity turnToUpdate = action.getTurn();
+            turnToUpdate.setBase(turnToUpdate.getBase() + action.getDistance());
+
+            if (turnToUpdate.getBase() > 0 && turnToUpdate.getBase() < 4) {
+                turnToUpdate.setCurrentStatus(TurnEntity.Status.ON_BASE);
+            } else if (turnToUpdate.getBase() == 4) {
+                turnToUpdate.setCurrentStatus(TurnEntity.Status.RUN);
+            }
+
+            if (ActionEntity.out().contains(action.getType())) {
+                turnToUpdate.setCurrentStatus(TurnEntity.Status.IS_OUT);
+            }
+
+            this.updateTurn(turnToUpdate);
+            action.setProceed(true);
+            this.updateAction(action);
+            action = action.getLinkedAction();
         }
     }
 }

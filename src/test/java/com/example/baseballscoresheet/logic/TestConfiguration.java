@@ -3,6 +3,7 @@ package com.example.baseballscoresheet.logic;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.repositories.*;
 import com.example.baseballscoresheet.services.*;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -83,7 +84,6 @@ public abstract class TestConfiguration {
     protected UmpireRepository umpireRepository;
 
     @BeforeEach
-    @Transactional
     public void setUp() {
         actionRepository.deleteAll();
         associationRepository.deleteAll();
@@ -146,7 +146,7 @@ public abstract class TestConfiguration {
         String[][] battersData = {
                 {"11", "Bas", "Topiac"},
                 {"22", "Jack", "Sluggard"},
-                {"33", "Tommy", " Fastball"},
+                {"33", "Tommy", "Fastball"},
                 {"44", "Sally", "Curveball"},
                 {"55", "Billy", "Homerun"},
                 {"66", "Maggie", "Slider"},

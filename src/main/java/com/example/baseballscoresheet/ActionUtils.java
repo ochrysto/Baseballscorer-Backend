@@ -8,13 +8,26 @@ import java.util.stream.Collectors;
 
 public class ActionUtils {
 
+    // TODO: if we change Enum names from screaming snake case to camel case - use this method
     public static String camelToSentence(String s) {
         return s.replaceAll("([A-Z])", " $1").toLowerCase().trim();
     }
 
+    public static String screamingSnakeToSentence(String s) {
+        // Replace underscores with spaces and convert to lowercase
+        String sentence = s.replaceAll("_", " ").toLowerCase();
+
+        // Capitalize the first letter of the resulting string
+        if (!sentence.isEmpty()) {
+            sentence = sentence.substring(0, 1).toUpperCase() + sentence.substring(1);
+        }
+
+        return sentence;
+    }
+
     public static ButtonDto createButton(ActionEntity.Type actionType) {
         ButtonDto buttonDTO = new ButtonDto();
-        buttonDTO.setButton(camelToSentence(actionType.name()));
+        buttonDTO.setButton(screamingSnakeToSentence(actionType.name()));
         buttonDTO.setActionType(actionType);
         buttonDTO.setResponsibleRequired(ActionEntity.isResponsibleRequired(actionType));
         buttonDTO.setMultipleResponsibleRequired(ActionEntity.areMultipleResponsibleRequired(actionType));

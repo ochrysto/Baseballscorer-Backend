@@ -1,9 +1,13 @@
 package com.example.baseballscoresheet.model.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "responsible")
+@Setter
+@Getter
 public class ResponsibleEntity {
     public enum Place {
         PITCHER, CATCHER, FIRST_BASE, SECOND_BASE, THIRD_BASE, SHORTSTOP,

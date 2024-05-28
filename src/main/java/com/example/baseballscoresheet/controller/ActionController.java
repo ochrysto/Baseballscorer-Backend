@@ -291,6 +291,7 @@ public class ActionController {
             foulCommand.setTurn(turn);
             foulCommand.execute();
         } else if (ActionEntity.Type.ASSISTED_OUT.equals(actionType)) {
+            assistedOutCommand.setTurn(turn);  // TODO: add validation to all commands, that throw error when `turn` is null
             assistedOutCommand.setBase(base);
             assistedOutCommand.setResponsible(responsible);
             assistedOutCommand.execute();
@@ -310,6 +311,7 @@ public class ActionController {
             homeRunCommand.setTurn(turn);
             homeRunCommand.execute();
         } else if (ActionEntity.Type.HOLD.equals(actionType)) {
+            holdCommand.setTurn(turn);
             holdCommand.setBase(base);
             holdCommand.execute();
         } else {
