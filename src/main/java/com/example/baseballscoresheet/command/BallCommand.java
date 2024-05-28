@@ -1,10 +1,8 @@
 package com.example.baseballscoresheet.command;
 
-import com.example.baseballscoresheet.model.entities.ActionEntity;
-import com.example.baseballscoresheet.model.entities.TurnEntity;
-import com.example.baseballscoresheet.services.TurnService;
 import com.example.baseballscoresheet.exceptionHandling.BadRequestError;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.baseballscoresheet.model.entities.ActionEntity;
+import com.example.baseballscoresheet.services.TurnService;
 import org.springframework.stereotype.Component;
 
 @Component

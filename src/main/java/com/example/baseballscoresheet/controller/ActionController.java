@@ -13,10 +13,8 @@ import com.example.baseballscoresheet.model.entities.ActionEntity;
 import com.example.baseballscoresheet.model.entities.GameEntity;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
 import com.example.baseballscoresheet.services.TurnService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,28 +23,31 @@ import java.util.List;
 @RequestMapping("/game/{gid}/action")
 public class ActionController {
 
-    @Autowired
-    private BallCommand ballCommand;
-    @Autowired
-    private StrikeCommand strikeCommand;
-    @Autowired
-    private FoulCommand foulCommand;
-    @Autowired
-    private AssistedOutCommand assistedOutCommand;
-    @Autowired
-    private BaseOnBallsCommand baseOnBallsCommand;
-    @Autowired
-    private HitSingleCommand hitSingleCommand;
-    @Autowired
-    private HitDoubleCommand hitDoubleCommand;
-    @Autowired
-    private HitTripleCommand hitTripleCommand;
-    @Autowired
-    private HomeRunCommand homeRunCommand;
-    @Autowired
-    private HoldCommand holdCommand;
-    @Autowired
-    private TurnService turnService;
+    private final BallCommand ballCommand;
+    private final StrikeCommand strikeCommand;
+    private final FoulCommand foulCommand;
+    private final AssistedOutCommand assistedOutCommand;
+    private final BaseOnBallsCommand baseOnBallsCommand;
+    private final HitSingleCommand hitSingleCommand;
+    private final HitDoubleCommand hitDoubleCommand;
+    private final HitTripleCommand hitTripleCommand;
+    private final HomeRunCommand homeRunCommand;
+    private final HoldCommand holdCommand;
+    private final TurnService turnService;
+
+    public ActionController(BallCommand ballCommand, StrikeCommand strikeCommand, FoulCommand foulCommand, AssistedOutCommand assistedOutCommand, BaseOnBallsCommand baseOnBallsCommand, HitSingleCommand hitSingleCommand, HitDoubleCommand hitDoubleCommand, HitTripleCommand hitTripleCommand, HomeRunCommand homeRunCommand, HoldCommand holdCommand, TurnService turnService) {
+        this.ballCommand = ballCommand;
+        this.strikeCommand = strikeCommand;
+        this.foulCommand = foulCommand;
+        this.assistedOutCommand = assistedOutCommand;
+        this.baseOnBallsCommand = baseOnBallsCommand;
+        this.hitSingleCommand = hitSingleCommand;
+        this.hitDoubleCommand = hitDoubleCommand;
+        this.hitTripleCommand = hitTripleCommand;
+        this.homeRunCommand = homeRunCommand;
+        this.holdCommand = holdCommand;
+        this.turnService = turnService;
+    }
 
     /**
      * Get allowed actions at the current step.
@@ -71,13 +72,16 @@ public class ActionController {
      */
     @PostMapping
     public ResponseEntity<MessageDto> registerAction(@PathVariable long gid, @RequestBody ActionPostDto actionPostDto) {
-        GameEntity game = null;
+        // define local variables
+        GameEntity game;
+        TurnEntity turn;
+
         try {
             game = turnService.getGame(gid);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        TurnEntity turn = null;
+
         try {
             turn = turnService.getLastTurn(game);
         } catch (Exception e) {
@@ -88,7 +92,6 @@ public class ActionController {
         ActionEntity.Type type = actionPostDto.getType();
         // extract and map responsible(s) to list of entities
         List<ResponsibleDto> responsible = actionPostDto.getResponsible();
-//        List<ResponsibleEntity> responsibleEntities = ResponsibleMapper.INSTANCE.responsibleDtoToResponsibleEntities(responsible);
 
         // Validate the action
         ActionGetDto allowedActions = getAllowedActions(turn);
@@ -157,9 +160,9 @@ public class ActionController {
                         dto.setSecondBase(ActionUtils.getActionsForHoldRunner());
                     }
                     if (lastAction.getDistance() < 3) {
-                        dto.setThirdBase(is_third_runner ? null : ActionUtils.getActionsForAdvanceRunner());
+                        dto.setThirdBase(ActionUtils.getActionsForAdvanceRunner());
                     }
-                    dto.setHomeBase(is_third_runner ? null : ActionUtils.getActionsForAdvanceRunner());
+                    dto.setHomeBase(ActionUtils.getActionsForAdvanceRunner());
                     availableActions.setSecondBaseRunner(dto);
                 } else if (is_first_runner) {
                     RunnerActionDto dto = new RunnerActionDto();
@@ -167,9 +170,9 @@ public class ActionController {
                         dto.setSecondBase(ActionUtils.getActionsForAdvanceRunner());
                     }
                     if (lastAction.getDistance() < 3) {
-                        dto.setThirdBase(is_third_runner ? null : ActionUtils.getActionsForAdvanceRunner());
+                        dto.setThirdBase(ActionUtils.getActionsForAdvanceRunner());
                     }
-                    dto.setHomeBase(is_third_runner ? null : ActionUtils.getActionsForAdvanceRunner());
+                    dto.setHomeBase(ActionUtils.getActionsForAdvanceRunner());
                     availableActions.setFirstBaseRunner(dto);
                 } else {
                     throw new RuntimeException("Backend Logic Bug: we have not-standalone action and no runners");

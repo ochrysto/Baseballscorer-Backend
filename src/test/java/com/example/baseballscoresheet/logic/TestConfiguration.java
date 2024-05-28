@@ -1,21 +1,21 @@
 package com.example.baseballscoresheet.logic;
 
 import com.example.baseballscoresheet.model.entities.*;
-import com.example.baseballscoresheet.repositories.*;
+import com.example.baseballscoresheet.repositories.truncate.TruncateRepository;
 import com.example.baseballscoresheet.services.*;
-import org.junit.Before;
+import com.example.baseballscoresheet.testcontainers.PostgresContextInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import com.example.baseballscoresheet.testcontainers.PostgresContextInitializer;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,62 +47,11 @@ public abstract class TestConfiguration {
     protected GameStateService gameStateService;
 
     @Autowired
-    protected ActionRepository actionRepository;
-    @Autowired
-    protected AssociationRepository associationRepository;
-    @Autowired
-    protected ClubRepository clubRepository;
-    @Autowired
-    protected GameRepository gameRepository;
-    @Autowired
-    protected GameStateRepository gameStateRepository;
-    @Autowired
-    protected GameUmpireRepository gameUmpireRepository;
-    @Autowired
-    protected InningRepository inningRepository;
-    @Autowired
-    protected LeagueRepository leagueRepository;
-    @Autowired
-    protected LineupRepository lineupRepository;
-    @Autowired
-    protected LineupTeamPlayerRepository lineupTeamPlayerRepository;
-    @Autowired
-    protected ManagerRepository managerRepository;
-    @Autowired
-    protected PlayerRepository playerRepository;
-    @Autowired
-    protected PositionRepository positionRepository;
-    @Autowired
-    protected ScorerRepository scorerRepository;
-    @Autowired
-    protected TeamPlayerRepository teamPlayerRepository;
-    @Autowired
-    protected TeamRepository teamRepository;
-    @Autowired
-    protected TurnRepository turnRepository;
-    @Autowired
-    protected UmpireRepository umpireRepository;
+    private Map<String, TruncateRepository> truncateRepositories; // Autowire all beans implementing TruncateRepository by name
 
     @BeforeEach
     public void setUp() {
-        actionRepository.deleteAll();
-        associationRepository.deleteAll();
-        clubRepository.deleteAll();
-        gameRepository.deleteAll();
-        gameStateRepository.deleteAll();
-        gameUmpireRepository.deleteAll();
-        inningRepository.deleteAll();
-        leagueRepository.deleteAll();
-        lineupRepository.deleteAll();
-        lineupTeamPlayerRepository.deleteAll();
-        managerRepository.deleteAll();
-        playerRepository.deleteAll();
-        positionRepository.deleteAll();
-        scorerRepository.deleteAll();
-        teamPlayerRepository.deleteAll();
-        teamRepository.deleteAll();
-        turnRepository.deleteAll();
-        umpireRepository.deleteAll();
+        truncateAndResetTables();
 
         // Initialize the database with required entities
         // Create association
@@ -171,5 +120,57 @@ public abstract class TestConfiguration {
         inning.setOuts(0);
         inning.setBattingTeam(InningEntity.Team.AWAY);
         return inningService.create(inning);
+    }
+
+    /**
+     * Truncates all relevant tables and resets their auto-increment counters.
+     * This method excludes non-entity repositories.
+     */
+    private void truncateAndResetTables() {
+        // Exclude TruncateRepositoryImpl from the truncation list
+        Map<String, TruncateRepository> actualRepositories = truncateRepositories.entrySet().stream()
+                .filter(entry -> !entry.getKey().equals("truncateRepositoryImpl"))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        // Truncate each table and reset its auto-increment counter
+        for (Map.Entry<String, TruncateRepository> entry : actualRepositories.entrySet()) {
+            String beanName = entry.getKey();
+            TruncateRepository repository = entry.getValue();
+            String tableName = extractTableNameFromBeanName(beanName);
+            repository.truncateTable(tableName);
+            repository.resetAutoIncrement(tableName);
+        }
+    }
+
+    /**
+     * Extracts the table name from the given repository bean name.
+     *
+     * @param beanName the name of the repository bean
+     * @return the corresponding table name in snake_case
+     */
+    private String extractTableNameFromBeanName(String beanName) {
+        // Assuming the bean name is in the format entityNameRepository (e.g., userRepository)
+        String className = beanName.replace("Repository", "");
+        return convertToSnakeCase(className);
+    }
+
+    /**
+     * Converts a camelCase string to snake_case.
+     *
+     * @param camelCase the camelCase string to be converted
+     * @return the converted snake_case string
+     */
+    private String convertToSnakeCase(String camelCase) {
+        StringBuilder result = new StringBuilder();
+        char[] chars = camelCase.toCharArray();
+        result.append(Character.toLowerCase(chars[0]));
+        for (int i = 1; i < chars.length; i++) {
+            if (Character.isUpperCase(chars[i])) {
+                result.append('_').append(Character.toLowerCase(chars[i]));
+            } else {
+                result.append(chars[i]);
+            }
+        }
+        return result.toString();
     }
 }

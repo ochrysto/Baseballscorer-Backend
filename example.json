@@ -1,38 +1,102 @@
 {
-  "game": 1,
-  "awayRunsTotal": 0,
-  "homeRunsTotal": 0,
-  "awayErrors": 0,
-  "homeErrors": 0,
-  "awayHits": 0,
-  "homeHits": 0,
-  "awayLob": 0,
-  "homeLob": 0,
-  "awayRuns": [],
-  "homeRuns": [],
-  "inning": 1,
-  "team": "AWAY",
-  "outs": 0,
-  "balls": 0,
-  "strikes": 0,
-  "onDeck": null,
-  "batter": {
-    "id": 3,
-    "firstName": "Sally",
-    "lastName": " Curveball",
-    "passnumber": 44
+  "batter": null,
+  "firstBaseRunner": {
+    "firstBase": null,
+    "secondBase": {
+      "out": [
+        {
+          "button": "Ground out",
+          "actionType": "GROUND_OUT",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Out by rule",
+          "actionType": "OUT_BY_RULE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Appeal play",
+          "actionType": "APPEAL_PLAY",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Picked off",
+          "actionType": "PICKED_OFF",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Caught base",
+          "actionType": "CAUGHT_BASE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Assisted out",
+          "actionType": "ASSISTED_OUT",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Unassisted out",
+          "actionType": "UNASSISTED_OUT",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        }
+      ],
+      "safe": [
+        {
+          "button": "Stolen base",
+          "actionType": "STOLEN_BASE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Wild pitch",
+          "actionType": "WILD_PITCH",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Passed ball",
+          "actionType": "PASSED_BALL",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Advanced by rule",
+          "actionType": "ADVANCED_BY_RULE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Advanced by batter",
+          "actionType": "ADVANCED_BY_BATTER",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        }
+      ],
+      "error": [
+        {
+          "button": "Error",
+          "actionType": "ERROR",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Assisted error",
+          "actionType": "ASSISTED_ERROR",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        }
+      ]
+    },
+    "thirdBase": null,
+    "homeBase": null
   },
-  "firstBase": {
-    "id": 2,
-    "firstName": "Tommy",
-    "lastName": "Fastball",
-    "passnumber": 33
-  },
-  "secondBase": null,
-  "thirdBase": {
-    "id": 1,
-    "firstName": "Bas",
-    "lastName": "Topiac",
-    "passnumber": 11
-  }
+  "secondBaseRunner": null,
+  "thirdBaseRunner": null
 }

@@ -5,11 +5,9 @@ import com.example.baseballscoresheet.model.entities.TurnEntity;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+@Setter
 @Component
 public class HoldCommand extends Command {
-    @Setter
     private int base;
 
     @Override

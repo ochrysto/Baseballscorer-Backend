@@ -8,7 +8,6 @@ import com.example.baseballscoresheet.model.entities.ResponsibleEntity;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
 import com.example.baseballscoresheet.services.ResponsibleService;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,9 +17,11 @@ import java.util.List;
 public class AssistedOutCommand extends Command {
     private int base;
     private List<ResponsibleDto> responsible;
+    private final ResponsibleService responsibleService;
 
-    @Autowired
-    private ResponsibleService responsibleService;
+    public AssistedOutCommand(ResponsibleService responsibleService) {
+        this.responsibleService = responsibleService;
+    }
 
     @Override
     public void execute() {

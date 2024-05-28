@@ -1,7 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.mapping.PlayerMapper;
 import com.example.baseballscoresheet.model.dtos.gamestate.GameStateDto;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
 import com.example.baseballscoresheet.model.entities.GameEntity;
@@ -77,9 +76,9 @@ public class StateController {
                 turn.getStrikes(),
                 null, // onDeck
                 batterDto, // batter
-                first_runner.isPresent() ? mappingService.mapPlayerEntityToGetPlayerDto(first_runner.get().getPlayer()) : null, // firstBase
-                second_runner.isPresent() ? mappingService.mapPlayerEntityToGetPlayerDto(second_runner.get().getPlayer()) : null, // secondBase
-                third_runner.isPresent() ? mappingService.mapPlayerEntityToGetPlayerDto(third_runner.get().getPlayer()) : null  // thirdBase
+                first_runner.map(turnEntity -> mappingService.mapPlayerEntityToGetPlayerDto(turnEntity.getPlayer())).orElse(null), // firstBase
+                second_runner.map(entity -> mappingService.mapPlayerEntityToGetPlayerDto(entity.getPlayer())).orElse(null), // secondBase
+                third_runner.map(value -> mappingService.mapPlayerEntityToGetPlayerDto(value.getPlayer())).orElse(null)  // thirdBase
         );
 
         return ResponseEntity.ok(gameState);
