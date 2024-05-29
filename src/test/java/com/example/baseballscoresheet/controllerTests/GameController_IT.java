@@ -10,11 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class GameController_IT extends AbstractIntegrationTest {
 
-    @BeforeEach
-    void setup() {
-
-    }
-
     @Test
     void authorization() throws Exception {
         this.mockMvc.perform(get("/game"))
