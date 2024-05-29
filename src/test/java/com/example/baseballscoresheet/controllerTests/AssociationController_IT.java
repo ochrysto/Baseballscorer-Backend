@@ -33,7 +33,7 @@ public class AssociationController_IT extends AbstractIntegrationTest {
         this.mockMvc.perform(get("/association"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$.[0].id",is((nullValue()))))
+                .andExpect(jsonPath("$.[0].id",is((1))))
                 .andExpect(jsonPath("$.[0].name", is("Test Association")))
                 .andReturn()
                 .getResponse()
