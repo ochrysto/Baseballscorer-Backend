@@ -131,9 +131,10 @@ public class MappingService {
 
 
     // TeamEntity -> LineupEntity
-    public LineupEntity mapTeamEntityToLineupEntity(TeamEntity teamEntity) {
+    public LineupEntity mapTeamEntityToLineupEntity(TeamEntity teamEntity, GameEntity gameEntity) {
         LineupEntity lineupEntity = new LineupEntity();
         lineupEntity.setTeam(teamEntity);
+        lineupEntity.setGame(gameEntity);
         return lineupEntity;
     }
 

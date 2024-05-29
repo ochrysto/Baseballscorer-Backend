@@ -33,6 +33,8 @@ public class TurnService {
     public static final int SECOND_BASE = 2;
     public static final int THIRD_BASE = 3;
     public static final int HOME_BASE = 4;
+    @Autowired
+    private LineupTeamPlayerRepository lineupTeamPlayerRepository;
 
     public GameEntity getGame(Long gameId) {
         return gameRepository.findById(gameId).orElseThrow(() ->
@@ -125,7 +127,7 @@ public class TurnService {
         // TODO: check if more than 3 outs
         InningEntity inning = turn.getInning();
         long nextId = turnRepository.countByInning(inning) + 1;
-        PlayerEntity batter = playerRepository.findById(nextId)
+        LineupTeamPlayerEntity batter = lineupTeamPlayerRepository.findById(nextId)
                 .orElseThrow(() -> new ResourceNotFoundException("Batter with id `" + nextId + "` not found"));
         return turnRepository.save(new TurnEntity(batter, inning, 0, TurnEntity.Status.AT_BAT));
     }
@@ -195,5 +197,9 @@ public class TurnService {
             this.updateAction(action);
             action = action.getLinkedAction();
         }
+    }
+
+    public List<TurnEntity> getTurnsByPlayerId(long playerId) {
+        return this.turnRepository.findTurnEntitiesByLineupTeamPlayer_Id(playerId);
     }
 }

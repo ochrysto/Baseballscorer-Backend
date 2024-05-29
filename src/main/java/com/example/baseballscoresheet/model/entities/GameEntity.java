@@ -74,4 +74,7 @@ public class GameEntity {
     // See: https://www.baeldung.com/hibernate-detached-entity-passed-to-persist
     @OneToOne(mappedBy = "game", cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
     private GameStateEntity gameState;
+
+    @OneToMany(mappedBy = "game")
+    private Set<LineupEntity> lineups;
 }

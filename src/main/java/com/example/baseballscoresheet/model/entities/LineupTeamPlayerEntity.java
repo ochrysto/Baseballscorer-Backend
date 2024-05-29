@@ -23,9 +23,11 @@ public class LineupTeamPlayerEntity {
     @JoinColumn(name = "lineup_id", nullable = false)
     private LineupEntity lineup;
 
-    @OneToOne
-    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    // TODO: Question to Darleen - why was this field OneToOne?
+    @ManyToOne
+    @JoinColumn(name = "position_id", nullable = false)
     private PositionEntity position;
+
 
     @Column(name = "jersey_nr")
     private Integer jerseyNr;

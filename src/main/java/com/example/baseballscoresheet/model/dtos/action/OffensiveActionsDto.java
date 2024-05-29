@@ -9,8 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 public class OffensiveActionsDto {
-    private String name;
-    private int passNumber;
+    private String firstName;
+    private String lastName;
+    private int jerseyNumber;
     private boolean isAtBat;
     private List<DiamondDto> actions;
 }

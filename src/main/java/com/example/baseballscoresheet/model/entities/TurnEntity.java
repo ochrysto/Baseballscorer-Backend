@@ -17,8 +17,8 @@ public class TurnEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "player_id", nullable = false)
-    private PlayerEntity player;
+    @JoinColumn(name = "lineup_team_player_id", nullable = false)
+    private LineupTeamPlayerEntity lineupTeamPlayer;
     @ManyToOne
     @JoinColumn(name = "inning_id", nullable = false)
     private InningEntity inning;
@@ -30,8 +30,8 @@ public class TurnEntity {
     @OneToMany(mappedBy = "turn", cascade = CascadeType.ALL)
     private List<ActionEntity> actions;
 
-    public TurnEntity(PlayerEntity player, InningEntity inning, int base, Status currentStatus) {
-        this.player = player;
+    public TurnEntity(LineupTeamPlayerEntity lineupTeamPlayer, InningEntity inning, int base, Status currentStatus) {
+        this.lineupTeamPlayer = lineupTeamPlayer;
         this.inning = inning;
         this.base = base;
         this.currentStatus = currentStatus;

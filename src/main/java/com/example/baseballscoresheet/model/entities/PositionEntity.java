@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,6 +21,8 @@ public class PositionEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(mappedBy = "position")
-    private LineupTeamPlayerEntity lineupTeamPlayer;
+    // TODO: Question to Darleen - why was this field OneToOne?
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL)
+    private List<LineupTeamPlayerEntity> lineupTeamPlayers;
+
 }

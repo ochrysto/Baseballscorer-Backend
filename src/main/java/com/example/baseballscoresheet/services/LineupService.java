@@ -16,8 +16,8 @@ public class LineupService {
         this.lineupRepository = lineupRepository;
     }
 
-    public void saveLineup(LineupEntity lineupEntity) {
-        this.lineupRepository.save(lineupEntity);
+    public LineupEntity saveLineup(LineupEntity lineupEntity) {
+        return this.lineupRepository.save(lineupEntity);
     }
 
     public LineupEntity findLineupByTeamId(Long teamId) {

@@ -29,4 +29,8 @@ public class ClubService {
     public List<ClubEntity> readAll() {
         return clubRepository.findAll();
     }
+
+    public ClubEntity createClub(ClubEntity club) {
+        return clubRepository.save(club);
+    }
 }

@@ -27,7 +27,7 @@ public class GameService {
         throw new ResourceNotFoundException("Game with game number: " + gameNr + " not found");
     }
 
-    private GameEntity findGameById(Long id) {
+    public GameEntity findGameById(Long id) {
         if (this.gameRepository.findById(id).isPresent()) {
             return this.gameRepository.findById(id).get();
         } else {
