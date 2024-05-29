@@ -2,15 +2,10 @@ package com.example.baseballscoresheet.controllerTests;
 
 import com.example.baseballscoresheet.model.entities.AssociationEntity;
 import com.example.baseballscoresheet.model.entities.ClubEntity;
-import com.example.baseballscoresheet.model.entities.TeamEntity;
 import com.example.baseballscoresheet.testcontainers.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,9 +36,9 @@ public class ClubController_IT extends AbstractIntegrationTest {
         club.setEmail("club@web.de");
         club.setCity("Club-City");
 
-        club = this.clubRepository.save(club);
+        this.clubRepository.save(club);
 
-        final var contentAsString = this.mockMvc.perform(get("/club"))
+        this.mockMvc.perform(get("/club"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$.[0].name", is("Club Nr. 1")))
