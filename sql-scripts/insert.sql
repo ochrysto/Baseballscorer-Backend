@@ -169,6 +169,9 @@ VALUES (7, 14);
 INSERT INTO game(game_nr, innings, association_id, league_id)
 VALUES (1, 9, 1, 1);
 
+INSERT INTO game_state(game_id, away_runs, home_runs, away_errors, home_errors, away_hits, home_hits, away_lob, home_lob)
+VALUES (1,0,0,0,0,0,0,0,0);
+
 INSERT INTO inning(game_id, inning, outs, batting_team)
 VALUES (1, 1, 0, 'AWAY');
 
