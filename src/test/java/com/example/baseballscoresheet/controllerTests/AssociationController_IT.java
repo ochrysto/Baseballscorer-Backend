@@ -28,13 +28,13 @@ public class AssociationController_IT extends AbstractIntegrationTest {
         association.setId(1L);
         association.setName("Test Association");
 
-        association = this.associationRepository.save(association);
+        this.associationRepository.save(association);
 
-        final var contentAsString = this.mockMvc.perform(get("/association"))
+        this.mockMvc.perform(get("/association"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id",is((nullValue()))))
-                .andExpect(jsonPath("$[0].name", is("Test Association")))
+                .andExpect(jsonPath("$.[0].id",is((nullValue()))))
+                .andExpect(jsonPath("$.[0].name", is("Test Association")))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
