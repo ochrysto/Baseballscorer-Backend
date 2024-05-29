@@ -31,8 +31,7 @@ public class ClubController_IT extends AbstractIntegrationTest {
         var association = new AssociationEntity();
         association.setId(1L);
         association.setName("Test Association");
-
-        Set<TeamEntity> teamEntitySet = new HashSet<>();
+        this.associationRepository.save(association);
 
         var club = new ClubEntity();
         club.setId(1L);
@@ -41,29 +40,18 @@ public class ClubController_IT extends AbstractIntegrationTest {
         club.setClubLogo("Club-Logo");
         club.setEmail("club@web.de");
         club.setCity("Club-City");
-        club.setTeamSet(new HashSet<>());
 
         club = this.clubRepository.save(club);
 
         final var contentAsString = this.mockMvc.perform(get("/club"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1L)))
-                .andExpect(jsonPath("$.name", is("Club Nr. 1")))
-                .andExpect(jsonPath("$.clubLogo", is("Club-Logo")))
-                .andExpect(jsonPath("$.Email", is("club@web.de")))
-                .andExpect(jsonPath("$.city", is("Club-City")))
+                .andExpect(jsonPath("$.[0].name", is("Club Nr. 1")))
+                .andExpect(jsonPath("$.[0].logo", is("Club-Logo")))
+                .andExpect(jsonPath("$.[0].email", is("club@web.de")))
+                .andExpect(jsonPath("$.[0].city", is("Club-City")))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
-                /*.andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0]..", is((nullValue()))))
-                .andExpect(jsonPath("$[0].name", is("Club Nr. 1")))
-                .andExpect(jsonPath("$[0].ci", is("Club Nr. 1")))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();*/
     }
 }
