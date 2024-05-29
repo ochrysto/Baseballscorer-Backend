@@ -3,6 +3,8 @@ package com.example.baseballscoresheet.controllerTests;
 import com.example.baseballscoresheet.model.entities.AssociationEntity;
 import com.example.baseballscoresheet.model.entities.ClubEntity;
 import com.example.baseballscoresheet.testcontainers.AbstractIntegrationTest;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -25,7 +27,7 @@ public class ClubController_IT extends AbstractIntegrationTest {
     void findAllClubs() throws Exception {
         var association = new AssociationEntity();
         association.setId(1L);
-        association.setName("Test Association");
+        association.setName("Test association");
         this.associationRepository.save(association);
 
         var club = new ClubEntity();

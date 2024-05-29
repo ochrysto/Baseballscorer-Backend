@@ -17,5 +17,7 @@ public class LeagueController_IT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser(roles = "user")
-    void findAllLeagues() throws Exception {}
+    void findAllLeagues() throws Exception {
+
+    }
 }
