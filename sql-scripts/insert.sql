@@ -62,6 +62,12 @@ INSERT INTO manager(first_name, last_name, email)
 VALUES ('Tina', 'Turner', 'tina.turner@managermail.com');
 INSERT INTO manager(first_name, last_name, email)
 VALUES ('Erika', 'Schuft', 'erika.schuft@managermail.com');
+INSERT INTO manager(first_name, last_name, email)
+VALUES ('John', 'Schuft', 'j.schuft@managermail.com');
+INSERT INTO manager(first_name, last_name, email)
+VALUES ('Boba', 'Schuft', 'boba.schuft@managermail.com');
+INSERT INTO manager(first_name, last_name, email)
+VALUES ('Biba', 'Schuft', 'biba.schuft@managermail.com');
 
 INSERT INTO player(passnumber, first_name, last_name, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb,
                    cs, sh, sf, a, po, e, dp, ip)
