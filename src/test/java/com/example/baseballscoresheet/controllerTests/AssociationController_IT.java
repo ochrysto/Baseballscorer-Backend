@@ -28,7 +28,7 @@ public class AssociationController_IT extends AbstractIntegrationTest {
         association.setId(1L);
         association.setName("Test Association");
 
-        association = this.associationRepository.save(association);
+        this.associationRepository.save(association);
 
         this.mockMvc.perform(get("/association"))
                 .andExpect(status().is2xxSuccessful())
