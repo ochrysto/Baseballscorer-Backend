@@ -85,7 +85,7 @@ public abstract class TestConfiguration {
         // create first turn
         TurnEntity turn = new TurnEntity();
         turn.setInning(inning);
-        turn.setPlayer(players.getFirst());
+        turn.setPlayer(players.get(0));
         turnService.createNewTurn(turn);
     }
 
