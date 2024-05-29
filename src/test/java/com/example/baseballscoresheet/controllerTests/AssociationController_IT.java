@@ -30,7 +30,7 @@ public class AssociationController_IT extends AbstractIntegrationTest {
 
         association = this.associationRepository.save(association);
 
-        final var contentAsString = this.mockMvc.perform(get("/association"))
+        this.mockMvc.perform(get("/association"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$.[0].id",is((nullValue()))))
