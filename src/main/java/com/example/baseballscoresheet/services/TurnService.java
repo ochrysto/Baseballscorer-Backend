@@ -202,4 +202,12 @@ public class TurnService {
     public List<TurnEntity> getTurnsByPlayerId(long playerId) {
         return this.turnRepository.findTurnEntitiesByLineupTeamPlayer_Id(playerId);
     }
+
+    public List<TurnEntity> getTurnsByInning(long inningId) {
+        return this.turnRepository.findTurnEntitiesByInning_IdOrderById(inningId);
+    }
+
+    public List<ActionEntity> getActionsByTurn(long turnId) {
+        return actionRepository.findAllByTurn_IdOrderByIdDesc(turnId);
+    }
 }

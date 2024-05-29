@@ -4,8 +4,6 @@ import com.example.baseballscoresheet.model.dtos.diamond.DiamondDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class OffensiveActionsDto {
@@ -13,5 +11,5 @@ public class OffensiveActionsDto {
     private String lastName;
     private int jerseyNumber;
     private boolean isAtBat;
-    private List<DiamondDto> actions;
+    private DiamondDto diamond;
 }

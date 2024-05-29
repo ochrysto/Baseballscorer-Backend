@@ -27,7 +27,7 @@ public class TurnEntity {
     private Status currentStatus = Status.AT_BAT;
     private int strikes = 0;
     private int balls = 0;
-    @OneToMany(mappedBy = "turn", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "turn", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ActionEntity> actions;
 
     public TurnEntity(LineupTeamPlayerEntity lineupTeamPlayer, InningEntity inning, int base, Status currentStatus) {

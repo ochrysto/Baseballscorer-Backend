@@ -6,7 +6,7 @@ import com.example.baseballscoresheet.model.dtos.diamond.DiamondDto;
 import com.example.baseballscoresheet.model.dtos.gamestate.GameStateDto;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
 import com.example.baseballscoresheet.model.entities.*;
-import com.example.baseballscoresheet.services.LineupTeamPlayerService;
+import com.example.baseballscoresheet.services.InningService;
 import com.example.baseballscoresheet.services.TurnService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,12 +27,12 @@ public class StateController {
 
     private final TurnService turnService;
     private final MappingService mappingService;
-    private final LineupTeamPlayerService lineupTeamPlayerService;
+    private final InningService inningService;
 
-    public StateController(TurnService turnService, MappingService mappingService, LineupTeamPlayerService lineupTeamPlayerService) {
+    public StateController(TurnService turnService, MappingService mappingService, InningService inningService1) {
         this.turnService = turnService;
         this.mappingService = mappingService;
-        this.lineupTeamPlayerService = lineupTeamPlayerService;
+        this.inningService = inningService1;
     }
 
     @GetMapping("/game/{gid}/state")
@@ -88,7 +88,7 @@ public class StateController {
         return ResponseEntity.ok(gameState);
     }
 
-    @GetMapping("/game/{gid}/diamonds")
+    @GetMapping("/game/{gid}/team/{team}/diamonds")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "diamonds found",
                     content = {@Content(mediaType = "application/json",
@@ -101,24 +101,87 @@ public class StateController {
                     content = @Content),
     })
     @RolesAllowed("user")
-    public ResponseEntity<List<OffensiveActionsDto>> getGameDiamonds(@PathVariable long gid, @PathVariable InningEntity.Team team) {
+    public ResponseEntity<List<List<OffensiveActionsDto>>> getGameDiamonds(@PathVariable long gid, @PathVariable InningEntity.Team team) {
         GameEntity game = turnService.getGame(gid);
 
-        List<LineupTeamPlayerEntity> lineupTeamPlayers = switch (team) {
-            case AWAY -> lineupTeamPlayerService.findByGameAndTeam(game.getId(), game.getGuest().getId());
-            case HOME -> lineupTeamPlayerService.findByGameAndTeam(game.getId(), game.getHost().getId());
-        };
+        List<InningEntity> innings = inningService.getByGameAndTeam(game.getId(), team);
+        List<List<OffensiveActionsDto>> dtos = new ArrayList<>();
 
-        List<OffensiveActionsDto> offensiveActionsDtoList = new ArrayList<>();
-
-        for (LineupTeamPlayerEntity player : lineupTeamPlayers) {
-            OffensiveActionsDto dto = new OffensiveActionsDto();
-            dto.setFirstName(player.getTeamPlayer().getPlayer().getFirstName());
-            dto.setLastName(player.getTeamPlayer().getPlayer().getLastName());
-            dto.setJerseyNumber(player.getJerseyNr());
+        for (InningEntity inning : innings) {
+            List<OffensiveActionsDto> subDtos = generateDiamondsForInning(inning.getId());
+            dtos.add(subDtos);
         }
 
-        return ResponseEntity.ok(offensiveActionsDtoList);
+        return ResponseEntity.ok(dtos);
+
+//        for (LineupTeamPlayerEntity player : lineupTeamPlayers) {
+//            OffensiveActionsDto dto = new OffensiveActionsDto();
+//            dto.setFirstName(player.getTeamPlayer().getPlayer().getFirstName());
+//            dto.setLastName(player.getTeamPlayer().getPlayer().getLastName());
+//            dto.setJerseyNumber(player.getJerseyNr());
+//        }
+//
+//        return ResponseEntity.ok(offensiveActionsDtoList);
+    }
+
+    private List<OffensiveActionsDto> generateDiamondsForInning(long inningId) {
+//        List<LineupTeamPlayerEntity> lineupTeamPlayers = new ArrayList<>();
+        List<TurnEntity> turns = this.turnService.getTurnsByInning(inningId);
+//        List<DiamondDto> diamondDtos = new ArrayList<>();
+        List<OffensiveActionsDto> offensiveActionsDtos = new ArrayList<>();
+
+        int out_counter = 1;
+        for (TurnEntity turn : turns) {
+            if (out_counter > 3) {
+                break;  // FIXME
+            }
+
+            DiamondDto diamondDto = new DiamondDto();
+            OffensiveActionsDto actionsDto = new OffensiveActionsDto();
+            diamondDto.setBase(turn.getBase());
+            switch (turn.getCurrentStatus()) {
+                case AT_BAT -> {
+                    actionsDto.setAtBat(true);
+                }
+                case IS_OUT -> {
+                    diamondDto.setCenter("I".repeat(out_counter));
+                    out_counter++;
+                }
+            }
+
+            int pos = turn.getBase();
+            List<ActionEntity> actions = turnService.getActionsByTurn(turn.getId());
+            for (ActionEntity a : actions) {
+                if (a.getDistance() == 0) {
+                    continue;
+                }
+                String symbol = getActionSymbol(a);
+                switch (a.getDistance()) {
+                    case 1 -> diamondDto.setFirst(symbol);
+                    case 2 -> diamondDto.setSecond(symbol);
+                    case 3 -> diamondDto.setThird(symbol);
+                    case 4 -> diamondDto.setHome(symbol);
+                }
+                pos -= a.getDistance();
+            }
+//            diamondDtos.add(diamondDto);
+            actionsDto.setFirstName(turn.getLineupTeamPlayer().getTeamPlayer().getPlayer().getFirstName());
+            actionsDto.setLastName(turn.getLineupTeamPlayer().getTeamPlayer().getPlayer().getLastName());
+            actionsDto.setJerseyNumber(turn.getLineupTeamPlayer().getJerseyNr());
+            actionsDto.setDiamond(diamondDto);
+            offensiveActionsDtos.add(actionsDto);
+        }
+        return offensiveActionsDtos;
+
+        // BAD ORDER! We do not know which player was first at bat and first out
+//        for (LineupTeamPlayerEntity player : lineupTeamPlayers) {
+//            Optional<TurnEntity> turn = turns.stream().filter(t -> t.getLineupTeamPlayer().getId().equals(player.getId())).findFirst();
+//            if (turn.isPresent()) {
+//
+//            } else {
+//
+//            }
+//        }
     }
 
     private LineupTeamPlayerEntity generateDiamonds(LineupTeamPlayerEntity player) {
