@@ -7,8 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class GetLeagueDto {
-
+    private long id;
     private String name;
-
     private GetAssociationDto association;
 }

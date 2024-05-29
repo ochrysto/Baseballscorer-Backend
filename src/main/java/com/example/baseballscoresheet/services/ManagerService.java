@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
+import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.ManagerEntity;
 import com.example.baseballscoresheet.repositories.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ManagerService {
         if (this.managerRepository.findById(id).isPresent()) {
             return this.managerRepository.findById(id).get();
         } else {
-            throw new RessourceNotFoundException("Manager with id: " + id + " not found");
+            throw new ResourceNotFoundException("Manager with id: " + id + " not found");
         }
     }
 

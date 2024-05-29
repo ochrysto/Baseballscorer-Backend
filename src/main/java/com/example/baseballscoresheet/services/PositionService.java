@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
+import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.PositionEntity;
 import com.example.baseballscoresheet.repositories.PositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class PositionService {
         if (this.positionRepository.findById(id).isPresent()) {
             return this.positionRepository.findById(id).get();
         } else {
-            throw new RessourceNotFoundException("Position with id: " + id + " not found");
+            throw new ResourceNotFoundException("Position with id: " + id + " not found");
         }
     }
 }

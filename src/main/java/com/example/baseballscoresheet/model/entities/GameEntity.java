@@ -23,7 +23,7 @@ public class GameEntity {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private Integer gameNr;
+    private Integer gameNr;  // TODO: why not auto-increment?
 
     private LocalDate date;
 
@@ -45,7 +45,7 @@ public class GameEntity {
      * This changes after every three 'Outs'.
      */
     @Column(nullable = false)
-    private Integer innings;
+    private Integer innings;  // TODO: is it just a counter of the innings played?
 
     @OneToMany(mappedBy = "game")
     private Set<GameUmpireEntity> gameUmpire;
@@ -69,4 +69,9 @@ public class GameEntity {
     @ManyToOne
     @JoinColumn(name = "league_id", nullable = false)
     private LeagueEntity league;
+
+    // CascadeType.MERGE because of an error "detached entity passed to persist"
+    // See: https://www.baeldung.com/hibernate-detached-entity-passed-to-persist
+    @OneToOne(mappedBy = "game", cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
+    private GameStateEntity gameState;
 }

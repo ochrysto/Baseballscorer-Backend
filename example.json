@@ -1,0 +1,102 @@
+{
+  "batter": null,
+  "firstBaseRunner": {
+    "firstBase": null,
+    "secondBase": {
+      "out": [
+        {
+          "button": "Ground out",
+          "actionType": "GROUND_OUT",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Out by rule",
+          "actionType": "OUT_BY_RULE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Appeal play",
+          "actionType": "APPEAL_PLAY",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Picked off",
+          "actionType": "PICKED_OFF",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Caught base",
+          "actionType": "CAUGHT_BASE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Assisted out",
+          "actionType": "ASSISTED_OUT",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Unassisted out",
+          "actionType": "UNASSISTED_OUT",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        }
+      ],
+      "safe": [
+        {
+          "button": "Stolen base",
+          "actionType": "STOLEN_BASE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Wild pitch",
+          "actionType": "WILD_PITCH",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Passed ball",
+          "actionType": "PASSED_BALL",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Advanced by rule",
+          "actionType": "ADVANCED_BY_RULE",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Advanced by batter",
+          "actionType": "ADVANCED_BY_BATTER",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        }
+      ],
+      "error": [
+        {
+          "button": "Error",
+          "actionType": "ERROR",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        },
+        {
+          "button": "Assisted error",
+          "actionType": "ASSISTED_ERROR",
+          "responsibleRequired": true,
+          "multipleResponsibleRequired": true
+        }
+      ]
+    },
+    "thirdBase": null,
+    "homeBase": null
+  },
+  "secondBaseRunner": null,
+  "thirdBaseRunner": null
+}

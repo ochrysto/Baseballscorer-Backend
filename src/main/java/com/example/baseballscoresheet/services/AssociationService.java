@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
+import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.AssociationEntity;
 import com.example.baseballscoresheet.repositories.AssociationRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,11 @@ public class AssociationService {
         if (this.associationRepository.findById(associationId).isPresent()) {
             return this.associationRepository.findById(associationId).get();
         } else {
-            throw new RessourceNotFoundException("Association with id: " + associationId + " not found");
+            throw new ResourceNotFoundException("Association with id: " + associationId + " not found");
         }
+    }
+
+    public AssociationEntity create(AssociationEntity associationEntity) {
+        return this.associationRepository.save(associationEntity);
     }
 }

@@ -11,7 +11,11 @@ Es muss außerdem die Möglichkeit der Protesterfassung geben. Die Erfassung erf
 
 Bevor das Sheet an den entsprechenden Verband weitergeleitet wird, müssen Trainer, Schiedsrichter und Scorer unterschreiben. Dies soll elektronisch erfolgen.
 
-Nachdem alles eingetragen und unterschrieben ist, werden die Formulare als PDF exportiert und an den Verband geschickt. 
+Nachdem alles eingetragen und unterschrieben ist, werden die Formulare als PDF exportiert und an den Verband geschickt.
+
+# Swagger
+
+Start the app and go at http://localhost:8080/swagger-ui/index.html.
 
 # Authentifizierung
 
@@ -117,9 +121,8 @@ Use `GetBearerToken.http` file to make requests to KeyCloak.
 
 **Note**: you must change credentials in this file
 
+## Known issues
 
-
-
-
-
-
+If you cannot run tests with an error message `Could not find a valid Docker environment. Please check configuration.`
+check that you can run docker without `sudo` with the command `docker ps`.
+If you see `permission denied` you should enable to run `docker` without `sudo`

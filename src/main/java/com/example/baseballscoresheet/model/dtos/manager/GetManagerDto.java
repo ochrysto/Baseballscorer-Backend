@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class GetManagerDto {
 
+    private long id;
+
     private String firstName;
 
     private String lastName;

@@ -1,74 +1,44 @@
 package com.example.baseballscoresheet.model.entities;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
-/**
- * Die Klasse {@link GameStateEntity} bildet ein GameState-Objekt mit seinen dazugehörigen Attributen ab.
- */
-
 @Entity
+@Table(name = "game_state")
 @Getter
 @Setter
-@NoArgsConstructor
-@Table(name = "game_state")
 public class GameStateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer inning;
-
-    private Integer positionCounter;
-
-    private Integer battingOrder;
-
-    @ManyToOne
-    @JoinColumn(name = "lineup_player_id", nullable = false)
-    private LineupTeamPlayerEntity lineupPlayer;
-
-    @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "game_id")
     private GameEntity game;
 
-    private Integer pa;
+    @Column(name = "away_runs", nullable = false)
+    private int awayRuns = 0;
 
-    private Integer ab;
+    @Column(name = "home_runs", nullable = false)
+    private int homeRuns = 0;
 
-    private Integer r;
+    @Column(name = "away_errors", nullable = false)
+    private int awayErrors = 0;
 
-    private Integer rbi;
+    @Column(name = "home_errors", nullable = false)
+    private int homeErrors = 0;
 
-    private Integer h;
+    @Column(name = "away_hits", nullable = false)
+    private int awayHits = 0;
 
-    private Integer twoB;
+    @Column(name = "home_hits", nullable = false)
+    private int homeHits = 0;
 
-    private Integer threeB;
+    @Column(name = "away_lob", nullable = false)
+    private int awayLOB = 0;
 
-    private Integer hr;
-
-    private Integer k;
-
-    private Integer bb;
-
-    private Integer hp;
-
-    private Integer sb;
-
-    private Integer cs;
-
-    private Integer sh;
-
-    private Integer sf;
-
-    private Integer a;
-
-    private Integer po;
-
-    private Integer e;
-
-    private Integer dp;
-
-    private Integer ip;
+    @Column(name = "home_lob", nullable = false)
+    private int homeLOB = 0;
 }

@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.services;
 
-import com.example.baseballscoresheet.exceptionHandling.RessourceNotFoundException;
+import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.LineupEntity;
 import com.example.baseballscoresheet.repositories.LineupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class LineupService {
         if (this.lineupRepository.findByTeam_Id(teamId) != null) {
             return lineupRepository.findByTeam_Id(teamId);
         } else {
-            throw new RessourceNotFoundException("Lineup with team id: " + teamId + " not found");
+            throw new ResourceNotFoundException("Lineup with team id: " + teamId + " not found");
         }
     }
 }

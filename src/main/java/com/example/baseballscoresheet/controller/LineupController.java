@@ -86,7 +86,7 @@ public class LineupController {
         getLineupDto1.setPlayerList(new ArrayList<>());
         getLineupDto2.setPlayerList(new ArrayList<>());
         for (LineupTeamPlayerEntity lineupTeamPlayer : addedLineupTeamPlayers) {
-            if (Objects.equals(lineupTeamPlayer.getTeamPlayer().getTeam().getId(), newLineups.getFirst().getTeamId())) {
+            if (Objects.equals(lineupTeamPlayer.getTeamPlayer().getTeam().getId(), newLineups.get(0).getTeamId())) {
                 getLineupDto1.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
                 getLineupDto1.getPlayerList().add(this.mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
             } else {

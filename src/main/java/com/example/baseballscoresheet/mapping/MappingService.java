@@ -68,6 +68,7 @@ public class MappingService {
     // ManagerEntity -> GetManagerDto
     public GetManagerDto mapManagerEntityToGetManagerDto(ManagerEntity managerEntity) {
         GetManagerDto managerDto = new GetManagerDto();
+        managerDto.setId(managerEntity.getId());
         managerDto.setFirstName(managerEntity.getFirstName());
         managerDto.setLastName(managerEntity.getLastName());
         managerDto.setEmail(managerEntity.getEmail());
@@ -77,6 +78,7 @@ public class MappingService {
     // LeagueEntity -> GetLeagueDto
     public GetLeagueDto mapLeagueEntityToGetLeagueDto(LeagueEntity leagueEntity) {
         GetLeagueDto getLeagueDto = new GetLeagueDto();
+        getLeagueDto.setId(leagueEntity.getId());
         getLeagueDto.setName(leagueEntity.getName());
         getLeagueDto.setAssociation(mapAssociationEntityToGetAssociationDto(leagueEntity.getAssociation()));
         return getLeagueDto;
@@ -85,7 +87,7 @@ public class MappingService {
     // AssociationEntity -> GetAssociationDto
     public GetAssociationDto mapAssociationEntityToGetAssociationDto(AssociationEntity associationEntity) {
         GetAssociationDto getAssociationDto = new GetAssociationDto();
-
+        getAssociationDto.setId(associationEntity.getId());
         getAssociationDto.setName(associationEntity.getName());
         return getAssociationDto;
     }
