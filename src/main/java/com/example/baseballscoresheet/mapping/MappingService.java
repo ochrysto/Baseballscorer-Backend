@@ -124,6 +124,7 @@ public class MappingService {
     // PositionEntity -> GetPositionDto
     public GetPositionDto mapPositionEntityToGetPositionDto(PositionEntity positionEntity) {
         GetPositionDto getPositionDto = new GetPositionDto();
+        getPositionDto.setId(positionEntity.getId());
         getPositionDto.setDescription(positionEntity.getDescription());
         return getPositionDto;
     }
