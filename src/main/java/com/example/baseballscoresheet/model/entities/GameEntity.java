@@ -59,12 +59,12 @@ public class GameEntity {
     private AssociationEntity association;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "guest_team_id", referencedColumnName = "id")
-    private TeamEntity guest;
+    @JoinColumn(name = "guest_lineup_id", referencedColumnName = "id")
+    private LineupEntity guest;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "host_team_id", referencedColumnName = "id")
-    private TeamEntity host;
+    @JoinColumn(name = "host_lineup_id", referencedColumnName = "id")
+    private LineupEntity host;
 
     @ManyToOne
     @JoinColumn(name = "league_id", nullable = false)
