@@ -67,7 +67,6 @@ public class AbstractIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        // TODO hier Mockdaten initialisieren
         associationRepository.deleteAll();
         clubRepository.deleteAll();
         gameRepository.deleteAll();

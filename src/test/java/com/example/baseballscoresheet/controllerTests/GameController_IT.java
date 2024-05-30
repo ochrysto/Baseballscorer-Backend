@@ -18,8 +18,7 @@ public class GameController_IT extends AbstractIntegrationTest {
 
     @Test
     void authorization() throws Exception {
-        this.mockMvc.perform(get("/game"))
-                .andExpect(status().isUnauthorized());
+        this.mockMvc.perform(get("/game")).andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -86,8 +85,7 @@ public class GameController_IT extends AbstractIntegrationTest {
                 """;
 
         final String response = this.mockMvc.perform(post("/game")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .content(content).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("gameNr", is(1)))
                 .andExpect(jsonPath("date", is("2024-05-21")))
@@ -96,7 +94,6 @@ public class GameController_IT extends AbstractIntegrationTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
     }
 
     @Test
@@ -111,5 +108,66 @@ public class GameController_IT extends AbstractIntegrationTest {
                             "durationInMinutes": 150
                         }
                 """;
+
+        // TODO return GetFinishedGameDto - gameNr = 1
+        final String response = this.mockMvc.perform(post("/game/1")
+                        .content(content).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
     }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void addLineupsToGame() throws Exception {
+        String content = """
+                        [
+                            {
+                                "teamId": 3,
+                                "isHostTeam": true,
+                                "isGuestTeam": false,
+                                "playerList": [
+                                    {
+                                        "playerId": 5,
+                                        "jerseyNr": 5,
+                                        "positionId": 5
+                                    },  
+                                    {
+                                        "playerId": 6,
+                                        "jerseyNr": 6,
+                                        "positionId": 6
+                                    }
+                                ]
+                            },
+                            {
+                                "teamId": 4,
+                                "isHostTeam": false,
+                                "isGuestTeam": true,
+                                "playerList": [
+                                    {
+                                        "playerId": 7,
+                                        "jerseyNr": 7,
+                                        "positionId": 7
+                                    },  
+                                    {
+                                        "playerId": 8,
+                                        "jerseyNr": 8,
+                                        "positionId": 8
+                                    }
+                                ]
+                            }
+                        ]
+                """;
+
+        // TODO return GetGameWithLineupsDto - gameNr = 1
+        final String response = this.mockMvc.perform(post("/game/1/lineup")
+                        .content(content).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+    }
+
+
 }

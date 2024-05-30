@@ -59,7 +59,13 @@ public class GameController {
 
     // Endpoint for saving a new game
     @Operation(summary = "saves a new game")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created game", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetGameWithoutLineupsDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created game",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(
+                            implementation = GetGameWithoutLineupsDto.class))}),
+            @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized", content = @Content),
+            @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PostMapping
     @RolesAllowed("user")
     public ResponseEntity<GetGameWithoutLineupsDto> createGame(@RequestBody @Valid AddGameDto addGameDto) {
