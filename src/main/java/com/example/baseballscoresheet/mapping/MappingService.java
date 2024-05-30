@@ -2,10 +2,7 @@ package com.example.baseballscoresheet.mapping;
 
 import com.example.baseballscoresheet.model.dtos.association.GetAssociationDto;
 import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
-import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
-import com.example.baseballscoresheet.model.dtos.game.GetFinishedGameDto;
-import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
-import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
+import com.example.baseballscoresheet.model.dtos.game.*;
 import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
 import com.example.baseballscoresheet.model.dtos.player.PlayerForLineupDto;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
@@ -29,10 +26,11 @@ import java.util.List;
 @Service
 public class MappingService {
 
+    public MappingService() {
+    }
+
     // AddTeamInfoDto + ManagerEntity + ClubEntity + LeagueEntity -> TeamEntity
-    public TeamEntity mapToTeamEntity(AddTeamWithoutPlayerListDto addTeamWithoutPlayerListDto,
-                                      ManagerEntity managerEntity, ClubEntity clubEntity,
-                                      LeagueEntity leagueEntity) {
+    public TeamEntity mapToTeamEntity(AddTeamWithoutPlayerListDto addTeamWithoutPlayerListDto, ManagerEntity managerEntity, ClubEntity clubEntity, LeagueEntity leagueEntity) {
         var teamEntity = new TeamEntity();
         teamEntity.setName(addTeamWithoutPlayerListDto.getName());
         teamEntity.setTeamLogo(addTeamWithoutPlayerListDto.getTeamLogo());
@@ -139,9 +137,7 @@ public class MappingService {
     }
 
     // PlayerForLineupDto + LineupPlayerDto + TeamPlayerEntity + PositionEntity -> LineupTeamPlayerEntity
-    public LineupTeamPlayerEntity mapToLineupTeamPlayerEntity(PlayerForLineupDto playerForLineupDto,
-                                                              LineupEntity lineupEntity, TeamPlayerEntity teamPlayer,
-                                                              PositionEntity position) {
+    public LineupTeamPlayerEntity mapToLineupTeamPlayerEntity(PlayerForLineupDto playerForLineupDto, LineupEntity lineupEntity, TeamPlayerEntity teamPlayer, PositionEntity position) {
         LineupTeamPlayerEntity lineupTeamPlayerEntity = new LineupTeamPlayerEntity();
         lineupTeamPlayerEntity.setLineup(lineupEntity);
         lineupTeamPlayerEntity.setTeamPlayer(teamPlayer);
@@ -155,8 +151,7 @@ public class MappingService {
         GetPlayerFromLineupDto getPlayerFromLineupDto = new GetPlayerFromLineupDto();
         getPlayerFromLineupDto.setJerseyNr(lineupTeamPlayer.getJerseyNr());
         getPlayerFromLineupDto.setPosition(lineupTeamPlayer.getPosition().getDescription());
-        getPlayerFromLineupDto.setPlayerName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName(),
-                lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
+        getPlayerFromLineupDto.setPlayerName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName(), lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
         return getPlayerFromLineupDto;
     }
 
@@ -178,10 +173,8 @@ public class MappingService {
         return getScorerDto;
     }
 
-    // AddGameDto + AssociationEntity + LeagueEntity + TeamEntity + TeamEntity + ScorerEntity-> GameEntity
-    public GameEntity mapToGameEntity(AddGameDto addGameDto, AssociationEntity associationEntity,
-                                      LeagueEntity leagueEntity, TeamEntity hostTeam, TeamEntity guestTeam,
-                                      ScorerEntity scorerEntity) {
+    // AddGameDto + AssociationEntity + LeagueEntity + LineupEntity + LineupEntity + ScorerEntity-> GameEntity
+    public GameEntity mapToGameEntity(AddGameDto addGameDto, AssociationEntity associationEntity, LeagueEntity leagueEntity, ScorerEntity scorerEntity) {
         GameEntity gameEntity = new GameEntity();
         gameEntity.setGameUmpire(new HashSet<>());
         gameEntity.setGameNr(addGameDto.getGameNr());
@@ -190,23 +183,19 @@ public class MappingService {
         gameEntity.setInnings(addGameDto.getInnings());
         gameEntity.setAssociation(associationEntity);
         gameEntity.setLeague(leagueEntity);
-        gameEntity.setHost(hostTeam);
-        gameEntity.setGuest(guestTeam);
         gameEntity.setScorer(scorerEntity);
         return gameEntity;
     }
 
     // GameEntity + List<GameUmpireEntity> -> GetGameDto
-    public GetGameDto mapToGetGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntityList) {
-        GetGameDto getGameDto = new GetGameDto();
+    public GetGameWithoutLineupsDto mapToGetGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntityList) {
+        GetGameWithoutLineupsDto getGameDto = new GetGameWithoutLineupsDto();
         getGameDto.setGameNr(gameEntity.getGameNr());
         getGameDto.setDate(gameEntity.getDate());
         getGameDto.setLocation(gameEntity.getLocation());
         getGameDto.setInnings(gameEntity.getInnings());
         getGameDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
         getGameDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
-        getGameDto.setHostTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getHost()));
-        getGameDto.setGuestTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getGuest()));
         getGameDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
         getGameDto.setUmpireList(new ArrayList<>());
 
@@ -274,8 +263,6 @@ public class MappingService {
         getFinishedGameDto.setInnings(gameEntity.getInnings());
         getFinishedGameDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
         getFinishedGameDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
-        getFinishedGameDto.setHostTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getHost()));
-        getFinishedGameDto.setGuestTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getGuest()));
         getFinishedGameDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
         getFinishedGameDto.setUmpireList(new ArrayList<>());
 
@@ -286,10 +273,83 @@ public class MappingService {
             getUmpireDto.setName(gameUmpire.getUmpire().getFirstName(), gameUmpire.getUmpire().getLastName());
             getFinishedGameDto.getUmpireList().add(getUmpireDto);
         }
+
+        GetTeamWithPlayerListDto guestTeam = new GetTeamWithPlayerListDto();
+        guestTeam.setTeamId(gameEntity.getGuest().getTeam().getId());
+        guestTeam.setName(gameEntity.getGuest().getTeam().getName());
+        guestTeam.setClub(mapClubEntityToGetClubDto(gameEntity.getGuest().getTeam().getClub()));
+        guestTeam.setManager(mapManagerEntityToGetManagerDto(gameEntity.getGuest().getTeam().getManager()));
+        guestTeam.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getGuest().getTeam().getLeague()));
+        guestTeam.setTeamLogo(gameEntity.getGuest().getTeam().getTeamLogo());
+        guestTeam.setPlayerList(new ArrayList<>());
+        for (TeamPlayerEntity teamPlayer : gameEntity.getGuest().getTeam().getTeamplayer()) {
+            guestTeam.getPlayerList().add(mapPlayerEntityToGetPlayerDto(teamPlayer.getPlayer()));
+        }
+
+        GetTeamWithPlayerListDto hostTeam = new GetTeamWithPlayerListDto();
+        hostTeam.setTeamId(gameEntity.getHost().getTeam().getId());
+        hostTeam.setName(gameEntity.getHost().getTeam().getName());
+        hostTeam.setClub(mapClubEntityToGetClubDto(gameEntity.getHost().getTeam().getClub()));
+        hostTeam.setManager(mapManagerEntityToGetManagerDto(gameEntity.getHost().getTeam().getManager()));
+        hostTeam.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getHost().getTeam().getLeague()));
+        hostTeam.setTeamLogo(gameEntity.getHost().getTeam().getTeamLogo());
+        hostTeam.setPlayerList(new ArrayList<>());
+        for (TeamPlayerEntity teamPlayer : gameEntity.getHost().getTeam().getTeamplayer()) {
+            hostTeam.getPlayerList().add(mapPlayerEntityToGetPlayerDto(teamPlayer.getPlayer()));
+        }
+
+        getFinishedGameDto.setGuestTeam(hostTeam);
+        getFinishedGameDto.setHostTeam(hostTeam);
+
         getFinishedGameDto.setAttendance(gameEntity.getAttendance());
         getFinishedGameDto.setStartTime(gameEntity.getStartTime());
         getFinishedGameDto.setEndTime(gameEntity.getEndTime());
         getFinishedGameDto.setDurationInMinutes(gameEntity.getDurationInMinutes());
         return getFinishedGameDto;
+    }
+
+    // GameEntity + List<GetLineupDto> -> GetGameWithLineupsDto
+    public GetGameWithLineupsDto mapToGetGameWithLineupsDto(GameEntity gameEntity, LineupEntity hostLineup, LineupEntity guestLineup) {
+        GetGameWithLineupsDto getGameWithLineupsDto = new GetGameWithLineupsDto();
+        getGameWithLineupsDto.setGameNr(gameEntity.getGameNr());
+        getGameWithLineupsDto.setDate(gameEntity.getDate());
+        getGameWithLineupsDto.setLocation(gameEntity.getLocation());
+        getGameWithLineupsDto.setInnings(gameEntity.getInnings());
+        getGameWithLineupsDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
+        getGameWithLineupsDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
+        getGameWithLineupsDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
+        getGameWithLineupsDto.setUmpireList(new ArrayList<>());
+
+        for (GameUmpireEntity gameUmpire : gameEntity.getGameUmpire()) {
+            getGameWithLineupsDto.getUmpireList().add(mapUmpireEntityToGetUmpireDto(gameUmpire.getUmpire()));
+        }
+
+        GetTeamWithPlayerListDto guestTeam = new GetTeamWithPlayerListDto();
+        guestTeam.setTeamId(guestLineup.getTeam().getId());
+        guestTeam.setName(guestLineup.getTeam().getName());
+        guestTeam.setClub(mapClubEntityToGetClubDto(guestLineup.getTeam().getClub()));
+        guestTeam.setManager(mapManagerEntityToGetManagerDto(guestLineup.getTeam().getManager()));
+        guestTeam.setLeague(mapLeagueEntityToGetLeagueDto(guestLineup.getTeam().getLeague()));
+        guestTeam.setTeamLogo(guestLineup.getTeam().getTeamLogo());
+        guestTeam.setPlayerList(new ArrayList<>());
+        for (TeamPlayerEntity teamPlayer : guestLineup.getTeam().getTeamplayer()) {
+            guestTeam.getPlayerList().add(mapPlayerEntityToGetPlayerDto(teamPlayer.getPlayer()));
+        }
+
+        GetTeamWithPlayerListDto hostTeam = new GetTeamWithPlayerListDto();
+        hostTeam.setTeamId(hostLineup.getTeam().getId());
+        hostTeam.setName(hostLineup.getTeam().getName());
+        hostTeam.setClub(mapClubEntityToGetClubDto(hostLineup.getTeam().getClub()));
+        hostTeam.setManager(mapManagerEntityToGetManagerDto(hostLineup.getTeam().getManager()));
+        hostTeam.setLeague(mapLeagueEntityToGetLeagueDto(hostLineup.getTeam().getLeague()));
+        hostTeam.setTeamLogo(hostLineup.getTeam().getTeamLogo());
+        hostTeam.setPlayerList(new ArrayList<>());
+        for (TeamPlayerEntity teamPlayer : hostLineup.getTeam().getTeamplayer()) {
+            hostTeam.getPlayerList().add(mapPlayerEntityToGetPlayerDto(teamPlayer.getPlayer()));
+        }
+
+        getGameWithLineupsDto.setGuestTeam(hostTeam);
+        getGameWithLineupsDto.setHostTeam(hostTeam);
+        return getGameWithLineupsDto;
     }
 }

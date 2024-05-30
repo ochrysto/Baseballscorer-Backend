@@ -67,8 +67,9 @@ public class StateController {
                 game.getGameState().getHomeHits(),
                 game.getGameState().getAwayLOB(),
                 game.getGameState().getHomeLOB(),
-                new ArrayList<>(), // TODO: Implement
-                new ArrayList<>(), // TODO: Implement
+                //new ArrayList<>(), // TODO: Implement
+                //new ArrayList<>(), // TODO: Implement
+                null,
                 turn.getInning().getInning(),
                 turn.getInning().getBattingTeam(),
                 turn.getInning().getOuts(),

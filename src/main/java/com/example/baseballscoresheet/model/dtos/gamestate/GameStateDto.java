@@ -21,8 +21,9 @@ public class GameStateDto {
     private int homeHits;
     private int awayLob;
     private int homeLob;
-    private List<Integer> awayRuns;
-    private List<Integer> homeRuns;
+    //private List<Integer> awayRuns;
+    //private List<Integer> homeRuns;
+    private List<ScoreBoardInningGetDto> scoreBoardInnings;
     private int inning;
     private InningEntity.Team team;
     private int outs;
