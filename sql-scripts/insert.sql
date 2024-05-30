@@ -166,8 +166,8 @@ VALUES (7, 13);
 INSERT INTO team_player(team_id, player_id)
 VALUES (7, 14);
 
-INSERT INTO game(game_nr, innings, association_id, league_id)
-VALUES (1, 9, 1, 1);
+--INSERT INTO game(game_nr, innings, association_id, league_id)
+--VALUES (1, 9, 1, 1);
 
 INSERT INTO inning(game_id, inning, outs, batting_team)
 VALUES (1, 1, 0, 'AWAY');

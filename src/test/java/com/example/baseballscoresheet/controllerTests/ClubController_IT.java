@@ -3,8 +3,6 @@ package com.example.baseballscoresheet.controllerTests;
 import com.example.baseballscoresheet.model.entities.AssociationEntity;
 import com.example.baseballscoresheet.model.entities.ClubEntity;
 import com.example.baseballscoresheet.testcontainers.AbstractIntegrationTest;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -37,7 +35,6 @@ public class ClubController_IT extends AbstractIntegrationTest {
         club.setClubLogo("Club-Logo");
         club.setEmail("club@web.de");
         club.setCity("Club-City");
-
         this.clubRepository.save(club);
 
         this.mockMvc.perform(get("/club"))

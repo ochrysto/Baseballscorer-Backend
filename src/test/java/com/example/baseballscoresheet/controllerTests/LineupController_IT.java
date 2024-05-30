@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class LineupController_IT extends AbstractIntegrationTest {
 
+    // TODO Sefa
+
     @Test
     void authorization() throws Exception {
         this.mockMvc.perform(get("/lineup"))
