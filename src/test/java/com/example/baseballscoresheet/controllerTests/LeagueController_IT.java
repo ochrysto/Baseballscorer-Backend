@@ -12,8 +12,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// TODO ich
-
 public class LeagueController_IT extends AbstractIntegrationTest {
 
     @Test
@@ -28,20 +26,21 @@ public class LeagueController_IT extends AbstractIntegrationTest {
 
         var association = new AssociationEntity();
         association.setId(1L);
-        association.setName("Mock-Association");
-        this.associationRepository.save(association);
 
         var league = new LeagueEntity();
         league.setId(1L);
-        league.setName("Mock-League");
+        league.setName("Test League");
         league.setAssociation(association);
+
+        this.associationRepository.save(association);
         this.leagueRepository.save(league);
 
         this.mockMvc.perform(get("/league"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$.[0].id", is("1")))
-                .andExpect(jsonPath("$.[0].id", is("1")))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("Test League")))
+                .andExpect(jsonPath("$[0].association.id", is(1)))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
