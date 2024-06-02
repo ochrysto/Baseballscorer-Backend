@@ -9,7 +9,7 @@ import lombok.Setter;
 public class OffensiveActionsDto {
     private String firstName;
     private String lastName;
-    private int jerseyNumber;
+    private int jerseyNr;
     private boolean isAtBat;
     private DiamondDto diamond;
 }

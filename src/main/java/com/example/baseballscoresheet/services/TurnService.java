@@ -42,9 +42,13 @@ public class TurnService {
         );
     }
 
-    public TurnEntity getLastTurn(GameEntity game){
+    public TurnEntity getLastTurn(GameEntity game) {
         return turnRepository.findFirstByInningGameOrderByIdDesc(game)
                 .orElseThrow(() -> new ResourceNotFoundException("No turn for the game with id `" + game.getId() + "` found"));
+    }
+
+    public TurnEntity getLastTurnOrElseNull(GameEntity game) {
+        return turnRepository.findFirstByInningGameOrderByIdDesc(game).orElse(null);
     }
 
     public ActionEntity getLastAction(TurnEntity turn) {
@@ -209,5 +213,24 @@ public class TurnService {
 
     public List<ActionEntity> getActionsByTurn(long turnId) {
         return actionRepository.findAllByTurn_IdOrderByIdDesc(turnId);
+    }
+
+    public InningEntity createFistInning(GameEntity game) {
+        InningEntity inning = new InningEntity();
+        inning.setGame(game);
+        inning.setInning(1);  // we always start a game with inning = 1
+        inning.setOuts(0);
+        inning.setBattingTeam(InningEntity.Team.AWAY);
+        return inningRepository.save(inning);
+    }
+
+    public TurnEntity createFirstTurn(GameEntity game) {
+        InningEntity inning = this.createFistInning(game);
+//        long position = 1;  // we always start with a position 1
+        LineupTeamPlayerEntity batter = lineupTeamPlayerRepository.findFirstByLineup_Game_IdAndLineup_Team_IdOrderByPositionIdAsc(game.getId(), game.getGuest().getId())  // we always start with first guest team batter
+                .orElseThrow(() -> new ResourceNotFoundException("Lineup team player not found"));
+//        LineupTeamPlayerEntity batter = lineupTeamPlayerRepository.findLineupTeamPlayerEntityByPosition_Id(position)
+//                .orElseThrow(() -> new ResourceNotFoundException("Lineup team player with position `" + position + "` not found"));
+        return this.turnRepository.save(new TurnEntity(batter, inning, 0, TurnEntity.Status.AT_BAT));
     }
 }

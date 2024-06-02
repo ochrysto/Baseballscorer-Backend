@@ -88,15 +88,6 @@ public abstract class TestConfiguration {
         GameStateEntity gameState = new GameStateEntity();
         gameState = gameStateService.create(gameState);
 
-        // create game
-        GameEntity game = new GameEntity();
-        game.setGameNr(1);
-        game.setInnings(9);
-        game.setAssociation(association);
-        game.setLeague(league);
-        game.setGameState(gameState);
-        gameService.createGame(game);
-
         // create club for home team
         ClubEntity clubHome = new ClubEntity();
         clubHome.setName("Example Club Home");
@@ -121,6 +112,17 @@ public abstract class TestConfiguration {
         teamAway.setClub(clubAway);
         teamAway.setLeague(league);
         teamAway = teamService.createTeam(teamAway);
+
+        // create game
+        GameEntity game = new GameEntity();
+        game.setGameNr(1);
+        game.setInnings(9);
+        game.setAssociation(association);
+        game.setLeague(league);
+        game.setGameState(gameState);
+        game.setGuest(teamAway);
+        game.setHost(teamHome);
+        gameService.createGame(game);
 
         // create players for home team
         String[][] homeTeamPlayerNames = {

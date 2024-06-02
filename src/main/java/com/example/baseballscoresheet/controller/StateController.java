@@ -167,7 +167,7 @@ public class StateController {
 //            diamondDtos.add(diamondDto);
             actionsDto.setFirstName(turn.getLineupTeamPlayer().getTeamPlayer().getPlayer().getFirstName());
             actionsDto.setLastName(turn.getLineupTeamPlayer().getTeamPlayer().getPlayer().getLastName());
-            actionsDto.setJerseyNumber(turn.getLineupTeamPlayer().getJerseyNr());
+            actionsDto.setJerseyNr(turn.getLineupTeamPlayer().getJerseyNr());
             actionsDto.setDiamond(diamondDto);
             offensiveActionsDtos.add(actionsDto);
         }

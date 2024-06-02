@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @Getter
 public class GetGameDto {
+    private Long id;
 
     private Integer gameNr;
 

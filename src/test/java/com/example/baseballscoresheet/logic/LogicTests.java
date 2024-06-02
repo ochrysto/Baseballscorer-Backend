@@ -44,6 +44,14 @@ public class LogicTests extends TestConfiguration {
     @Test
     @Transactional
     @WithMockUser(roles = "user")
+    public void testGetGameById() throws Exception {
+        long id = 1;
+        this.mockMvc.perform(get("/game/" + id).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(roles = "user")
     public void testCase1() throws Exception {
         GameEntity game = gameService.findGameByGameNr(1);
 
