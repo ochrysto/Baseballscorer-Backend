@@ -189,9 +189,9 @@ public class MappingService {
         gameEntity.setLocation(addGameDto.getLocation());
         gameEntity.setInnings(addGameDto.getInnings());
         gameEntity.setAssociation(associationEntity);
-        gameEntity.setLeague(leagueEntity);
         gameEntity.setHost(hostTeam);
         gameEntity.setGuest(guestTeam);
+        gameEntity.setLeague(leagueEntity);
         gameEntity.setScorer(scorerEntity);
         return gameEntity;
     }
@@ -285,8 +285,6 @@ public class MappingService {
         getFinishedGameDto.setInnings(gameEntity.getInnings());
         getFinishedGameDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
         getFinishedGameDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
-        getFinishedGameDto.setHostTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getHost()));
-        getFinishedGameDto.setGuestTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getGuest()));
         getFinishedGameDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
         getFinishedGameDto.setUmpireList(new ArrayList<>());
 

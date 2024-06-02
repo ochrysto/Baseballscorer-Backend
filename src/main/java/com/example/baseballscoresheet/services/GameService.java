@@ -2,6 +2,8 @@ package com.example.baseballscoresheet.services;
 
 import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.GameEntity;
+import com.example.baseballscoresheet.model.entities.LineupEntity;
+import com.example.baseballscoresheet.model.entities.TeamEntity;
 import com.example.baseballscoresheet.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,5 +46,12 @@ public class GameService {
         gameEntity.setDurationInMinutes(updatedGameEntity.getDurationInMinutes());
         this.gameRepository.save(gameEntity);
         return gameEntity;
+    }
+
+    public GameEntity saveLineupsToGame(GameEntity game, TeamEntity hostLineup, TeamEntity guestLineup) {
+        GameEntity gameEntity = this.findGameById(game.getId());
+        gameEntity.setHost(hostLineup);
+        gameEntity.setGuest(guestLineup);
+        return this.gameRepository.save(gameEntity);
     }
 }

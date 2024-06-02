@@ -14,7 +14,7 @@ public class AddLineupDto {
     @NotNull (message = "Team id is mandatory")
     private Long teamId;
 
-    @NotNull (message = "Team id is mandatory")
+    @NotNull (message = "Game id is mandatory")
     private Long gameId;
 
     private List<PlayerForLineupDto> playerList;
