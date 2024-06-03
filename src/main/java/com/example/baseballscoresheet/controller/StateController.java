@@ -60,6 +60,9 @@ public class StateController {
         Optional<TurnEntity> second_runner = activeRunners.stream().filter(turnEntity -> turnEntity.getBase() == TurnEntity.Base.SECOND_BASE.getValue()).findFirst();
         Optional<TurnEntity> third_runner = activeRunners.stream().filter(turnEntity -> turnEntity.getBase() == TurnEntity.Base.THIRD_BASE.getValue()).findFirst();
 
+        List<Integer> inningsAwayScores = inningService.getByGameAndTeam(game.getId(), InningEntity.Team.AWAY).stream().map(InningEntity::getScore).toList();
+        List<Integer> inningsHomeScores = inningService.getByGameAndTeam(game.getId(), InningEntity.Team.HOME).stream().map(InningEntity::getScore).toList();
+
         GameStateDto gameState = new GameStateDto(
                 game.getId(),
                 game.getGameState().getAwayRuns(),
@@ -70,9 +73,9 @@ public class StateController {
                 game.getGameState().getHomeHits(),
                 game.getGameState().getAwayLOB(),
                 game.getGameState().getHomeLOB(),
-                //new ArrayList<>(), // TODO: Implement
-                //new ArrayList<>(), // TODO: Implement
-                null,
+                inningsAwayScores, // TODO: Implement
+                inningsHomeScores, // TODO: Implement
+//                null,
                 turn.getInning().getInning(),
                 turn.getInning().getBattingTeam(),
                 turn.getInning().getOuts(),
@@ -113,21 +116,10 @@ public class StateController {
         }
 
         return ResponseEntity.ok(dtos);
-
-//        for (LineupTeamPlayerEntity player : lineupTeamPlayers) {
-//            OffensiveActionsDto dto = new OffensiveActionsDto();
-//            dto.setFirstName(player.getTeamPlayer().getPlayer().getFirstName());
-//            dto.setLastName(player.getTeamPlayer().getPlayer().getLastName());
-//            dto.setJerseyNumber(player.getJerseyNr());
-//        }
-//
-//        return ResponseEntity.ok(offensiveActionsDtoList);
     }
 
     private List<OffensiveActionsDto> generateDiamondsForInning(long inningId) {
-//        List<LineupTeamPlayerEntity> lineupTeamPlayers = new ArrayList<>();
         List<TurnEntity> turns = this.turnService.getTurnsByInning(inningId);
-//        List<DiamondDto> diamondDtos = new ArrayList<>();
         List<OffensiveActionsDto> offensiveActionsDtos = new ArrayList<>();
 
         int out_counter = 1;
@@ -164,7 +156,7 @@ public class StateController {
                 }
                 pos -= a.getDistance();
             }
-//            diamondDtos.add(diamondDto);
+
             actionsDto.setFirstName(turn.getLineupTeamPlayer().getTeamPlayer().getPlayer().getFirstName());
             actionsDto.setLastName(turn.getLineupTeamPlayer().getTeamPlayer().getPlayer().getLastName());
             actionsDto.setJerseyNr(turn.getLineupTeamPlayer().getJerseyNr());
@@ -172,16 +164,6 @@ public class StateController {
             offensiveActionsDtos.add(actionsDto);
         }
         return offensiveActionsDtos;
-
-        // BAD ORDER! We do not know which player was first at bat and first out
-//        for (LineupTeamPlayerEntity player : lineupTeamPlayers) {
-//            Optional<TurnEntity> turn = turns.stream().filter(t -> t.getLineupTeamPlayer().getId().equals(player.getId())).findFirst();
-//            if (turn.isPresent()) {
-//
-//            } else {
-//
-//            }
-//        }
     }
 
     private LineupTeamPlayerEntity generateDiamonds(LineupTeamPlayerEntity player) {

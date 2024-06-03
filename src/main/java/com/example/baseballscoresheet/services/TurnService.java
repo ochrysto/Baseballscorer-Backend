@@ -166,6 +166,10 @@ public class TurnService {
                 if (previousRunner != null) {
                     prevAction = actionRepository.save(new ActionEntity(
                             runner, ActionEntity.Type.ADVANCED_BY_BATTER, ActionEntity.Place.forBase(runner.getBase()), 1, prevAction, false));
+                    // move batter / runner and change status
+                    runner.setBase(runner.getBase() + 1);
+                    runner.setCurrentStatus(runner.getBase() < 4 ? TurnEntity.Status.ON_BASE : TurnEntity.Status.RUN);
+                    turnRepository.save(runner);
                 }
             }
         }

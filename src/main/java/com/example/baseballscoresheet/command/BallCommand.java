@@ -20,6 +20,7 @@ public class BallCommand extends Command {
 
         if (turn.getBalls() == 4) {
             turnService.advanceRunners(turn.getInning().getGame(), action);
+            turnService.moveBatterToBase(turn, TurnService.FIRST_BASE);
             turnService.createNewTurn(turn);
         }
     }
