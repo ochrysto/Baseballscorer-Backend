@@ -26,8 +26,8 @@ public class UmpireController_IT extends AbstractIntegrationTest {
         var umpire = new UmpireEntity();
         umpire.setId(1L);
         umpire.setPassnumber(123L);
-        umpire.setFirstName("Test Umpire");
-        umpire.setLastName("Test Umpire");
+        umpire.setFirstName("Test");
+        umpire.setLastName("Test");
 
         this.umpireRepository.save(umpire);
 
@@ -36,7 +36,7 @@ public class UmpireController_IT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].umpireId", is((1))))
                 .andExpect(jsonPath("$[0].passnumber", is(123)))
-                .andExpect(jsonPath("$[0].name", is("Test Umpire Test Umpire")))
+                .andExpect(jsonPath("$[0].name", is("Test Umpire")))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
