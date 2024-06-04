@@ -50,7 +50,7 @@ public class GameEntity {
     @OneToMany(mappedBy = "game")
     private Set<GameUmpireEntity> gameUmpire;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)  // One scorer can be in more than one game
     @JoinColumn(name = "scorer_id", referencedColumnName = "id")
     private ScorerEntity scorer;
 
@@ -58,11 +58,11 @@ public class GameEntity {
     @JoinColumn(name = "association_id", nullable = false)
     private AssociationEntity association;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)  // One team can be in more than one game
     @JoinColumn(name = "guest_team_id", referencedColumnName = "id")
     private TeamEntity guest;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)  // One team can be in more than one game
     @JoinColumn(name = "host_team_id", referencedColumnName = "id")
     private TeamEntity host;
 

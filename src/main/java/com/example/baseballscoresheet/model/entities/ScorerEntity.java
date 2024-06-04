@@ -3,6 +3,8 @@ package com.example.baseballscoresheet.model.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * Die Klasse {@link ScorerEntity} bildet ein Scorer-Objekt mit seinen dazugehörigen Attributen ab.
  * Der Scorer erfasst aller relevanten Aktionen eines Spiels.
@@ -24,6 +26,6 @@ public class ScorerEntity {
 
     private String lastName;
 
-    @OneToOne(mappedBy = "scorer")
-    private GameEntity game;
+    @OneToMany(mappedBy = "scorer")
+    private List<GameEntity> games;
 }
