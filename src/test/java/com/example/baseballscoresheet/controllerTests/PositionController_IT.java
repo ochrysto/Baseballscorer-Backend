@@ -21,7 +21,7 @@ public class PositionController_IT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser(roles = "user")
-    void findAllPositions() throws Exception {
+    void getAllPositions() throws Exception {
 
         var position = new PositionEntity();
         position.setId(1L);
