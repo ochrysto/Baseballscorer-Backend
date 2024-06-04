@@ -9,11 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface ActionRepository extends JpaRepository<ActionEntity, Long>, TruncateRepository {
     ActionEntity findFirstByTurnOrderByIdDesc(TurnEntity turn);
 
     ActionEntity findByLinkedAction(ActionEntity lastAction);
+
+    List<ActionEntity> findAllByTurn_IdOrderByIdDesc(Long turn_id);
 
     @Modifying
     @Transactional

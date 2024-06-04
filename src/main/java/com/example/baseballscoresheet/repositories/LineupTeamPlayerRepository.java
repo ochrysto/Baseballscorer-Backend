@@ -4,7 +4,13 @@ import com.example.baseballscoresheet.model.entities.LineupTeamPlayerEntity;
 import com.example.baseballscoresheet.repositories.truncate.TruncateRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface LineupTeamPlayerRepository extends JpaRepository<LineupTeamPlayerEntity, Long>, TruncateRepository {
 
     LineupTeamPlayerEntity findByTeamPlayerId(Long teamPlayerId);
+    List<LineupTeamPlayerEntity> findLineupTeamPlayerEntitiesByLineup_Game_IdAndLineup_Team_IdOrderByPosition_Id(Long lineup_game_id, Long lineup_team_id);
+    Optional<LineupTeamPlayerEntity> findLineupTeamPlayerEntityByPosition_Id(Long positionId);
+    Optional<LineupTeamPlayerEntity> findFirstByLineup_Game_IdAndLineup_Team_IdOrderByPositionIdAsc(Long lineup_game_id, Long lineup_team_id);
 }

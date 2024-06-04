@@ -18,4 +18,7 @@ public class LineupEntity {
     @JoinColumn(name = "team_id", nullable = false)
     private TeamEntity team;
 
+    @ManyToOne
+    @JoinColumn(name = "game_id", nullable = false)
+    private GameEntity game;
 }

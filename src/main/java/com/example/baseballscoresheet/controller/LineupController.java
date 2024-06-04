@@ -36,16 +36,18 @@ public class LineupController {
     private final TeamService teamService;
     private final TeamPlayerService teamPlayerService;
     private final PositionService positionService;
+    private final GameService gameService;
 
     public LineupController(MappingService mappingService, LineupService lineupService,
                             LineupTeamPlayerService lineupTeamPlayerService, TeamService teamService,
-                            TeamPlayerService teamPlayerService, PositionService positionService) {
+                            TeamPlayerService teamPlayerService, PositionService positionService, GameService gameService) {
         this.mappingService = mappingService;
         this.lineupService = lineupService;
         this.lineupTeamPlayerService = lineupTeamPlayerService;
         this.teamService = teamService;
         this.teamPlayerService = teamPlayerService;
         this.positionService = positionService;
+        this.gameService = gameService;
     }
 
     // Endpoint for saving lineups
@@ -60,7 +62,8 @@ public class LineupController {
         // both lineups are mapped and saved
         for (AddLineupDto addLineupDto : newLineups) {
             TeamEntity teamEntity = this.teamService.findTeamById(addLineupDto.getTeamId());
-            LineupEntity lineupEntity = this.mappingService.mapTeamEntityToLineupEntity(teamEntity);
+            GameEntity gameEntity = this.gameService.findGameById(addLineupDto.getGameId());
+            LineupEntity lineupEntity = this.mappingService.mapTeamEntityToLineupEntity(teamEntity, gameEntity);
             this.lineupService.saveLineup(lineupEntity);
         }
 

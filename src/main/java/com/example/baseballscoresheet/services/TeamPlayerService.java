@@ -15,8 +15,8 @@ public class TeamPlayerService {
         this.teamPlayerRepository = teamPlayerRepository;
     }
 
-    public void saveTeamPlayer(TeamPlayerEntity teamPlayerEntity) {
-        this.teamPlayerRepository.save(teamPlayerEntity);
+    public TeamPlayerEntity saveTeamPlayer(TeamPlayerEntity teamPlayerEntity) {
+        return this.teamPlayerRepository.save(teamPlayerEntity);
     }
 
     public TeamPlayerEntity findTeamPlayerEntityByTeamIdAndPlayerId(Long teamId, Long playerId) {

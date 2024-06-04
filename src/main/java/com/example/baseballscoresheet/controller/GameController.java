@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.exceptionHandling.BadRequestError;
 import com.example.baseballscoresheet.exceptionHandling.DoubleInputException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
@@ -34,8 +35,9 @@ public class GameController {
     private final ScorerService scorerService;
     private final TeamService teamService;
     private final GameUmpireService gameUmpireService;
+    private final GameStateService gameStateService;
 
-    public GameController(GameService gameService, MappingService mappingService, AssociationService associationService, LeagueService leagueService, UmpireService umpireService, ScorerService scorerService, TeamService teamService, GameUmpireService gameUmpireService) {
+    public GameController(GameService gameService, MappingService mappingService, AssociationService associationService, LeagueService leagueService, UmpireService umpireService, ScorerService scorerService, TeamService teamService, GameUmpireService gameUmpireService, GameStateService gameStateService) {
         this.gameService = gameService;
         this.mappingService = mappingService;
         this.associationService = associationService;
@@ -44,6 +46,7 @@ public class GameController {
         this.scorerService = scorerService;
         this.teamService = teamService;
         this.gameUmpireService = gameUmpireService;
+        this.gameStateService = gameStateService;
     }
 
     // Endpoint for saving a new game
@@ -94,7 +97,7 @@ public class GameController {
                     this.gameUmpireService.save(gameUmpire);
                 }
             }
-        } else {
+        } else if (umpires.size() == 1) {
             // saving game
             if (!hostTeam.equals(guestTeam)) {
                 gameEntity = this.mappingService.mapToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
@@ -105,7 +108,17 @@ public class GameController {
             GameUmpireEntity gameUmpire = this.mappingService.mapToGameUmpireEntity(gameEntity, umpires.get(0));
             gameUmpireEntities.add(gameUmpire);
             this.gameUmpireService.save(gameUmpire);
+        } else if (umpires.isEmpty()) {
+            throw new BadRequestError("No umpires provided");
+        } else {
+            throw new BadRequestError("Too many umpires provided");
         }
+
+        // Create game state
+        GameStateEntity gameState = new GameStateEntity();
+        gameState.setGame(gameEntity);
+        gameStateService.create(gameState);
+
         GetGameDto addedGame = this.mappingService.mapToGetGameDto(gameEntity, gameUmpireEntities);
         return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
     }
@@ -141,5 +154,28 @@ public class GameController {
 
         GetFinishedGameDto finishedGameDto = this.mappingService.mapToGetFinishedGameDto(updatedGameEntity, gameUmpireEntities);
         return new ResponseEntity<>(finishedGameDto, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "get a game by id", description = "game must exist")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "game found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetFinishedGameDto.class))}),
+            @ApiResponse(responseCode = "204", description = "no content"),
+            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "game not found"),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    @RolesAllowed("user")
+    public ResponseEntity<GetGameDto> getGameById(@PathVariable final Long id) {
+        GameEntity foundGameEntity = this.gameService.findGameById(id);
+        List<GameUmpireEntity> gameUmpireEntities = gameUmpireService.findAllByGameId(foundGameEntity.getId());
+        GetGameDto gameDto = this.mappingService.mapToGetGameDto(foundGameEntity, gameUmpireEntities);
+        return new ResponseEntity<>(gameDto, HttpStatus.OK);
     }
 }

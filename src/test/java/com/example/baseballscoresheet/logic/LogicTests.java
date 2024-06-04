@@ -1,11 +1,7 @@
 package com.example.baseballscoresheet.logic;
 
-import com.example.baseballscoresheet.model.entities.ActionEntity;
-import com.example.baseballscoresheet.model.entities.GameEntity;
-import com.example.baseballscoresheet.model.entities.PlayerEntity;
-import com.example.baseballscoresheet.model.entities.ResponsibleEntity;
+import com.example.baseballscoresheet.model.entities.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -43,6 +39,14 @@ public class LogicTests extends TestConfiguration {
         long id = 1;
         PlayerEntity player = playerService.findPlayerById(id);
         this.mockMvc.perform(get("/player/" + player.getId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(roles = "user")
+    public void testGetGameById() throws Exception {
+        long id = 1;
+        this.mockMvc.perform(get("/game/" + id).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
@@ -1141,6 +1145,13 @@ public class LogicTests extends TestConfiguration {
         JSONAssert.assertEquals(responseBody, expectedData, false);
     }
 
+    public void checkInningDiamonds(Long gameId, InningEntity.Team team, String expectedData) throws Exception {
+        MvcResult result = mockMvc.perform(get("/game/" + gameId + "/team/" + team.toString() + "/diamonds").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals(responseBody, expectedData, false);
+    }
+
     public void checkAvailableActions(Long gameId, String expectedActions) throws Exception {
         // Perform the GET request to the endpoint
         MvcResult result = mockMvc.perform(get("/game/" + gameId + "/action").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
@@ -1170,5 +1181,114 @@ public class LogicTests extends TestConfiguration {
         assertNotNull(responseMap, "Response JSON must have action data");
         assertEquals(1, responseMap.size(), "Response JSON must have 1 field");
         assertTrue(responseMap.containsKey("msg"), "Response JSON must have `msg` field");
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(roles = "user")
+    public void testDiamonds() throws Exception {
+        GameEntity game = gameService.findGameByGameNr(1);
+
+        String expectedJson = """
+                {
+                  "game": 1,
+                  "awayRunsTotal": 0,
+                  "homeRunsTotal": 0,
+                  "awayErrors": 0,
+                  "homeErrors": 0,
+                  "awayHits": 0,
+                  "homeHits": 0,
+                  "awayLob": 0,
+                  "homeLob": 0,
+                  "scoreBoardInnings": null,
+                  "inning": 1,
+                  "team": "AWAY",
+                  "outs": 0,
+                  "balls": 0,
+                  "strikes": 0,
+                  "onDeck": null,
+                  "batter": {
+                    "playerName": "Bas Topiac",
+                    "jerseyNr": 11,
+                    "position": "Catcher"
+                  },
+                  "firstBase": null,
+                  "secondBase": null,
+                  "thirdBase": null
+                }""";
+
+        this.checkGameState(game.getId(), expectedJson);
+
+        // Step 2: Three Balls and a Triple Hit
+        for (int i = 1; i <= 3; i++) {
+            this.createAction(game.getId(), 0, ActionEntity.Type.BALL, null, null);
+            expectedJson = String.format("""
+                    {
+                      "game": 1,
+                      "awayRunsTotal": 0,
+                      "homeRunsTotal": 0,
+                      "awayErrors": 0,
+                      "homeErrors": 0,
+                      "awayHits": 0,
+                      "homeHits": 0,
+                      "awayLob": 0,
+                      "homeLob": 0,
+                      "scoreBoardInnings": null,
+                      "inning": 1,
+                      "team": "AWAY",
+                      "outs": 0,
+                      "balls": %s,
+                      "strikes": 0,
+                      "onDeck": null,
+                      "batter": {
+                        "playerName": "Bas Topiac",
+                        "jerseyNr": 11,
+                        "position": "Catcher"
+                      },
+                      "firstBase": null,
+                      "secondBase": null,
+                      "thirdBase": null
+                    }""", i);
+            this.checkGameState(game.getId(), expectedJson);
+        }
+
+        this.createAction(game.getId(), 0, ActionEntity.Type.HIT_TRIPLE, null, null);
+
+        expectedJson = """
+                [
+                  [
+                    {
+                      "firstName": "Bas",
+                      "lastName": "Topiac",
+                      "jerseyNumber": 11,
+                      "diamond": {
+                        "base": 3,
+                        "center": null,
+                        "first": null,
+                        "second": null,
+                        "third": "3B",
+                        "home": null,
+                        "util": null
+                      },
+                      "atBat": false
+                    },
+                    {
+                      "firstName": "Jack",
+                      "lastName": "Sluggard",
+                      "jerseyNumber": 22,
+                      "diamond": {
+                        "base": 0,
+                        "center": null,
+                        "first": null,
+                        "second": null,
+                        "third": null,
+                        "home": null,
+                        "util": null
+                      },
+                      "atBat": true
+                    }
+                  ]
+                ]""";
+        this.checkInningDiamonds(game.getId(), InningEntity.Team.AWAY, expectedJson);
     }
 }

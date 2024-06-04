@@ -1,6 +1,7 @@
 package com.example.baseballscoresheet.model.dtos.gamestate;
 
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
+import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
 import com.example.baseballscoresheet.model.entities.InningEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,17 +22,17 @@ public class GameStateDto {
     private int homeHits;
     private int awayLob;
     private int homeLob;
-    //private List<Integer> awayRuns;
-    //private List<Integer> homeRuns;
-    private List<ScoreBoardInningGetDto> scoreBoardInnings;
+    private List<Integer> awayRuns;
+    private List<Integer> homeRuns;
+//    private List<ScoreBoardInningGetDto> scoreBoardInnings;
     private int inning;
     private InningEntity.Team team;
     private int outs;
     private int balls;
     private int strikes;
-    private GetPlayerDto onDeck;
-    private GetPlayerDto batter;
-    private GetPlayerDto firstBase;
-    private GetPlayerDto secondBase;
-    private GetPlayerDto thirdBase;
+    private GetPlayerFromLineupDto onDeck;
+    private GetPlayerFromLineupDto batter;
+    private GetPlayerFromLineupDto firstBase;
+    private GetPlayerFromLineupDto secondBase;
+    private GetPlayerFromLineupDto thirdBase;
 }

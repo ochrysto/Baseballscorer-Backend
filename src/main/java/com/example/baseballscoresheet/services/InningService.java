@@ -5,6 +5,8 @@ import com.example.baseballscoresheet.repositories.InningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InningService {
     private final InningRepository inningRepository;
@@ -16,5 +18,9 @@ public class InningService {
 
     public InningEntity create(InningEntity inning) {
         return this.inningRepository.save(inning);
+    }
+
+    public List<InningEntity> getByGameAndTeam(long gameId, InningEntity.Team team) {
+        return inningRepository.findInningEntitiesByGame_IdAndBattingTeamOrderByIdAsc(gameId, team);
     }
 }
