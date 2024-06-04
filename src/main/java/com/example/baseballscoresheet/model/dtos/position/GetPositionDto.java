@@ -9,5 +9,6 @@ public class GetPositionDto {
 
     private Long id;
 
+    private Integer position;
     private String description;
 }

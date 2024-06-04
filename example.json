@@ -1,35 +1,33 @@
-[
-  [
-    {
-      "firstName": "Bas",
-      "lastName": "Topiac",
-      "jerseyNumber": 11,
-      "diamond": {
-        "base": 3,
-        "center": null,
-        "first": null,
-        "second": null,
-        "third": "3B",
-        "home": null,
-        "util": null
-      },
-      "atBat": false
-    },
-    {
-      "firstName": "Jack",
-      "lastName": "Sluggard",
-      "jerseyNumber": 22,
-      "diamond": {
-        "base": 0,
-        "center": null,
-        "first": null,
-        "second": null,
-        "third": null,
-        "home": null,
-        "util": null
-      },
-      "atBat": true
-    }
-  ]
-]
-                
+{
+  "game": 1,
+  "awayRunsTotal": 0,
+  "homeRunsTotal": 0,
+  "awayErrors": 0,
+  "homeErrors": 0,
+  "awayHits": 0,
+  "homeHits": 0,
+  "awayLob": 0,
+  "homeLob": 0,
+  "awayRuns": [],
+  "homeRuns": [],
+  "inning": 1,
+  "team": "AWAY",
+  "outs": 0,
+  "balls": 0,
+  "strikes": 0,
+  "onDeck": null,
+  "batter": {
+    "id": 2,
+    "firstName": "Jack",
+    "lastName": "Sluggard",
+    "passnumber": 22
+  },
+  "firstBase": null,
+  "secondBase": null,
+  "thirdBase": {
+    "id": 1,
+    "firstName": "Bas",
+    "lastName": "Topiac",
+    "passnumber": 11
+  }
+}

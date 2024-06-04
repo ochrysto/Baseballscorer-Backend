@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.fasterxml.jackson.databind.cfg.CoercionInputShape.Array;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -69,8 +67,9 @@ public abstract class TestConfiguration {
         truncateAndResetTables();
 
         // Create positions
-        List<String> descriptions = List.of("Pitcher", "Catcher", "First Base", "Second Base", "Third Base", "Short Stop", "Leftfielder", "Centerfielder", "Rightfielder", "Designated Hitter");
-        List<PositionEntity> positions = createPositions(descriptions);
+//        List<String> descriptions = List.of("Pitcher", "Catcher", "First Base", "Second Base", "Third Base", "Short Stop", "Leftfielder", "Centerfielder", "Rightfielder", "Designated Hitter");
+        List<Integer> position_numbers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        List<PositionEntity> positions = createPositions(position_numbers);
 
         // Initialize the database with required entities
         // Create association
@@ -234,14 +233,14 @@ public abstract class TestConfiguration {
         return inningService.create(inning);
     }
 
-    protected List<PositionEntity> createPositions(List<String> descriptions) {
+    protected List<PositionEntity> createPositions(List<Integer> descriptions) {
         long id = 1;
         List<PositionEntity> positions = new ArrayList<>();
 
-        for (String description : descriptions) {
+        for (Integer description : descriptions) {
             PositionEntity positionEntity = new PositionEntity();
             positionEntity.setId(id);
-            positionEntity.setDescription(description);
+            positionEntity.setPosition(description);
             positionEntity = positionRepository.save(positionEntity);
             positions.add(positionEntity);
             id += 1;
