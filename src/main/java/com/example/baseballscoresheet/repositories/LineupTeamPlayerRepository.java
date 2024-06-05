@@ -11,6 +11,6 @@ public interface LineupTeamPlayerRepository extends JpaRepository<LineupTeamPlay
 
     LineupTeamPlayerEntity findByTeamPlayerId(Long teamPlayerId);
     List<LineupTeamPlayerEntity> findLineupTeamPlayerEntitiesByLineup_Game_IdAndLineup_Team_IdOrderByPosition_Id(Long lineup_game_id, Long lineup_team_id);
-    Optional<LineupTeamPlayerEntity> findLineupTeamPlayerEntityByPosition_Id(Long positionId);
+    Optional<LineupTeamPlayerEntity> findLineupTeamPlayerEntityByPositionPosition(Integer position);
     Optional<LineupTeamPlayerEntity> findFirstByLineup_Game_IdAndLineup_Team_IdOrderByPositionIdAsc(Long lineup_game_id, Long lineup_team_id);
 }

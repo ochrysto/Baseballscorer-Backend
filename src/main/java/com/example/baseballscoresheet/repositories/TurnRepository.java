@@ -18,4 +18,5 @@ public interface TurnRepository extends JpaRepository<TurnEntity, Long>, Truncat
     List<TurnEntity> findByInningAndCurrentStatus(InningEntity activeInning, TurnEntity.Status status);
     List<TurnEntity> findTurnEntitiesByLineupTeamPlayer_Id(Long playerId);
     List<TurnEntity> findTurnEntitiesByInning_IdOrderById(Long inningId);
+    Integer countTurnEntitiesByInningAndCurrentStatus(InningEntity inning, TurnEntity.Status currentStatus);
 }

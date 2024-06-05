@@ -35,13 +35,18 @@ public class AssistedOutCommand extends Command {
         }
 
         ActionEntity lastAction = turnService.getLastAction(turn);
+
+        // create action
+        // TODO: what if the initial linked action is not a batter?
         ActionEntity assistedOutAction = new ActionEntity();
         assistedOutAction.setTurn(runnerTurn);
         assistedOutAction.setType(ActionEntity.Type.ASSISTED_OUT);
         assistedOutAction.setDistance(0);
-        assistedOutAction.setLinkedAction(lastAction != null && !lastAction.isStandalone() ? lastAction : null);
-        assistedOutAction.setStandalone(lastAction == null || lastAction.isStandalone());
-        turnService.createNewAction(assistedOutAction);
+        boolean mustHaveLinkedAction = lastAction != null && !lastAction.isStandalone() && !lastAction.isProceed();
+        boolean isStandalone = !mustHaveLinkedAction;
+        assistedOutAction.setLinkedAction(mustHaveLinkedAction ? lastAction : null);
+        assistedOutAction.setStandalone(isStandalone);
+        assistedOutAction = turnService.createNewAction(assistedOutAction);
 
         for (int count = 0; count < responsible.size(); count++) {
             ResponsibleEntity responsibleEntity = new ResponsibleEntity();
@@ -54,6 +59,7 @@ public class AssistedOutCommand extends Command {
         runnerTurn.setCurrentStatus(TurnEntity.Status.IS_OUT);
         turnService.updateTurn(runnerTurn);
 
-        turnService.updateTurnsAndActions(assistedOutAction, turn);
+        if (!isStandalone)
+            turnService.updateTurnsAndActions(assistedOutAction, turn);
     }
 }
