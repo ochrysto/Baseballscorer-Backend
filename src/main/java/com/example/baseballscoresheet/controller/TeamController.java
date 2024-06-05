@@ -206,11 +206,7 @@ public class TeamController {
         for (Long playerId : playerList) {
             PlayerEntity playerEntity = this.playerService.findPlayerById(playerId);
             //checks whether the PlayerEntity object found is already assigned to a team
-            if (!Utility.isPlayerAssignedToTeam(playerEntity.getId())) {
-                players.add(playerEntity);
-            } else {
-                throw new PlayerIsNotAvailableException("Player with id: " + " is already assigned to a team.");
-            }
+            players.add(playerEntity);
         }
         // iterate over the list with PlayerEntity objects, each PlayerEntity is assigned to a new TeamPlayerEntity object
         // saves new TeamPlayerEntity
