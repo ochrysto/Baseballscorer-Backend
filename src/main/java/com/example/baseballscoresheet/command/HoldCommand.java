@@ -24,10 +24,16 @@ public class HoldCommand extends Command {
             newAction.setLinkedAction(lastAction);
             newAction.setStandalone(false);
             turnService.createNewAction(newAction);
-            turnService.updateTurnsAndActions(lastAction, turn);
+            turnService.updateTurnsAndActions(lastAction, turn, base);
         } else {
             newAction.setStandalone(true);
             turnService.createNewAction(newAction);
         }
+
+        if (!turnService.isBatterAtBat(turn))
+            turnService.createNewTurn(turn);
+
+        if (this.turnService.isEndOfInning(turn.getInning()))
+            turnService.createNewTurn(turn);
     }
 }

@@ -158,39 +158,44 @@ public class StateController {
         List<TurnEntity> turns = this.turnService.getTurnsByInning(inningId);
         List<OffensiveActionsDto> offensiveActionsDtos = new ArrayList<>();
 
-        int out_counter = 1;
+        int out_counter = 1;  // FIXME: wrong logic. e.g. runner in position 1 can be out second
         for (TurnEntity turn : turns) {
             if (out_counter > 3) {
-                break;  // FIXME
+                break;  // FIXME: panic
             }
 
             DiamondDto diamondDto = new DiamondDto();
             OffensiveActionsDto actionsDto = new OffensiveActionsDto();
-            diamondDto.setBase(turn.getBase());
+
+            int base = turn.getBase();
+
             switch (turn.getCurrentStatus()) {
                 case AT_BAT -> {
                     actionsDto.setAtBat(true);
                 }
                 case IS_OUT -> {
                     diamondDto.setCenter("I".repeat(out_counter));
+                    base -= 1;  // runner that is out hadn't reached destination base
                     out_counter++;
                 }
             }
 
-            int pos = turn.getBase();
+            diamondDto.setBase(base);
+
+            int pos = 0;
             List<ActionEntity> actions = turnService.getActionsByTurn(turn.getId());
             for (ActionEntity a : actions) {
                 if (a.getDistance() == 0) {
                     continue;
                 }
+                pos += a.getDistance();
                 String symbol = getActionSymbol(a);
-                switch (a.getDistance()) {
+                switch (pos) {
                     case 1 -> diamondDto.setFirst(symbol);
                     case 2 -> diamondDto.setSecond(symbol);
                     case 3 -> diamondDto.setThird(symbol);
                     case 4 -> diamondDto.setHome(symbol);
                 }
-                pos -= a.getDistance();
             }
 
             actionsDto.setFirstName(turn.getLineupTeamPlayer().getTeamPlayer().getPlayer().getFirstName());
@@ -202,30 +207,30 @@ public class StateController {
         return offensiveActionsDtos;
     }
 
-    private LineupTeamPlayerEntity generateDiamonds(LineupTeamPlayerEntity player) {
-        List<TurnEntity> turns = this.turnService.getTurnsByPlayerId(player.getId());
-
-        for (TurnEntity turn : turns) {
-            DiamondDto diamondDto = new DiamondDto();
-            diamondDto.setBase(turn.getBase());
-
-            int final_base = turn.getBase();
-            for (ActionEntity action : turn.getActions()) {
-                if (action.getDistance() == 0) {
-                    continue;
-                }
-                String symbol = getActionSymbol(action);
-                switch (final_base) {
-                    case 4 -> diamondDto.setHome(symbol);
-                    case 3 -> diamondDto.setThird(symbol);
-                    case 2 -> diamondDto.setSecond(symbol);
-                    case 1 -> diamondDto.setFirst(symbol);
-                }
-            }
-        }
-
-        return null;
-    }
+//    private LineupTeamPlayerEntity generateDiamonds(LineupTeamPlayerEntity player) {
+//        List<TurnEntity> turns = this.turnService.getTurnsByPlayerId(player.getId());
+//
+//        for (TurnEntity turn : turns) {
+//            DiamondDto diamondDto = new DiamondDto();
+//            diamondDto.setBase(turn.getBase());
+//
+//            int final_base = turn.getBase();
+//            for (ActionEntity action : turn.getActions()) {
+//                if (action.getDistance() == 0) {
+//                    continue;
+//                }
+//                String symbol = getActionSymbol(action);
+//                switch (final_base) {
+//                    case 4 -> diamondDto.setHome(symbol);
+//                    case 3 -> diamondDto.setThird(symbol);
+//                    case 2 -> diamondDto.setSecond(symbol);
+//                    case 1 -> diamondDto.setFirst(symbol);
+//                }
+//            }
+//        }
+//
+//        return null;
+//    }
 
     private String getActionSymbol(ActionEntity action) {
         return switch (action.getType()) {
@@ -234,6 +239,7 @@ public class StateController {
             case HIT_TRIPLE -> "3B";
             case HOME_RUN -> "HR";
             case STRIKEOUT -> "K";
+            case ASSISTED_OUT -> action.getSequence().stream().map((entity) -> String.valueOf(entity.getPosition())).reduce("", (res, next) -> res.isEmpty() ? next : res + "-" + next);
             default -> "??";
         };
     }

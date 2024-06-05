@@ -149,7 +149,8 @@ public class TurnService {
         // TODO: should we implement repetition logic, e.g. if last batter pos was 9 (last in lineup), next batter pos is 1 and so on...?
         LineupTeamPlayerEntity nextBatter = lineupTeamPlayerService.getNextLineupTeamPlayerByLineupTeamPlayer(turn.getLineupTeamPlayer())
                 .orElseThrow(() -> new ResourceNotFoundException("No next batter found. Maybe more than 9 turns in one inning?"));
-        return turnRepository.save(new TurnEntity(nextBatter, inning, 0, TurnEntity.Status.AT_BAT));
+        TurnEntity newTurn = new TurnEntity(nextBatter, inning, 0, TurnEntity.Status.AT_BAT);
+        return turnRepository.save(newTurn);
     }
 
     @Transactional
@@ -191,14 +192,24 @@ public class TurnService {
         }
     }
 
-    public void updateTurnsAndActions(ActionEntity lastAction, TurnEntity currentTurn) {  // TODO: not DRY and unpredictable
+    public void updateTurnsAndActions(ActionEntity lastAction, TurnEntity currentTurn, int base) {  // TODO: not DRY and unpredictable
         List<TurnEntity> offence = this.getActiveRunners(currentTurn.getInning().getGame());
         boolean is_first_runner = offence.stream().anyMatch(turnEntity -> turnEntity.getBase() == TurnEntity.Base.FIRST_BASE.getValue());
         boolean is_second_runner = offence.stream().anyMatch(turnEntity -> turnEntity.getBase() == TurnEntity.Base.SECOND_BASE.getValue());
-        if (!is_first_runner && !is_second_runner) {
-            saveLinkedActions(lastAction);
-            if (!this.isBatterAtBat(currentTurn)) {
-                this.createNewTurn(currentTurn);  // TODO: not "single responsibility"
+
+        switch (base) {
+            case 1 -> {
+                saveLinkedActions(lastAction);
+            }
+            case 2 -> {
+                if (!is_first_runner) {
+                    saveLinkedActions(lastAction);
+                }
+            }
+            case 3 -> {
+                if (!is_first_runner && !is_second_runner) {
+                    saveLinkedActions(lastAction);
+                }
             }
         }
     }
@@ -234,7 +245,7 @@ public class TurnService {
     }
 
     public List<ActionEntity> getActionsByTurn(long turnId) {  // TODO: move to ActionsService
-        return actionRepository.findAllByTurn_IdOrderByIdDesc(turnId);
+        return actionRepository.findAllByTurn_IdOrderByIdAsc(turnId);
     }
 
     public boolean isBatterAtBat(TurnEntity turn) {

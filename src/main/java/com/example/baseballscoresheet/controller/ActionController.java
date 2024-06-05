@@ -88,6 +88,8 @@ public class ActionController {
         }
 
         int base = actionPostDto.getBase();
+        int distance = actionPostDto.getDistance();
+
         ActionEntity.Type type = actionPostDto.getType();
         // extract and map responsible(s) to list of entities
         List<ResponsibleDto> responsible = actionPostDto.getResponsible();
@@ -98,7 +100,7 @@ public class ActionController {
             return ResponseEntity.badRequest().body(new MessageDto("Invalid Action: The action is not allowed at this step."));
         }
 
-        executeAction(type, base, responsible, turn);
+        executeAction(type, base, distance, responsible, turn);
         return ResponseEntity.ok(new MessageDto("success"));
     }
 
@@ -279,10 +281,11 @@ public class ActionController {
      *
      * @param actionType  the type of action to be executed
      * @param base        the base involved in the action
+     * @param distance    the distance made by runner/batter
      * @param responsible the entity(ies) of defence player that was involved in the action
      * @param turn        the current turn
      */
-    private void executeAction(ActionEntity.Type actionType, int base, List<ResponsibleDto> responsible, TurnEntity turn) {
+    private void executeAction(ActionEntity.Type actionType, int base, int distance, List<ResponsibleDto> responsible, TurnEntity turn) {
         if (ActionEntity.Type.BALL.equals(actionType)) {
             ballCommand.setTurn(turn);
             ballCommand.execute();
@@ -295,6 +298,7 @@ public class ActionController {
         } else if (ActionEntity.Type.ASSISTED_OUT.equals(actionType)) {
             assistedOutCommand.setTurn(turn);  // TODO: add validation to all commands, that throw error when `turn` is null
             assistedOutCommand.setBase(base);
+            assistedOutCommand.setDistance(distance);
             assistedOutCommand.setResponsible(responsible);
             assistedOutCommand.execute();
         } else if (ActionEntity.Type.BASE_ON_BALLS.equals(actionType)) {

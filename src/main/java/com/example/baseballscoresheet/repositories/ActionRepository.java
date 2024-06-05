@@ -17,7 +17,7 @@ public interface ActionRepository extends JpaRepository<ActionEntity, Long>, Tru
 
     ActionEntity findByLinkedAction(ActionEntity lastAction);
 
-    List<ActionEntity> findAllByTurn_IdOrderByIdDesc(Long turn_id);
+    List<ActionEntity> findAllByTurn_IdOrderByIdAsc(Long turn_id);
 
     @Modifying
     @Transactional

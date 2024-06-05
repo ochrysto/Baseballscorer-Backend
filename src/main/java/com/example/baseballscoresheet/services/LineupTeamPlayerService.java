@@ -31,7 +31,9 @@ public class LineupTeamPlayerService {
     }
 
     public Optional<LineupTeamPlayerEntity> getNextLineupTeamPlayerByLineupTeamPlayer(LineupTeamPlayerEntity lineupTeamPlayer) {
+        // We should search using position number AND concrete lineup
+        // Otherwise we will get `Query did not return a unique result: 2 results were returned`
         int position = lineupTeamPlayer.getPosition().getPosition() + 1;
-        return repository.findLineupTeamPlayerEntityByPositionPosition(position);
+        return repository.findLineupTeamPlayerEntityByPositionPositionAndLineup(position, lineupTeamPlayer.getLineup());
     }
 }

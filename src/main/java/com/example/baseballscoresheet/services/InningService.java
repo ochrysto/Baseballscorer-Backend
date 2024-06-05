@@ -3,6 +3,7 @@ package com.example.baseballscoresheet.services;
 import com.example.baseballscoresheet.model.entities.GameEntity;
 import com.example.baseballscoresheet.model.entities.InningEntity;
 import com.example.baseballscoresheet.repositories.InningRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,11 @@ public class InningService {
         inning.setInning(1);  // we always start a game with inning = 1
         inning.setOuts(0);
         inning.setBattingTeam(InningEntity.Team.AWAY);
+        return inningRepository.save(inning);
+    }
+
+    public InningEntity increaseOuts(InningEntity inning) {
+        inning.setOuts(inning.getOuts() + 1);
         return inningRepository.save(inning);
     }
 }

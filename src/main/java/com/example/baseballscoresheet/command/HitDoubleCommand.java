@@ -11,15 +11,8 @@ public class HitDoubleCommand extends Command {
     @Override
     public void execute() {
         List<TurnEntity> runners = turnService.getActiveRunners(turn.getInning().getGame());
-        if (!runners.isEmpty()) {
-            ActionEntity action = new ActionEntity();
-            action.setTurn(turn);
-            action.setType(ActionEntity.Type.HIT_DOUBLE);
-            action.setDistance(2);
-            action.setStandalone(false);
-            turnService.createNewAction(action);
-        } else {
-            turnService.moveBatterToBase(turn, 1);
+        if (runners.isEmpty()) {
+            turnService.moveBatterToBase(turn, 2);
             ActionEntity action = new ActionEntity();
             action.setTurn(turn);
             action.setType(ActionEntity.Type.HIT_DOUBLE);
@@ -27,6 +20,13 @@ public class HitDoubleCommand extends Command {
             action.setStandalone(true);
             turnService.createNewAction(action);
             turnService.createNewTurn(turn);
+        } else {
+            ActionEntity action = new ActionEntity();
+            action.setTurn(turn);
+            action.setType(ActionEntity.Type.HIT_DOUBLE);
+            action.setDistance(2);
+            action.setStandalone(false);
+            turnService.createNewAction(action);
         }
     }
 }

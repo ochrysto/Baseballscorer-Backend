@@ -26,5 +26,19 @@ public class ResponsibleEntity {
     @Enumerated(EnumType.STRING)
     private Place defencePosition;  // Use Place enum if desired
 
+    public int getPosition() {
+        return switch (defencePosition) {
+            case PITCHER -> 1;
+            case CATCHER -> 2;
+            case FIRST_BASE -> 3;
+            case SECOND_BASE -> 4;
+            case THIRD_BASE -> 5;
+            case SHORTSTOP -> 6;
+            case LEFT_FIELD -> 7;
+            case CENTER_FIELD -> 8;
+            case RIGHT_FIELD -> 9;
+        };
+    }
+
     // Getters and Setters
 }

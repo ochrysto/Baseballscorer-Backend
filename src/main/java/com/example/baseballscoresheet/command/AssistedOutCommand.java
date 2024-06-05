@@ -6,6 +6,7 @@ import com.example.baseballscoresheet.model.dtos.responsible.ResponsibleDto;
 import com.example.baseballscoresheet.model.entities.ActionEntity;
 import com.example.baseballscoresheet.model.entities.ResponsibleEntity;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
+import com.example.baseballscoresheet.services.InningService;
 import com.example.baseballscoresheet.services.ResponsibleService;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -15,12 +16,15 @@ import java.util.List;
 @Setter
 @Component
 public class AssistedOutCommand extends Command {
+    private final InningService inningService;
     private int base;
+    private int distance;
     private List<ResponsibleDto> responsible;
     private final ResponsibleService responsibleService;
 
-    public AssistedOutCommand(ResponsibleService responsibleService) {
+    public AssistedOutCommand(ResponsibleService responsibleService, InningService inningService) {
         this.responsibleService = responsibleService;
+        this.inningService = inningService;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class AssistedOutCommand extends Command {
         ActionEntity assistedOutAction = new ActionEntity();
         assistedOutAction.setTurn(runnerTurn);
         assistedOutAction.setType(ActionEntity.Type.ASSISTED_OUT);
-        assistedOutAction.setDistance(0);
+        assistedOutAction.setDistance(distance);  // FIXME: quick and dirty - e.g. runner at 3rd base that ran to the home base has distance 1 he had no reach home plate
         boolean mustHaveLinkedAction = lastAction != null && !lastAction.isStandalone() && !lastAction.isProceed();
         boolean isStandalone = !mustHaveLinkedAction;
         assistedOutAction.setLinkedAction(mustHaveLinkedAction ? lastAction : null);
@@ -59,7 +63,16 @@ public class AssistedOutCommand extends Command {
         runnerTurn.setCurrentStatus(TurnEntity.Status.IS_OUT);
         turnService.updateTurn(runnerTurn);
 
+        inningService.increaseOuts(turn.getInning());
+
         if (!isStandalone)
-            turnService.updateTurnsAndActions(assistedOutAction, turn);
+            turnService.updateTurnsAndActions(assistedOutAction, turn, base);
+
+        if (!turnService.isBatterAtBat(turn))
+            turnService.createNewTurn(turn);
+
+        if (this.turnService.isEndOfInning(turn.getInning()))
+            turnService.createNewTurn(turn);
+
     }
 }
