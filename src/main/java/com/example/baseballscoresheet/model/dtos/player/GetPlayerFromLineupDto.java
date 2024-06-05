@@ -6,14 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetPlayerFromLineupDto {
-
-    private String playerName;
-
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private Integer passnumber;
     private Integer jerseyNr;
-
-    private String position;
-
-    public void setPlayerName(String firstName, String lastName) {
-        this.playerName = firstName + " " + lastName;
-    }
+    private Integer position;
 }

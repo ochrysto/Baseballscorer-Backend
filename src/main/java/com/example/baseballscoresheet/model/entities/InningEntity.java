@@ -24,7 +24,8 @@ public class InningEntity {
     private GameEntity game;
 
     private int inning;
-    private int outs;
+    private int outs = 0;
+    private int score = 0;
 
     @Enumerated(EnumType.STRING)
     private Team battingTeam;  // Use Team enum if desired

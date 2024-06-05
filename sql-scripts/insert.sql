@@ -1,26 +1,26 @@
 INSERT INTO association(name)
 VALUES ('DBV');
 
-INSERT INTO position(id, description)
-VALUES (1, 'Pitcher');
-INSERT INTO position(id, description)
-VALUES (2, 'Catcher');
-INSERT INTO position(id, description)
-VALUES (3, 'First Base');
-INSERT INTO position(id, description)
-VALUES (4, 'Second Base');
-INSERT INTO position(id, description)
-VALUES (5, 'Third Base');
-INSERT INTO position(id, description)
-VALUES (6, 'Short Stop');
-INSERT INTO position(id, description)
-VALUES (7, 'Leftfielder');
-INSERT INTO position(id, description)
-VALUES (8, 'Centerfielder');
-INSERT INTO position(id, description)
-VALUES (9, 'Rightfielder');
-INSERT INTO position(id, description)
-VALUES (10, 'Designated Hitter');
+INSERT INTO position(id, position, description)
+VALUES (1, 1, 'Pitcher');
+INSERT INTO position(id, position, description)
+VALUES (2, 2, 'Catcher');
+INSERT INTO position(id, position, description)
+VALUES (3, 3, 'First Base');
+INSERT INTO position(id, position, description)
+VALUES (4, 4, 'Second Base');
+INSERT INTO position(id, position, description)
+VALUES (5, 5, 'Third Base');
+INSERT INTO position(id, position, description)
+VALUES (6, 6, 'Short Stop');
+INSERT INTO position(id, position, description)
+VALUES (7, 7, 'Leftfielder');
+INSERT INTO position(id, position, description)
+VALUES (8, 8, 'Centerfielder');
+INSERT INTO position(id, position, description)
+VALUES (9, 9, 'Rightfielder');
+INSERT INTO position(id, position, description)
+VALUES (10, 10, 'Designated Hitter');
 
 INSERT INTO club(name, city, association_id)
 VALUES ('Mannheim Tornados', 'Mannheim', 1);
@@ -172,8 +172,8 @@ VALUES (1, 9, 1, 1, 1, 1);
 INSERT INTO game_state(game_id, away_runs, home_runs, away_errors, home_errors, away_hits, home_hits, away_lob, home_lob)
 VALUES (1,0,0,0,0,0,0,0,0);
 
-INSERT INTO inning(game_id, inning, outs, batting_team)
-VALUES (1, 1, 0, 'AWAY');
+-- INSERT INTO inning(game_id, inning, outs, batting_team)
+-- VALUES (1, 1, 0, 'AWAY');
 
 -- INSERT INTO turn(balls, base, strikes, inning_id, player_id, current_status)
 -- VALUES (0, 0, 0, 1, 1, 'AT_BAT');

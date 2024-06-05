@@ -125,6 +125,7 @@ public class MappingService {
     public GetPositionDto mapPositionEntityToGetPositionDto(PositionEntity positionEntity) {
         GetPositionDto getPositionDto = new GetPositionDto();
         getPositionDto.setId(positionEntity.getId());
+        getPositionDto.setPosition(positionEntity.getPosition());
         getPositionDto.setDescription(positionEntity.getDescription());
         return getPositionDto;
     }
@@ -153,10 +154,12 @@ public class MappingService {
     // LineupTeamPlayerEntity -> GetPlayerFromLineupDto
     public GetPlayerFromLineupDto mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(LineupTeamPlayerEntity lineupTeamPlayer) {
         GetPlayerFromLineupDto getPlayerFromLineupDto = new GetPlayerFromLineupDto();
+        getPlayerFromLineupDto.setId(lineupTeamPlayer.getId());
+        getPlayerFromLineupDto.setFirstName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName());
+        getPlayerFromLineupDto.setLastName(lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
+        getPlayerFromLineupDto.setPassnumber(lineupTeamPlayer.getTeamPlayer().getPlayer().getPassnumber());
         getPlayerFromLineupDto.setJerseyNr(lineupTeamPlayer.getJerseyNr());
-        getPlayerFromLineupDto.setPosition(lineupTeamPlayer.getPosition().getDescription());
-        getPlayerFromLineupDto.setPlayerName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName(),
-                lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
+        getPlayerFromLineupDto.setPosition(lineupTeamPlayer.getPosition().getPosition());
         return getPlayerFromLineupDto;
     }
 

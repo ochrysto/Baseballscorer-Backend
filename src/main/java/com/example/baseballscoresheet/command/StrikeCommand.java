@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class StrikeCommand extends Command {
     @Override
     public void execute() {
-
+        this.turnService.increaseStrikeCount(this.turn);
     }
 }

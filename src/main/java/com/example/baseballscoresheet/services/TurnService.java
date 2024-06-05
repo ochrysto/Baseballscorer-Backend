@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.services;
 
+import com.example.baseballscoresheet.exceptionHandling.BadRequestError;
 import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.repositories.*;
@@ -75,9 +76,9 @@ public class TurnService {
     }
 
     @Transactional
-    public void increaseStrikeCount(TurnEntity turn) throws Exception {
+    public void increaseStrikeCount(TurnEntity turn) {
         if (turn.getStrikes() >= MAX_STRIKES) {
-            throw new Exception("The maximum number of strikes has already been reached.");
+            throw new BadRequestError("The maximum number of strikes has already been reached.");
         }
         turn.setStrikes(turn.getStrikes() + 1);
         if (turn.getStrikes() == MAX_STRIKES) {
@@ -166,6 +167,10 @@ public class TurnService {
                 if (previousRunner != null) {
                     prevAction = actionRepository.save(new ActionEntity(
                             runner, ActionEntity.Type.ADVANCED_BY_BATTER, ActionEntity.Place.forBase(runner.getBase()), 1, prevAction, false));
+                    // move batter / runner and change status
+                    runner.setBase(runner.getBase() + 1);
+                    runner.setCurrentStatus(runner.getBase() < 4 ? TurnEntity.Status.ON_BASE : TurnEntity.Status.RUN);
+                    turnRepository.save(runner);
                 }
             }
         }

@@ -1,6 +1,9 @@
 package com.example.baseballscoresheet.logic;
 
-import com.example.baseballscoresheet.model.entities.*;
+import com.example.baseballscoresheet.model.entities.ActionEntity;
+import com.example.baseballscoresheet.model.entities.GameEntity;
+import com.example.baseballscoresheet.model.entities.InningEntity;
+import com.example.baseballscoresheet.model.entities.PlayerEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -66,7 +69,7 @@ public class LogicTests extends TestConfiguration {
                   "homeHits": 0,
                   "awayLob": 0,
                   "homeLob": 0,
-                  "awayRuns": [],
+                  "awayRuns": [0],
                   "homeRuns": [],
                   "inning": 1,
                   "team": "AWAY",
@@ -78,7 +81,9 @@ public class LogicTests extends TestConfiguration {
                     "id": 1,
                     "firstName": "Bas",
                     "lastName": "Topiac",
-                    "passnumber": 11
+                    "passnumber": 11,
+                    "jerseyNr": 11,
+                    "position": 2
                   },
                   "firstBase": null,
                   "secondBase": null,
@@ -243,7 +248,7 @@ public class LogicTests extends TestConfiguration {
                       "homeHits": 0,
                       "awayLob": 0,
                       "homeLob": 0,
-                      "awayRuns": [],
+                      "awayRuns": [0],
                       "homeRuns": [],
                       "inning": 1,
                       "team": "AWAY",
@@ -255,7 +260,9 @@ public class LogicTests extends TestConfiguration {
                         "id": 1,
                         "firstName": "Bas",
                         "lastName": "Topiac",
-                        "passnumber": 11
+                        "passnumber": 11,
+                        "jerseyNr": 11,
+                        "position": 2
                       },
                       "firstBase": null,
                       "secondBase": null,
@@ -266,7 +273,44 @@ public class LogicTests extends TestConfiguration {
 
         this.createAction(game.getId(), 0, ActionEntity.Type.HIT_TRIPLE, null, null);
 
-        expectedJson = "{\"game\":1,\"awayRunsTotal\":0,\"homeRunsTotal\":0,\"awayErrors\":0,\"homeErrors\":0,\"awayHits\":0,\"homeHits\":0,\"awayLob\":0,\"homeLob\":0,\"awayRuns\":[],\"homeRuns\":[],\"inning\":1,\"team\":\"AWAY\",\"outs\":0,\"balls\":0,\"strikes\":0,\"onDeck\":null,\"batter\":{\"id\":2,\"firstName\":\"Jack\",\"lastName\":\"Sluggard\",\"passnumber\":22},\"firstBase\":null,\"secondBase\":null,\"thirdBase\":{\"id\":1,\"firstName\":\"Bas\",\"lastName\":\"Topiac\",\"passnumber\":11}}";
+        expectedJson = """
+                  {
+                  "game": 1,
+                  "awayRunsTotal": 0,
+                  "homeRunsTotal": 0,
+                  "awayErrors": 0,
+                  "homeErrors": 0,
+                  "awayHits": 0,
+                  "homeHits": 0,
+                  "awayLob": 0,
+                  "homeLob": 0,
+                  "awayRuns": [0],
+                  "homeRuns": [],
+                  "inning": 1,
+                  "team": "AWAY",
+                  "outs": 0,
+                  "balls": 0,
+                  "strikes": 0,
+                  "onDeck": null,
+                  "batter": {
+                    "id": 2,
+                    "firstName": "Jack",
+                    "lastName": "Sluggard",
+                    "passnumber": 22,
+                    "jerseyNr": 22,
+                    "position": 3
+                  },
+                  "firstBase": null,
+                  "secondBase": null,
+                  "thirdBase": {
+                    "id": 1,
+                    "firstName": "Bas",
+                    "lastName": "Topiac",
+                    "passnumber": 11,
+                    "jerseyNr": 11,
+                    "position": 2
+                  }
+                }""";
         this.checkGameState(game.getId(), expectedJson);
 
         // Step 3: Single Hit and Hold Action
@@ -1062,7 +1106,7 @@ public class LogicTests extends TestConfiguration {
                 }""";
         this.checkAvailableActions(game.getId(), expectedJson);
 
-        this.createAction(game.getId(), 1, ActionEntity.Type.ASSISTED_OUT, null, List.of(Map.of("defence_position", ResponsibleEntity.Place.SHORTSTOP.toString()), Map.of("defence_position", ResponsibleEntity.Place.SECOND_BASE.toString())));
+        this.createAction(game.getId(), 1, ActionEntity.Type.ASSISTED_OUT, null, List.of(Map.of("defence_position", 4), Map.of("defence_position", 6)));
 
         expectedJson = """
                 {
@@ -1075,7 +1119,7 @@ public class LogicTests extends TestConfiguration {
                   "homeHits": 0,
                   "awayLob": 0,
                   "homeLob": 0,
-                  "awayRuns": [],
+                  "awayRuns": [0],
                   "homeRuns": [],
                   "inning": 1,
                   "team": "AWAY",
@@ -1087,20 +1131,26 @@ public class LogicTests extends TestConfiguration {
                     "id": 4,
                     "firstName": "Sally",
                     "lastName": "Curveball",
-                    "passnumber": 44
+                    "passnumber": 44,
+                    "jerseyNr": 44,
+                    "position": 5
                   },
                   "firstBase": {
                     "id": 3,
                     "firstName": "Tommy",
                     "lastName": "Fastball",
-                    "passnumber": 33
+                    "passnumber": 33,
+                    "jerseyNr": 33,
+                    "position": 4
                   },
                   "secondBase": null,
                   "thirdBase": {
                     "id": 1,
                     "firstName": "Bas",
                     "lastName": "Topiac",
-                    "passnumber": 11
+                    "passnumber": 11,
+                    "jerseyNr": 11,
+                    "position": 2
                   }
                 }""";
         this.checkGameState(game.getId(), expectedJson);
