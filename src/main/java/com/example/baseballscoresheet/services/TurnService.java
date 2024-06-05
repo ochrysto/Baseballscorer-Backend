@@ -38,6 +38,8 @@ public class TurnService {
     private LineupTeamPlayerRepository lineupTeamPlayerRepository;
     @Autowired
     private LineupTeamPlayerService lineupTeamPlayerService;
+    @Autowired
+    private InningService inningService;
 
     public GameEntity getGame(Long gameId) {  // TODO: move to GameService
         return gameRepository.findById(gameId).orElseThrow(() ->
@@ -137,8 +139,13 @@ public class TurnService {
      */
     @Transactional
     public TurnEntity createNewTurn(TurnEntity turn) {
-        // TODO: check if more than 3 outs
         InningEntity inning = turn.getInning();
+
+        if (isEndOfInning(inning)) {
+            inning = inningService.createNext(inning);  // next
+        }
+
+        // TODO: check if more than 3 outs
         // TODO: should we implement repetition logic, e.g. if last batter pos was 9 (last in lineup), next batter pos is 1 and so on...?
         LineupTeamPlayerEntity nextBatter = lineupTeamPlayerService.getNextLineupTeamPlayerByLineupTeamPlayer(turn.getLineupTeamPlayer())
                 .orElseThrow(() -> new ResourceNotFoundException("No next batter found. Maybe more than 9 turns in one inning?"));
@@ -230,27 +237,18 @@ public class TurnService {
         return actionRepository.findAllByTurn_IdOrderByIdDesc(turnId);
     }
 
-    public InningEntity createFirstInning(GameEntity game) {  // TODO: move to InningService
-        InningEntity inning = new InningEntity();
-        inning.setGame(game);
-        inning.setInning(1);  // we always start a game with inning = 1
-        inning.setOuts(0);
-        inning.setBattingTeam(InningEntity.Team.AWAY);
-        return inningRepository.save(inning);
-    }
-
     public boolean isBatterAtBat(TurnEntity turn) {
         return this.getLastTurn(turn.getInning().getGame()).getCurrentStatus() == TurnEntity.Status.AT_BAT;
     }
 
     public TurnEntity createFirstTurn(GameEntity game) {
-        InningEntity inning = this.createFirstInning(game);
+        InningEntity inning = inningService.createFirstInning(game);
         LineupTeamPlayerEntity batter = lineupTeamPlayerRepository.findFirstByLineup_Game_IdAndLineup_Team_IdOrderByPositionIdAsc(game.getId(), game.getGuest().getId())  // we always start with first guest team batter
                 .orElseThrow(() -> new ResourceNotFoundException("Lineup team player not found"));
         return this.turnRepository.save(new TurnEntity(batter, inning, 0, TurnEntity.Status.AT_BAT));
     }
 
-    public boolean isEndOfInning(InningEntity inning) {
+    public boolean isEndOfInning(InningEntity inning) {  // TODO: *confused* InningService or TurnService?
         Integer outs = turnRepository.countTurnEntitiesByInningAndCurrentStatus(inning, TurnEntity.Status.IS_OUT);
         return outs >= MAX_OUTS;
     }
