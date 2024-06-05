@@ -22,7 +22,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/game/{gid}/action")
 public class ActionController {
-
     private final BallCommand ballCommand;
     private final StrikeCommand strikeCommand;
     private final FoulCommand foulCommand;

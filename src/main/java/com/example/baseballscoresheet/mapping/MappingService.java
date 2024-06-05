@@ -57,6 +57,7 @@ public class MappingService {
     // ClubEntity -> GetClubDto
     public GetClubDto mapClubEntityToGetClubDto(ClubEntity clubEntity) {
         GetClubDto getClubDto = new GetClubDto();
+        getClubDto.setId(clubEntity.getId());
         getClubDto.setName(clubEntity.getName());
         getClubDto.setCity(clubEntity.getCity());
         getClubDto.setLogo(clubEntity.getClubLogo());
