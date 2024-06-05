@@ -2,12 +2,20 @@ package com.example.baseballscoresheet.command;
 
 import com.example.baseballscoresheet.model.entities.ActionEntity;
 import com.example.baseballscoresheet.model.entities.TurnEntity;
+import com.example.baseballscoresheet.services.GameStateService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class HitTripleCommand extends Command {
+    private final GameStateService gameStateService;
+
+    public HitTripleCommand(GameStateService gameStateService) {
+        super();
+        this.gameStateService = gameStateService;
+    }
+
     @Override
     public void execute() {
         List<TurnEntity> runners = turnService.getActiveRunners(turn.getInning().getGame());
@@ -28,5 +36,7 @@ public class HitTripleCommand extends Command {
             action.setStandalone(false);
             turnService.createNewAction(action);
         }
+
+        gameStateService.increaseHitPoints(turn.getInning().getGame(), turn.getInning().getBattingTeam());
     }
 }

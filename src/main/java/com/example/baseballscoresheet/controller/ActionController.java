@@ -33,8 +33,25 @@ public class ActionController {
     private final HomeRunCommand homeRunCommand;
     private final HoldCommand holdCommand;
     private final TurnService turnService;
+    private final WildPitchCommand wildPitchCommand;
+    private final UnassistedOutCommand unassistedOutCommand;
+    private final StrikeoutCommand strikeoutCommand;
+    private final StolenBaseCommand stolenBaseCommand;
+    private final SacrificeHitCommand sacrificeHitCommand;
+    private final SacrificeFlyCommand sacrificeFlyCommand;
+    private final PickedOffCommand pickedOffCommand;
+    private final PassedBallCommand passedBallCommand;
+    private final OutByRuleCommand outByRuleCommand;
+    private final GroundOutCommand groundOutCommand;
+    private final FlyoutCommand flyoutCommand;
+    private final ErrorCommand errorCommand;
+    private final CaughtBaseCommand caughtBaseCommand;
+    private final AssistedErrorCommand assistedErrorCommand;
+    private final AppealPlayCommand appealPlayCommand;
+    private final AdvancedByBatterCommand advancedByBatterCommand;
+    private final AdvancedByRuleCommand advancedByRuleCommand;
 
-    public ActionController(BallCommand ballCommand, StrikeCommand strikeCommand, FoulCommand foulCommand, AssistedOutCommand assistedOutCommand, BaseOnBallsCommand baseOnBallsCommand, HitSingleCommand hitSingleCommand, HitDoubleCommand hitDoubleCommand, HitTripleCommand hitTripleCommand, HomeRunCommand homeRunCommand, HoldCommand holdCommand, TurnService turnService) {
+    public ActionController(BallCommand ballCommand, StrikeCommand strikeCommand, FoulCommand foulCommand, AssistedOutCommand assistedOutCommand, BaseOnBallsCommand baseOnBallsCommand, HitSingleCommand hitSingleCommand, HitDoubleCommand hitDoubleCommand, HitTripleCommand hitTripleCommand, HomeRunCommand homeRunCommand, HoldCommand holdCommand, TurnService turnService, WildPitchCommand wildPitchCommand, UnassistedOutCommand unassistedOutCommand, StrikeoutCommand strikeoutCommand, StolenBaseCommand stolenBaseCommand, SacrificeHitCommand sacrificeHitCommand, SacrificeFlyCommand sacrificeFlyCommand, PickedOffCommand pickedOffCommand, PassedBallCommand passedBallCommand, OutByRuleCommand outByRuleCommand, GroundOutCommand groundOutCommand, FlyoutCommand flyoutCommand, ErrorCommand errorCommand, CaughtBaseCommand caughtBaseCommand, AssistedErrorCommand assistedErrorCommand, AppealPlayCommand appealPlayCommand, AdvancedByBatterCommand advancedByBatterCommand, AdvancedByRuleCommand advancedByRuleCommand) {
         this.ballCommand = ballCommand;
         this.strikeCommand = strikeCommand;
         this.foulCommand = foulCommand;
@@ -46,6 +63,23 @@ public class ActionController {
         this.homeRunCommand = homeRunCommand;
         this.holdCommand = holdCommand;
         this.turnService = turnService;
+        this.wildPitchCommand = wildPitchCommand;
+        this.unassistedOutCommand = unassistedOutCommand;
+        this.strikeoutCommand = strikeoutCommand;
+        this.stolenBaseCommand = stolenBaseCommand;
+        this.sacrificeHitCommand = sacrificeHitCommand;
+        this.sacrificeFlyCommand = sacrificeFlyCommand;
+        this.pickedOffCommand = pickedOffCommand;
+        this.passedBallCommand = passedBallCommand;
+        this.outByRuleCommand = outByRuleCommand;
+        this.groundOutCommand = groundOutCommand;
+        this.flyoutCommand = flyoutCommand;
+        this.errorCommand = errorCommand;
+        this.caughtBaseCommand = caughtBaseCommand;
+        this.assistedErrorCommand = assistedErrorCommand;
+        this.appealPlayCommand = appealPlayCommand;
+        this.advancedByBatterCommand = advancedByBatterCommand;
+        this.advancedByRuleCommand = advancedByRuleCommand;
     }
 
     /**
@@ -316,6 +350,57 @@ public class ActionController {
         } else if (ActionEntity.Type.HOME_RUN.equals(actionType)) {
             homeRunCommand.setTurn(turn);
             homeRunCommand.execute();
+        } else if (ActionEntity.Type.WILD_PITCH.equals(actionType)) {
+            wildPitchCommand.setTurn(turn);
+            wildPitchCommand.execute();
+        } else if (ActionEntity.Type.UNASSISTED_OUT.equals(actionType)) {
+            unassistedOutCommand.setTurn(turn);
+            unassistedOutCommand.execute();
+        } else if (ActionEntity.Type.STRIKEOUT.equals(actionType)) {
+            strikeoutCommand.setTurn(turn);
+            strikeoutCommand.execute();
+        } else if (ActionEntity.Type.STOLEN_BASE.equals(actionType)) {
+            stolenBaseCommand.setTurn(turn);
+            stolenBaseCommand.execute();
+        } else if (ActionEntity.Type.SACRIFICE_HIT.equals(actionType)) {
+            sacrificeHitCommand.setTurn(turn);
+            sacrificeHitCommand.execute();
+        } else if (ActionEntity.Type.SACRIFICE_FLY.equals(actionType)) {
+            sacrificeFlyCommand.setTurn(turn);
+            sacrificeFlyCommand.execute();
+        } else if (ActionEntity.Type.PICKED_OFF.equals(actionType)) {
+            pickedOffCommand.setTurn(turn);
+            pickedOffCommand.execute();
+        } else if (ActionEntity.Type.PASSED_BALL.equals(actionType)) {
+            passedBallCommand.setTurn(turn);
+            passedBallCommand.execute();
+        } else if (ActionEntity.Type.OUT_BY_RULE.equals(actionType)) {
+            outByRuleCommand.setTurn(turn);
+            outByRuleCommand.execute();
+        } else if (ActionEntity.Type.GROUND_OUT.equals(actionType)) {
+            groundOutCommand.setTurn(turn);
+            groundOutCommand.execute();
+        } else if (ActionEntity.Type.FLYOUT.equals(actionType)) {
+            flyoutCommand.setTurn(turn);
+            flyoutCommand.execute();
+        } else if (ActionEntity.Type.ERROR.equals(actionType)) {
+            errorCommand.setTurn(turn);
+            errorCommand.execute();
+        } else if (ActionEntity.Type.CAUGHT_BASE.equals(actionType)) {
+            caughtBaseCommand.setTurn(turn);
+            caughtBaseCommand.execute();
+        } else if (ActionEntity.Type.ASSISTED_ERROR.equals(actionType)) {
+            assistedErrorCommand.setTurn(turn);
+            assistedErrorCommand.execute();
+        } else if (ActionEntity.Type.APPEAL_PLAY.equals(actionType)) {
+            appealPlayCommand.setTurn(turn);
+            appealPlayCommand.execute();
+        } else if (ActionEntity.Type.ADVANCED_BY_RULE.equals(actionType)) {
+            advancedByRuleCommand.setTurn(turn);
+            advancedByRuleCommand.execute();
+        } else if (ActionEntity.Type.ADVANCED_BY_BATTER.equals(actionType)) {
+            advancedByBatterCommand.setTurn(turn);
+            advancedByBatterCommand.execute();
         } else if (ActionEntity.Type.HOLD.equals(actionType)) {
             holdCommand.setTurn(turn);
             holdCommand.setBase(base);

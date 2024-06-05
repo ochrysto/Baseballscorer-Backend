@@ -4,9 +4,9 @@ import com.example.baseballscoresheet.exceptionHandling.NotImplementedError;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HomeRunCommand extends Command {
+public class StolenBaseCommand extends Command {
     @Override
     public void execute() {
-        throw new NotImplementedError("The 'Home Run' game action is not yet implemented.");
+        throw new NotImplementedError("The 'Stolen Base' game action is not yet implemented.");
     }
 }
