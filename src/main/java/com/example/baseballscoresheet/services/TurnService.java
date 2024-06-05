@@ -182,7 +182,7 @@ public class TurnService {
         boolean is_second_runner = offence.stream().anyMatch(turnEntity -> turnEntity.getBase() == TurnEntity.Base.SECOND_BASE.getValue());
         if (!is_first_runner && !is_second_runner) {
             saveLinkedActions(lastAction);
-            this.createNewTurn(currentTurn);
+            this.createNewTurn(currentTurn);  // FIXME: check if batter is there
         }
     }
 

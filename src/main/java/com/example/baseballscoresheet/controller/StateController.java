@@ -1,5 +1,6 @@
 package com.example.baseballscoresheet.controller;
 
+import com.example.baseballscoresheet.exceptionHandling.BadRequestError;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.action.OffensiveActionsDto;
 import com.example.baseballscoresheet.model.dtos.diamond.DiamondDto;
@@ -7,6 +8,8 @@ import com.example.baseballscoresheet.model.dtos.gamestate.GameStateDto;
 import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.services.InningService;
+import com.example.baseballscoresheet.services.LineupService;
+import com.example.baseballscoresheet.services.LineupTeamPlayerService;
 import com.example.baseballscoresheet.services.TurnService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,10 +32,13 @@ public class StateController {
     private final MappingService mappingService;
     private final InningService inningService;
 
-    public StateController(TurnService turnService, MappingService mappingService, InningService inningService1) {
+    private final LineupTeamPlayerService playerService;
+
+    public StateController(TurnService turnService, MappingService mappingService, InningService inningService, LineupTeamPlayerService playerService) {
         this.turnService = turnService;
         this.mappingService = mappingService;
-        this.inningService = inningService1;
+        this.inningService = inningService;
+        this.playerService = playerService;
     }
 
     @GetMapping("/game/{gid}/state")
@@ -89,6 +95,36 @@ public class StateController {
         );
 
         return ResponseEntity.ok(gameState);
+    }
+
+
+    @GetMapping("/game/{gid}/defencive-team-state")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "game state found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GameStateDto.class))}),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "game not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "server error",
+                    content = @Content),
+    })
+    @RolesAllowed("user")
+    public ResponseEntity<List<GetPlayerFromLineupDto>> getGameStateOfDefenciveTeam(@PathVariable long gid) {
+        GameEntity game = turnService.getGame(gid);
+        TurnEntity turn = turnService.getLastTurn(game);
+        List<LineupTeamPlayerEntity> entities;
+        List<GetPlayerFromLineupDto> dtos;
+
+        switch (turn.getInning().getBattingTeam()) {
+            case AWAY -> entities = playerService.findByGameAndTeam(game.getId(), game.getHost().getId());
+            case HOME -> entities = playerService.findByGameAndTeam(game.getId(), game.getGuest().getId());
+            default -> throw new BadRequestError("Cannot get current batting team. Check `StateController`.");
+        }
+        dtos = entities.stream().map(mappingService::mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto).toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/game/{gid}/team/{team}/diamonds")

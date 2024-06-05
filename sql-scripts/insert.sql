@@ -111,6 +111,23 @@ VALUES (000013, 'Iron', 'Man', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 INSERT INTO player(passnumber, first_name, last_name, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
                    sh, sf, a, po, e, dp, ip)
 VALUES (000014, 'Newt', 'Scamander', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO player(passnumber, first_name, last_name, pa, ab, r, rbi, h, twob, threeb, hr, k, bb, hp, sb, cs,
+                   sh, sf, a, po, e, dp, ip)
+VALUES (000015, 'Ivy', 'Greenhorn', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000016, 'Waldo', 'Wigglesworth', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000017, 'Misty', 'Bluebird', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000018, 'Ziggy', 'Stardust', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000019, 'Pixie', 'Twinkletoes', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000020, 'Rufus', 'T. Firefly', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000021, 'Binky', 'McFadden', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000022, 'Gizmo', 'Snicklefritz', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000023, 'Zelda', 'Moonbeam', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000024, 'Fifi', 'Fluffernutter', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000025, 'Buzz', 'Lightyear', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000026, 'Daisy', 'Doolittle', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000027, 'Spike', 'Sledgehammer', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000028, 'Coco', 'Bananarama', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+       (000029, 'Luna', 'Lovegood', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT INTO scorer(passnumber, first_name, last_name)
 VALUES (000001, 'Klaus', 'Büchner');
@@ -158,19 +175,32 @@ VALUES (5, 9);
 INSERT INTO team_player(team_id, player_id)
 VALUES (5, 10);
 INSERT INTO team_player(team_id, player_id)
-VALUES (6, 11);
+VALUES (6, 11),
+       (6, 12),
+       (6, 13),
+       (6, 14),
+       (6, 15),
+       (6, 16),
+       (6, 17),
+       (6, 18),
+       (6, 19);
 INSERT INTO team_player(team_id, player_id)
-VALUES (6, 12);
-INSERT INTO team_player(team_id, player_id)
-VALUES (7, 13);
-INSERT INTO team_player(team_id, player_id)
-VALUES (7, 14);
+VALUES (7, 20),
+       (7, 21),
+       (7, 22),
+       (7, 23),
+       (7, 24),
+       (7, 25),
+       (7, 26),
+       (7, 27),
+       (7, 28);
 
 INSERT INTO game(game_nr, innings, association_id, league_id, host_team_id, guest_team_id)
 VALUES (1, 9, 1, 1, 1, 1);
 
-INSERT INTO game_state(game_id, away_runs, home_runs, away_errors, home_errors, away_hits, home_hits, away_lob, home_lob)
-VALUES (1,0,0,0,0,0,0,0,0);
+INSERT INTO game_state(game_id, away_runs, home_runs, away_errors, home_errors, away_hits, home_hits, away_lob,
+                       home_lob)
+VALUES (1, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- INSERT INTO inning(game_id, inning, outs, batting_team)
 -- VALUES (1, 1, 0, 'AWAY');
