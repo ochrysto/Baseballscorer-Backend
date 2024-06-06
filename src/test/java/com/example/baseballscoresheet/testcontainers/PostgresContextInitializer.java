@@ -7,18 +7,20 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 public class PostgresContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:13.3"))
+
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:14"))
             .withDatabaseName("test_db")
             .withUsername("test-db-user")
             .withPassword("test-db-password");
 
     @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        postgreSQLContainer.start();
+    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+        postgres.start();
 
         TestPropertyValues.of(
-                "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
-                "spring.datasource.username=" + postgreSQLContainer.getUsername(),
-                "spring.datasource.password=" + postgreSQLContainer.getPassword()).applyTo(applicationContext.getEnvironment());
+                        "spring.datasource.url=" + postgres.getJdbcUrl(),
+                        "spring.datasource.username=" + postgres.getUsername(),
+                        "spring.datasource.password=" + postgres.getPassword())
+                .applyTo(configurableApplicationContext.getEnvironment());
     }
 }

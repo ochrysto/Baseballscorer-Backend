@@ -45,7 +45,7 @@ public class GameEntity {
      * This changes after every three 'Outs'.
      */
     @Column(nullable = false)
-    private Integer innings;  // TODO: is it just a counter of the innings played?
+    private Integer innings;
 
     @OneToMany(mappedBy = "game")
     private Set<GameUmpireEntity> gameUmpire;

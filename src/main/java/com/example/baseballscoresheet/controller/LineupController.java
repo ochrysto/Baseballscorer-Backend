@@ -51,6 +51,8 @@ public class LineupController {
     }
 
     // Endpoint for saving lineups
+    /*
+    // new Endpoint -> addLineupsToGame
     @Operation(summary = "saves lineup(s)")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created lineup(s)", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = LineupGetDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @RolesAllowed("user")
@@ -100,5 +102,5 @@ public class LineupController {
         addedLineup.add(lineupGetDto1);
         addedLineup.add(lineupGetDto2);
         return new ResponseEntity<>(addedLineup, HttpStatus.CREATED);
-    }
+    }*/
 }

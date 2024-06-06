@@ -48,7 +48,8 @@ public class MappingService {
         teamInfoDto.setTeamId(teamEntity.getId());
         teamInfoDto.setName(teamEntity.getName());
         teamInfoDto.setTeamLogo(teamEntity.getTeamLogo());
-        teamInfoDto.setManager(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
+        if (teamEntity.getManager() != null)
+            teamInfoDto.setManager(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
         teamInfoDto.setLeague(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
         teamInfoDto.setClub(mapClubEntityToGetClubDto(teamEntity.getClub()));
         return teamInfoDto;
