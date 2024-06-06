@@ -33,17 +33,7 @@ public class AssociationController {
 
     // Endpoint for getting all associations
     @Operation(summary = "retrieve all existing associations")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "associations found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AssociationGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "associations not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "associations found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AssociationGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "associations not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<AssociationGetDto>> findAllAssociations() {

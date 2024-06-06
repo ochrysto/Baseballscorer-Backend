@@ -35,17 +35,7 @@ public class ScorerController {
 
     // Endpoint for getting all official scorers
     @Operation(summary = "retrieve all official scorers")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "scorers found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ScorerGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "scorers not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "scorers found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ScorerGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "scorers not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<ScorerGetDto>> findAllScorers() {

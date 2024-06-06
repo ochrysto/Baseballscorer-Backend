@@ -13,18 +13,6 @@ import java.util.List;
 @Service
 public class TurnService {
 
-    @Autowired
-    private GameRepository gameRepository;
-
-    @Autowired
-    private TurnRepository turnRepository;
-
-    @Autowired
-    private ActionRepository actionRepository;
-
-    @Autowired
-    private InningRepository inningRepository;
-
     public static final int MAX_STRIKES = 3;
     public static final int MAX_BALLS = 4;
     public static final int MAX_OUTS = 3;
@@ -32,7 +20,14 @@ public class TurnService {
     public static final int SECOND_BASE = 2;
     public static final int THIRD_BASE = 3;
     public static final int HOME_BASE = 4;
-
+    @Autowired
+    private GameRepository gameRepository;
+    @Autowired
+    private TurnRepository turnRepository;
+    @Autowired
+    private ActionRepository actionRepository;
+    @Autowired
+    private InningRepository inningRepository;
     @Autowired
     private LineupTeamPlayerRepository lineupTeamPlayerRepository;
     @Autowired
@@ -41,14 +36,11 @@ public class TurnService {
     private InningService inningService;
 
     public GameEntity getGame(Long gameId) {  // TODO: move to GameService
-        return gameRepository.findById(gameId).orElseThrow(() ->
-                new ResourceNotFoundException("Game with id `" + gameId + "` not found")
-        );
+        return gameRepository.findById(gameId).orElseThrow(() -> new ResourceNotFoundException("Game with id `" + gameId + "` not found"));
     }
 
     public TurnEntity getLastTurn(GameEntity game) {
-        return turnRepository.findFirstByInningGameOrderByIdDesc(game)
-                .orElseThrow(() -> new ResourceNotFoundException("No turn for the game with id `" + game.getId() + "` found"));
+        return turnRepository.findFirstByInningGameOrderByIdDesc(game).orElseThrow(() -> new ResourceNotFoundException("No turn for the game with id `" + game.getId() + "` found"));
     }
 
     public TurnEntity getLastTurnOrElseNull(GameEntity game) {
@@ -74,8 +66,7 @@ public class TurnService {
     }
 
     public TurnEntity getRunnerByBase(TurnEntity turn, int base) {
-        return turnRepository.findByInningAndBaseAndCurrentStatus(turn.getInning(), base, TurnEntity.Status.ON_BASE)
-                .orElseThrow(() -> new ResourceNotFoundException("No runner for the inning with id `" + turn.getInning().getId() + "` and the base " + base + " found"));
+        return turnRepository.findByInningAndBaseAndCurrentStatus(turn.getInning(), base, TurnEntity.Status.ON_BASE).orElseThrow(() -> new ResourceNotFoundException("No runner for the inning with id `" + turn.getInning().getId() + "` and the base " + base + " found"));
     }
 
     @Transactional
@@ -121,13 +112,11 @@ public class TurnService {
     }
 
     public TurnEntity getBatter(TurnEntity turn) {
-        return turnRepository.findByInningAndBaseAndCurrentStatus(turn.getInning(), 0, TurnEntity.Status.AT_BAT)
-                .orElseThrow(() -> new ResourceNotFoundException("No batter for the inning with id `" + turn.getInning().getId() + "` found"));
+        return turnRepository.findByInningAndBaseAndCurrentStatus(turn.getInning(), 0, TurnEntity.Status.AT_BAT).orElseThrow(() -> new ResourceNotFoundException("No batter for the inning with id `" + turn.getInning().getId() + "` found"));
     }
 
     public List<TurnEntity> getActiveRunners(GameEntity game) {
-        InningEntity activeInning = inningRepository.findFirstByGameOrderByIdDesc(game)
-                .orElseThrow(() -> new ResourceNotFoundException("No active inning for the game with id `" + game.getId() + "` found"));
+        InningEntity activeInning = inningRepository.findFirstByGameOrderByIdDesc(game).orElseThrow(() -> new ResourceNotFoundException("No active inning for the game with id `" + game.getId() + "` found"));
         return turnRepository.findByInningAndCurrentStatus(activeInning, TurnEntity.Status.ON_BASE);
     }
 
@@ -146,8 +135,7 @@ public class TurnService {
 
         // TODO: check if more than 3 outs
         // TODO: should we implement repetition logic, e.g. if last batter pos was 9 (last in lineup), next batter pos is 1 and so on...?
-        LineupTeamPlayerEntity nextBatter = lineupTeamPlayerService.getNextLineupTeamPlayerByLineupTeamPlayer(turn.getLineupTeamPlayer())
-                .orElseThrow(() -> new ResourceNotFoundException("No next batter found. Maybe more than 9 turns in one inning?"));
+        LineupTeamPlayerEntity nextBatter = lineupTeamPlayerService.getNextLineupTeamPlayerByLineupTeamPlayer(turn.getLineupTeamPlayer()).orElseThrow(() -> new ResourceNotFoundException("No next batter found. Maybe more than 9 turns in one inning?"));
         TurnEntity newTurn = new TurnEntity(nextBatter, inning, 0, TurnEntity.Status.AT_BAT);
         return turnRepository.save(newTurn);
     }
@@ -175,13 +163,9 @@ public class TurnService {
             actionRepository.save(baseAction);
             ActionEntity prevAction = baseAction;
             for (TurnEntity runner : runners) {
-                TurnEntity previousRunner = runners.stream()
-                        .filter(r -> r.getBase() == runner.getBase() - 1)
-                        .findFirst()
-                        .orElse(null);
+                TurnEntity previousRunner = runners.stream().filter(r -> r.getBase() == runner.getBase() - 1).findFirst().orElse(null);
                 if (previousRunner != null) {
-                    prevAction = actionRepository.save(new ActionEntity(
-                            runner, ActionEntity.Type.ADVANCED_BY_BATTER, ActionEntity.Place.forBase(runner.getBase()), 1, prevAction, false));
+                    prevAction = actionRepository.save(new ActionEntity(runner, ActionEntity.Type.ADVANCED_BY_BATTER, ActionEntity.Place.forBase(runner.getBase()), 1, prevAction, false));
                     // move batter / runner and change status
                     runner.setBase(runner.getBase() + 1);
                     runner.setCurrentStatus(runner.getBase() < 4 ? TurnEntity.Status.ON_BASE : TurnEntity.Status.RUN);

@@ -51,16 +51,7 @@ public class GameController {
 
     // Endpoint for saving a new game
     @Operation(summary = "saves a new game")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "created game",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GameGetDto.class))}),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created game", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GameGetDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PostMapping
     @RolesAllowed("user")
     public ResponseEntity<GameGetDto> createGame(@RequestBody @Valid GameAddDto gameAddDto) {
@@ -124,25 +115,11 @@ public class GameController {
     }
 
     // Endpoint for updating an existing game after it is finished
-    @Operation(summary = "updates an existing game after it is finished",
-            description = "game must exist")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "game found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GameFinishedGetDto.class))}),
-            @ApiResponse(responseCode = "204", description = "no content"),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "game not found"),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @Operation(summary = "updates an existing game after it is finished", description = "game must exist")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "game found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GameFinishedGetDto.class))}), @ApiResponse(responseCode = "204", description = "no content"), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "game not found"), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PutMapping("/{gameNr}")
     @RolesAllowed("user")
-    public ResponseEntity<GameFinishedGetDto> finishGame(@PathVariable final Integer gameNr,
-                                                         @Valid @RequestBody final GamePutDto gamePutDto) {
+    public ResponseEntity<GameFinishedGetDto> finishGame(@PathVariable final Integer gameNr, @Valid @RequestBody final GamePutDto gamePutDto) {
 
         GameEntity updatedGameEntity = this.mappingService.mapUpdateGameDtoToGameEntity(gamePutDto);
         GameEntity foundGameEntity = this.gameService.findGameByGameNr(gameNr);
@@ -151,25 +128,12 @@ public class GameController {
 
         List<GameUmpireEntity> gameUmpireEntities = gameUmpireService.findAllByGameId(foundGameEntity.getId());
 
-
         GameFinishedGetDto finishedGameDto = this.mappingService.mapToGetFinishedGameDto(updatedGameEntity, gameUmpireEntities);
         return new ResponseEntity<>(finishedGameDto, HttpStatus.CREATED);
     }
 
     @Operation(summary = "get a game by id", description = "game must exist")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "game found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GameFinishedGetDto.class))}),
-            @ApiResponse(responseCode = "204", description = "no content"),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "game not found"),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "game found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GameFinishedGetDto.class))}), @ApiResponse(responseCode = "204", description = "no content"), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "game not found"), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @GetMapping("/{id}")
     @RolesAllowed("user")
     public ResponseEntity<GameGetDto> getGameById(@PathVariable final Long id) {

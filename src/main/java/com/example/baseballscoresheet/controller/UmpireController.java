@@ -33,17 +33,7 @@ public class UmpireController {
 
     // Endpoint for getting all official umpires
     @Operation(summary = "retrieve all official umpires")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "umpires found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UmpireGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "umpires not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "umpires found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UmpireGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "umpires not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<UmpireGetDto>> findAllUmpires() {

@@ -3,7 +3,6 @@ package com.example.baseballscoresheet.services;
 import com.example.baseballscoresheet.model.entities.GameEntity;
 import com.example.baseballscoresheet.model.entities.InningEntity;
 import com.example.baseballscoresheet.repositories.InningRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

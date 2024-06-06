@@ -35,9 +35,7 @@ public class TeamController {
     private final LeagueService leagueService;
     private final ClubService clubService;
 
-    public TeamController(MappingService mappingService, TeamService teamService, TeamPlayerService teamPlayerService,
-                          PlayerService playerService, ManagerService managerService, LeagueService leagueService,
-                          ClubService clubService) {
+    public TeamController(MappingService mappingService, TeamService teamService, TeamPlayerService teamPlayerService, PlayerService playerService, ManagerService managerService, LeagueService leagueService, ClubService clubService) {
         this.mappingService = mappingService;
         this.teamService = teamService;
         this.teamPlayerService = teamPlayerService;
@@ -49,17 +47,7 @@ public class TeamController {
 
     // Endpoint for saving a new team
     @Operation(summary = "saves a new team")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "created team",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TeamGetDto.class))}),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created team", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TeamGetDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PostMapping
     @RolesAllowed("user")
     public ResponseEntity<TeamGetDto> createTeam(@RequestBody @Valid TeamAddDto teamAddDto) {
@@ -69,8 +57,7 @@ public class TeamController {
         LeagueEntity leagueEntity = this.leagueService.getLeagueById(teamAddDto.getLeagueId());
 
         // maps TeamDto object to TeamEntity object and saves it in the database
-        TeamEntity teamEntity = this.mappingService.mapToTeamEntity(
-                teamAddDto, managerEntity, clubEntity, leagueEntity);
+        TeamEntity teamEntity = this.mappingService.mapToTeamEntity(teamAddDto, managerEntity, clubEntity, leagueEntity);
         teamEntity = this.teamService.createTeam(teamEntity);
         TeamGetDto addedTeam = this.mappingService.mapTeamEntityToGetTeamWithoutPlayerListDto(teamEntity);
         return new ResponseEntity<>(addedTeam, HttpStatus.CREATED);
@@ -78,17 +65,7 @@ public class TeamController {
 
     // Endpoint to retrieve all existing teams
     @Operation(summary = "retrieve all existing teams")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "teams found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TeamGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "teams not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "teams found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TeamGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "teams not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<TeamGetDto>> findAllTeams() {
@@ -106,46 +83,21 @@ public class TeamController {
 
     // Endpoint to retrieve information about a specific team by id
     @Operation(summary = "retrieve all information of a specific team")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "team found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TeamGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "team not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "team found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TeamGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "team not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @GetMapping("/{teamId}")
     @RolesAllowed("user")
     public ResponseEntity<TeamGetDto> findTeamById(@PathVariable Long teamId) {
         TeamEntity teamEntity = this.teamService.findTeamById(teamId);
-        TeamGetDto teamGetDto
-                = this.mappingService.mapTeamEntityToGetTeamWithoutPlayerListDto(teamEntity);
+        TeamGetDto teamGetDto = this.mappingService.mapTeamEntityToGetTeamWithoutPlayerListDto(teamEntity);
         return new ResponseEntity<>(teamGetDto, HttpStatus.OK);
     }
 
     // Endpoint for updating an existing team by id
-    @Operation(summary = "updates a existing team",
-            description = "team must exist")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "team found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TeamGetDto.class))}),
-            @ApiResponse(responseCode = "204", description = "no content"),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "team not found"),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @Operation(summary = "updates a existing team", description = "team must exist")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "team found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TeamGetDto.class))}), @ApiResponse(responseCode = "204", description = "no content"), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "team not found"), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PutMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<TeamGetDto> updateTeamInfo(@PathVariable final Long id,
-                                                     @Valid @RequestBody final TeamAddDto updateTeamDto) {
+    public ResponseEntity<TeamGetDto> updateTeamInfo(@PathVariable final Long id, @Valid @RequestBody final TeamAddDto updateTeamDto) {
         // searches for club, manager and league and returns them if they are found in the database
         ManagerEntity managerEntity = this.managerService.getManagerById(updateTeamDto.getManagerId());
         ClubEntity clubEntity = this.clubService.getClubById(updateTeamDto.getClubId());
@@ -164,16 +116,8 @@ public class TeamController {
     }
 
     // Endpoint to delete an existing team by id
-    @Operation(summary = "deletes team by id",
-            description = "team must exist")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "no content"),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "team not found"),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @Operation(summary = "deletes team by id", description = "team must exist")
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "no content"), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "team not found"), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @DeleteMapping("/{id}")
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -184,20 +128,9 @@ public class TeamController {
 
     // Endpoint to add players to an existing team
     @Operation(summary = "add players to an existing team")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "added player(s) to team",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TeamGetDto.class))}),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "added player(s) to team", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TeamGetDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PutMapping("{teamId}/players")
-    public ResponseEntity<TeamWithPlayersGetDto> addPlayersToTeam(@PathVariable Long teamId,
-                                                                  @RequestBody @Valid List<Long> playerList) {
+    public ResponseEntity<TeamWithPlayersGetDto> addPlayersToTeam(@PathVariable Long teamId, @RequestBody @Valid List<Long> playerList) {
         // searches for team data record with the passed id and return when found
         TeamEntity teamEntity = teamService.findTeamById(teamId);
         Set<PlayerEntity> players = new HashSet<>();
@@ -222,17 +155,7 @@ public class TeamController {
 
     // Endpoint to remove a player from a team
     @Operation(summary = "remove player from an existing team")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "removed player from team",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TeamGetDto.class))}),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "removed player from team", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TeamGetDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @DeleteMapping("{teamId}/{playerId}")
     @Transactional
     public ResponseEntity<TeamWithPlayersGetDto> removePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
@@ -247,17 +170,7 @@ public class TeamController {
 
     // Endpoint to retrieve all existing teams
     @Operation(summary = "retrieve all players from one existing teams")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "teams found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PlayerGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "team not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "teams found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PlayerGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "team not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @GetMapping("/{teamId}/players")
     @RolesAllowed("user")
     public ResponseEntity<List<PlayerGetDto>> getAllPlayersFromTeam(@PathVariable Long teamId) {

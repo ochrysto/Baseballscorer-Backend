@@ -2,7 +2,6 @@ package com.example.baseballscoresheet.services;
 
 import com.example.baseballscoresheet.exceptionHandling.ResourceNotFoundException;
 import com.example.baseballscoresheet.model.entities.GameEntity;
-import com.example.baseballscoresheet.model.entities.LineupEntity;
 import com.example.baseballscoresheet.model.entities.TeamEntity;
 import com.example.baseballscoresheet.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;

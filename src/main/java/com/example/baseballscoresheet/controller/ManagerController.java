@@ -13,7 +13,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +36,7 @@ public class ManagerController {
 
     // Endpoint to retrieve all managers who are not assigned to a team
     @Operation(summary = "retrieve all managers who are not assigned to a team")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "manager found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ManagerGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "manager not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "manager found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ManagerGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "manager not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<ManagerGetDto>> findAllAvailableManagers() {
@@ -60,31 +52,4 @@ public class ManagerController {
         }
         return new ResponseEntity<>(allAvailableManagers, HttpStatus.OK);
     }
-
-    /*
-    // Endpoint to retrieve all existing managers
-    @Operation(summary = "retrieve all existing managers")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "managers found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ManagerGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "managers not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
-    @GetMapping
-    @RolesAllowed("user")
-    public ResponseEntity<List<ManagerGetDto>> findAllManagers() {
-        List<ManagerEntity> allManagerEntities = managerService.readAll();
-        List<ManagerGetDto> allManagerDos = new LinkedList<>();
-
-        for (ManagerEntity manager : allManagerEntities) {
-            allManagerDos.add(mappingService.mapManagerEntityToGetManagerDto(manager));
-        }
-        return new ResponseEntity<>(allManagerDos, HttpStatus.OK);
-    }
-    */
 }

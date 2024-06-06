@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.dtos.player.PlayerAddDto;
 import com.example.baseballscoresheet.model.dtos.player.PlayerGetDto;
 import com.example.baseballscoresheet.model.entities.PlayerEntity;
-import com.example.baseballscoresheet.model.dtos.player.PlayerAddDto;
 import com.example.baseballscoresheet.services.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,17 +33,7 @@ public class PlayerController {
 
     // Endpoint for saving a new player
     @Operation(summary = "saves a new player")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "created player",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PlayerGetDto.class))}),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created player", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PlayerGetDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @RolesAllowed("user")
     @PostMapping
     public ResponseEntity<PlayerGetDto> createPlayer(@RequestBody @Valid PlayerAddDto newPlayer) {
@@ -55,17 +45,7 @@ public class PlayerController {
 
     // Endpoint to retrieve all existing players
     @Operation(summary = "retrieve all existing players")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "players found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PlayerGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "players not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "players found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PlayerGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "players not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<PlayerGetDto>> findAllPlayers() {
@@ -79,17 +59,7 @@ public class PlayerController {
 
     // Endpoint to retrieve information about a specific player
     @Operation(summary = "retrieve all information of a specific player")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "player found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PlayerGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "player not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "player found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PlayerGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "player not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @GetMapping("/{playerId}")
     @RolesAllowed("user")
     public ResponseEntity<PlayerGetDto> findPlayerById(@PathVariable Long playerId) {
@@ -99,25 +69,11 @@ public class PlayerController {
     }
 
     // Endpoint for updating an existing player
-    @Operation(summary = "updates a existing player",
-            description = "player must exist")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "player found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PlayerGetDto.class))}),
-            @ApiResponse(responseCode = "204", description = "no content"),
-            @ApiResponse(responseCode = "400", description = "invalid JSON posted",
-                    content = @Content),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "player not found"),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @Operation(summary = "updates a existing player", description = "player must exist")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "player found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PlayerGetDto.class))}), @ApiResponse(responseCode = "204", description = "no content"), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "player not found"), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @PutMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<PlayerGetDto> updatePlayer(@PathVariable final Long id,
-                                                     @Valid @RequestBody final PlayerAddDto playerAddDto) {
+    public ResponseEntity<PlayerGetDto> updatePlayer(@PathVariable final Long id, @Valid @RequestBody final PlayerAddDto playerAddDto) {
         PlayerGetDto updatedPlayerDto;
         PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerDtoToPlayerEntity(playerAddDto);
         updatedPlayerEntity.setId(id);
@@ -127,16 +83,8 @@ public class PlayerController {
     }
 
     //Endpoint to delete an existing player
-    @Operation(summary = "deletes player by id",
-            description = "player must exist")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "no content"),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "player not found"),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content)
-    })
+    @Operation(summary = "deletes player by id", description = "player must exist")
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "no content"), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "player not found"), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @DeleteMapping("/{id}")
     @RolesAllowed("user")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)

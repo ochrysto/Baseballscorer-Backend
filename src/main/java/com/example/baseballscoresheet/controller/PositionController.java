@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.dtos.club.ClubGetDto;
 import com.example.baseballscoresheet.model.dtos.position.PositionGetDto;
 import com.example.baseballscoresheet.model.entities.PositionEntity;
-import com.example.baseballscoresheet.model.dtos.club.ClubGetDto;
 import com.example.baseballscoresheet.services.PositionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,17 +34,7 @@ public class PositionController {
 
     // Endpoint to retrieve all existing clubs
     @Operation(summary = "retrieve all available positions")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "positions found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ClubGetDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "clubs not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "positions found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ClubGetDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "clubs not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @GetMapping
     @RolesAllowed("user")
     public ResponseEntity<List<PositionGetDto>> getAllPositions() {

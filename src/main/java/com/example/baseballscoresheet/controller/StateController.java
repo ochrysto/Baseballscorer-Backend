@@ -41,17 +41,7 @@ public class StateController {
     }
 
     @GetMapping("/game/{gid}/state")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "game state found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GameStateDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "game not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "game state found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GameStateDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "game not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @RolesAllowed("user")
     public ResponseEntity<GameStateDto> getGameState(@PathVariable long gid) {
         GameEntity game = turnService.getGame(gid);
@@ -68,25 +58,10 @@ public class StateController {
         List<Integer> inningsAwayScores = inningService.getByGameAndTeam(game.getId(), InningEntity.Team.AWAY).stream().map(InningEntity::getScore).toList();
         List<Integer> inningsHomeScores = inningService.getByGameAndTeam(game.getId(), InningEntity.Team.HOME).stream().map(InningEntity::getScore).toList();
 
-        GameStateDto gameState = new GameStateDto(
-                game.getId(),
-                game.getGameState().getAwayRuns(),
-                game.getGameState().getHomeRuns(),
-                game.getGameState().getAwayErrors(),
-                game.getGameState().getHomeErrors(),
-                game.getGameState().getAwayHits(),
-                game.getGameState().getHomeHits(),
-                game.getGameState().getAwayLOB(),
-                game.getGameState().getHomeLOB(),
-                inningsAwayScores, // TODO: Implement
+        GameStateDto gameState = new GameStateDto(game.getId(), game.getGameState().getAwayRuns(), game.getGameState().getHomeRuns(), game.getGameState().getAwayErrors(), game.getGameState().getHomeErrors(), game.getGameState().getAwayHits(), game.getGameState().getHomeHits(), game.getGameState().getAwayLOB(), game.getGameState().getHomeLOB(), inningsAwayScores, // TODO: Implement
                 inningsHomeScores, // TODO: Implement
 //                null,
-                turn.getInning().getInning(),
-                turn.getInning().getBattingTeam(),
-                turn.getInning().getOuts(),
-                turn.getBalls(),
-                turn.getStrikes(),
-                null, // onDeck
+                turn.getInning().getInning(), turn.getInning().getBattingTeam(), turn.getInning().getOuts(), turn.getBalls(), turn.getStrikes(), null, // onDeck
                 batterDto, // batter
                 first_runner.map(turnEntity -> mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(turnEntity.getLineupTeamPlayer())).orElse(null), // firstBase
                 second_runner.map(entity -> mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(entity.getLineupTeamPlayer())).orElse(null), // secondBase
@@ -98,17 +73,7 @@ public class StateController {
 
 
     @GetMapping("/game/{gid}/defencive-team-state")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "game state found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GameStateDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "game not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "game state found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GameStateDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "game not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @RolesAllowed("user")
     public ResponseEntity<List<LineupPlayerGetDto>> getGameStateOfDefenciveTeam(@PathVariable long gid) {
         GameEntity game = turnService.getGame(gid);
@@ -127,17 +92,7 @@ public class StateController {
     }
 
     @GetMapping("/game/{gid}/team/{team}/diamonds")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "diamonds found",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = OffensiveActionsDto.class))}),
-            @ApiResponse(responseCode = "401", description = "not authorized",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "game not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "500", description = "server error",
-                    content = @Content),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "diamonds found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = OffensiveActionsDto.class))}), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "404", description = "game not found", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content),})
     @RolesAllowed("user")
     public ResponseEntity<List<List<OffensiveActionsDto>>> getGameDiamonds(@PathVariable long gid, @PathVariable InningEntity.Team team) {
         GameEntity game = turnService.getGame(gid);
@@ -207,31 +162,6 @@ public class StateController {
         return offensiveActionsDtos;
     }
 
-//    private LineupTeamPlayerEntity generateDiamonds(LineupTeamPlayerEntity player) {
-//        List<TurnEntity> turns = this.turnService.getTurnsByPlayerId(player.getId());
-//
-//        for (TurnEntity turn : turns) {
-//            DiamondDto diamondDto = new DiamondDto();
-//            diamondDto.setBase(turn.getBase());
-//
-//            int final_base = turn.getBase();
-//            for (ActionEntity action : turn.getActions()) {
-//                if (action.getDistance() == 0) {
-//                    continue;
-//                }
-//                String symbol = getActionSymbol(action);
-//                switch (final_base) {
-//                    case 4 -> diamondDto.setHome(symbol);
-//                    case 3 -> diamondDto.setThird(symbol);
-//                    case 2 -> diamondDto.setSecond(symbol);
-//                    case 1 -> diamondDto.setFirst(symbol);
-//                }
-//            }
-//        }
-//
-//        return null;
-//    }
-
     private String getActionSymbol(ActionEntity action) {
         return switch (action.getType()) {
             case HIT_SINGLE -> "1B";
@@ -239,7 +169,8 @@ public class StateController {
             case HIT_TRIPLE -> "3B";
             case HOME_RUN -> "HR";
             case STRIKEOUT -> "K";
-            case ASSISTED_OUT -> action.getSequence().stream().map((entity) -> String.valueOf(entity.getPosition())).reduce("", (res, next) -> res.isEmpty() ? next : res + "-" + next);
+            case ASSISTED_OUT ->
+                    action.getSequence().stream().map((entity) -> String.valueOf(entity.getPosition())).reduce("", (res, next) -> res.isEmpty() ? next : res + "-" + next);
             default -> "??";
         };
     }
