@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuthTests extends TestConfiguration {
+public class AuthTests extends AbstractLogicIntegrationTest {
     @Test
     @Transactional
     @WithMockUser(roles = "user")

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
 
-public class AssistedOutTests extends TestConfiguration {
+public class AssistedOutTests extends AbstractLogicIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 

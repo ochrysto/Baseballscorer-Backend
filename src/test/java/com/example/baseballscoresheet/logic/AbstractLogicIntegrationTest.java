@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = PostgresContextInitializer.class)
-public abstract class TestConfiguration {
+public abstract class AbstractLogicIntegrationTest {
     @Autowired
     protected MockMvc mockMvc;
 
