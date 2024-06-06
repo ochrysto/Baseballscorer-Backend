@@ -175,7 +175,8 @@ public class StateController {
                 }
                 case IS_OUT -> {
                     diamondDto.setCenter("I".repeat(out_counter));
-                    base -= 1;  // runner that is out hadn't reached destination base
+                    // FIXME: does not work properly
+//                    base -= 1;  // runner that is out hadn't reached destination base
                     out_counter++;
                 }
             }

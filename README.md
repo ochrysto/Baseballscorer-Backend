@@ -1,128 +1,128 @@
-# Baseball-Scoresheet
-Die Webanwendung Baseball-Scoresheet löst das Problem der manuellen Spielprotokol-lierung im Baseball Betrieb. 
-Aktuell ist es so, dass das Scoren nur handschriftlich passiert, was mit einem hohhen Zeitaufwand verbunden ist. Eine elektronische Verarbeitung ist bis jetzt nicht möglich. Der Zeitaufwand soll durch diese Anwendung stark reduziert werden. Mit dem Projekt sollen folgende Möglichkeiten geschaffen werden:
-Der Scorer kann sich bei der Anwendung anmelden, nur ausgewählten Personen sind dazu autorisiert. Danach können Voreinstellungen getroffen werden, z.B. Teams oder teilnehmende Spieler auswählen. Mit diesen wird anschließend das Score Sheet automatisch erstellt.
+# Baseball Scoresheet Backend
 
-Im Verlauf des Spiels kann jeder Spielzug über eine GUI vom Scorer erfasst werden. Korrekturen sind jederzeit möglich. Da die Dauer eines Spiels stark variieren kann, soll das Score Sheet in der Größe frei skalierbar sein.
+The Baseball Scoresheet web application addresses the problem of manual game logging in baseball operations. Currently, scoring is done by hand, which is time-consuming and inefficient. This application aims to significantly reduce the time required by providing electronic processing capabilities. The project offers the following features:
 
-Am Ende der Partie wird eine statistische Auswertung erstellt, z.B. Batting-Average, On-Base-Average…
+- Authorized scorers can log in and configure settings such as selecting teams and participating players.
+- An automatically generated score sheet based on the initial configuration.
+- Real-time logging of each play via a user-friendly GUI, with the ability to make corrections.
+- Game duration flexibility with scalable score sheet sizes.
+- Post-game statistical analysis, including metrics like Batting Average and On-Base Average.
+- Protest logging via a separate form.
+- Electronic signatures from coaches, umpires, and scorers before submitting the score sheet.
+- Exporting completed and signed forms as PDFs for submission to the relevant association.
 
-Es muss außerdem die Möglichkeit der Protesterfassung geben. Die Erfassung erfolgt auf einem separaten Formular.
+## Table of Contents
 
-Bevor das Sheet an den entsprechenden Verband weitergeleitet wird, müssen Trainer, Schiedsrichter und Scorer unterschreiben. Dies soll elektronisch erfolgen.
+- [Swagger](#swagger)
+- [Authentication](#authentication)
+  - [Running Keycloak Locally](#running-keycloak-locally)
+  - [Production Configuration](#production-configuration)
+- [Running the Application](#running-the-application)
+- [Known Issues](#known-issues)
 
-Nachdem alles eingetragen und unterschrieben ist, werden die Formulare als PDF exportiert und an den Verband geschickt.
+## Swagger
 
-# Swagger
+Start the app and navigate to [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) to explore the API documentation.
 
-Start the app and go at http://localhost:8080/swagger-ui/index.html.
+## Authentication
 
-# Authentifizierung
+### Running Keycloak Locally
 
-### How to start Keycloak locally?
+To run Keycloak locally, follow these steps:
 
-To run keycloak locally, open terminal and do following steps...
+#### Step 0 - Requirements
 
-#### Step 0 - requirements
+Ensure **Docker** is installed on your computer. You can download it from the [Docker download page](https://docs.docker.com/engine/install/).
 
-For running Keycloak locally you need to have **Docker** installed.
-
-Use this [**Docker download page link**](https://docs.docker.com/engine/install/) to download **Docker**.
-
-You can check that docker is installed on your computer with this command:
+Verify the installation with:
 ```bash
 docker --version
 ```
 
-#### Step 1 - change working directory
+#### Step 1 - Change Working Directory
 ```bash
-# go into `docker/local` folder
-cd .\docker\local\keycloak\dev  # Windows
+# Windows
+cd .\docker\local\keycloak\dev
+# Linux, MacOS
+cd docker/local/keycloak/dev
+```
+
+#### Step 2 - Create and Start Containers
+```bash
+docker compose up  # Run in foreground
 # or
-cd docker/local/keycloak/dev  # Linux, MacOS
-```
-#### Step 2 - create and start containers
-```bash
-docker compose up  # Windows, Linux, MacOS
+docker compose up -d  # Run in background
 ```
 
-Now you can open keycloak in your web browser:
+Open Keycloak in your web browser at [http://localhost:8070](http://localhost:8070).
 
-Go at **http://localhost:8070**
+Log in using the admin credentials from the `docker-compose.yml` file (default username and password are `admin`). **Change these credentials before going live.**
 
-Now you should see the login page. Input admin credential from `docker-compose.yml` file to log in.
+#### Step 3 - Create User
 
-**Note**: by default we have `admin` as **username** and **password**.
-You **must** change credentials before go live.
+1. Change realm to `BaseballScoresheet`.
+2. Go to the `Users` page.
+3. Add a new user, ensure `Email verified` is activated, and fill in all fields. Click `create`.
+4. In the `Credentials` tab, set the password, disable temporary setting, and save.
+5. In the `Role Mappings` tab, assign the `user` role to the new user.
 
-#### Step 3 - create user
+#### Step 4 - Generating Access Tokens
 
-Once you are in admin web panel, do following steps:
+Use the `GetBearerToken.http` file to make requests to Keycloak. Update credentials in this file accordingly.
 
-1. Change realm to `BaseballScoresheet`
-2. Go to the `Users` page
-2. Add new user. Activate `Email verified` and fill all fields. Click `create`. 
-3. Go to the `Credentials` tab
-4. Set the password, set temporary off and click `save`.
-5. Navigate to the `Role Mappings` tab
-6. Assign the `user` role to new user
+#### Step 5 - Test Endpoints with Postman
 
-#### Step 4 - Generating Access Tokens With Keycloak’s API
+1. Start `BaseballScoresheetApplication`.
+2. In Postman, create a new GET request for `http://localhost:8080/protected`.
+3. In the `Authorization` tab, select `Bearer Token` and enter your access token.
+4. Press `Send`.
 
-Use `GetBearerToken.http` file to make requests to KeyCloak.
+You should receive a **200 OK** status and JSON response `{"text": "hello from protected backend GET resource"}`.
 
-**Note**: you must change credentials in this file
+### Production Configuration
 
-#### Step 5 - Test protected and public endpoint with Postman
-
-To test protected endpoint with Postman, do following steps:
-
-1. Start `BaseballScoresheetApplication`
-2. In Postman: create new GET connection for URL http://localhost:8080/protected
-3. Go into `Authorization` tab
-4. Select type `Bearer Token`
-5. Pass your access token into the `Token` field
-6. Press `Send`
-
-You should get status **200 OK** and JSON `{"text": "hello from protected backend GET resource"}`
-
-### (Production) Manually Configure Keycloak:
-
-See this [**step-by-step guide**](https://www.baeldung.com/spring-boot-keycloak).
+For production setup, refer to this [step-by-step guide](https://www.baeldung.com/spring-boot-keycloak).
 
 #### Step 1 - Creating a Realm
 
-1. Navigate to the upper left corner to discover the `Create realm` button.
+1. Click the `Create realm` button in the upper left corner.
 2. Add a new realm called `BaseballScoresheet`.
-3. Ensure that the rearm is enabled
-4. Switch to the new realm `BaseballScoresheet`.
+3. Ensure the realm is enabled and switch to it.
 
 #### Step 2 - Creating a Client
 
-1. Navigate to the `Clients` page.
-2. Click `Create`. We’ll call the new Client `login-app`.
-3. We must change `Valid Redirect URIs` field. This field should contain the application URL(s) that will use this client for authentication:
+1. Go to the `Clients` page and click `Create`.
+2. Name the new client `login-app`.
+3. Set the `Valid Redirect URIs` to the application URLs that will use this client for authentication.
 
 #### Step 3 - Creating a Role and a User
 
-1. Navigate to the `Realm Roles` page
-2. Add the `user` role
-3. Go to the `Users` page
-4. Add new user
-5. Go to the `Credentials` tab
-6. Set the initial password
-7. Navigate to the `Role Mappings` tab
-8. Assign the `user` role to new user
-9. Navigate to the `Client Scopes` page and then set `microprofile-jwt` to “default”.
+1. Go to the `Realm Roles` page and add the `user` role.
+2. In the `Users` page, add a new user.
+3. In the `Credentials` tab, set the initial password.
+4. In the `Role Mappings` tab, assign the `user` role to the new user.
+5. In the `Client Scopes` page, set `microprofile-jwt` to “default”.
 
-#### Step 4 - Generating Access Tokens With Keycloak’s API
+#### Step 4 - Generating Access Tokens
 
-Use `GetBearerToken.http` file to make requests to KeyCloak.
+Use the `GetBearerToken.http` file to make requests to Keycloak, ensuring credentials are updated.
 
-**Note**: you must change credentials in this file
+## Running the Application
 
-## Known issues
+### Prerequisites
 
-If you cannot run tests with an error message `Could not find a valid Docker environment. Please check configuration.`
-check that you can run docker without `sudo` with the command `docker ps`.
-If you see `permission denied` you should enable to run `docker` without `sudo`
+Before starting the `BaseballScoresheetApplication`, start the PostgreSQL Docker container located at `/docker/local/postgres/dev/docker-compose.yml`.
+
+### Starting the Application
+
+1. Ensure the backend, frontend, and both Docker containers (PostgreSQL and Keycloak) are running.
+2. Execute the `create-data.sql` script located in the `sql-scripts` folder.
+3. Access the frontend at [http://localhost:4200/game/2](http://localhost:4200/game/2) to score the game.
+
+## Known Issues
+
+If you encounter an error `Could not find a valid Docker environment. Please check configuration.` when running tests, ensure you can run Docker without `sudo` using:
+```bash
+docker ps
+```
+If you see `permission denied`, enable running Docker without `sudo`.
