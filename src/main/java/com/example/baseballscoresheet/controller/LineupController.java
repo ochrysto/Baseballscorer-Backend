@@ -4,8 +4,8 @@ import com.example.baseballscoresheet.Utility;
 import com.example.baseballscoresheet.exceptionHandling.PlayerIsNotAvailableException;
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.entities.*;
-import com.example.baseballscoresheet.model.dtos.lineup.AddLineupDto;
-import com.example.baseballscoresheet.model.dtos.lineup.GetLineupDto;
+import com.example.baseballscoresheet.model.dtos.lineup.LineupAddDto;
+import com.example.baseballscoresheet.model.dtos.lineup.LineupGetDto;
 import com.example.baseballscoresheet.model.dtos.player.PlayerForLineupDto;
 import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,27 +52,27 @@ public class LineupController {
 
     // Endpoint for saving lineups
     @Operation(summary = "saves lineup(s)")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created lineup(s)", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetLineupDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "created lineup(s)", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = LineupGetDto.class))}), @ApiResponse(responseCode = "400", description = "invalid JSON posted", content = @Content), @ApiResponse(responseCode = "401", description = "not authorized", content = @Content), @ApiResponse(responseCode = "500", description = "server error", content = @Content)})
     @RolesAllowed("user")
     @PostMapping
-    public ResponseEntity<List<GetLineupDto>> createLineups(@RequestBody @Valid List<AddLineupDto> newLineups) {
-        List<GetLineupDto> addedLineup = new ArrayList<>();
+    public ResponseEntity<List<LineupGetDto>> createLineups(@RequestBody @Valid List<LineupAddDto> newLineups) {
+        List<LineupGetDto> addedLineup = new ArrayList<>();
         List<LineupTeamPlayerEntity> addedLineupTeamPlayers = new ArrayList<>();
 
         // both lineups are mapped and saved
-        for (AddLineupDto addLineupDto : newLineups) {
-            TeamEntity teamEntity = this.teamService.findTeamById(addLineupDto.getTeamId());
-            GameEntity gameEntity = this.gameService.findGameById(addLineupDto.getGameId());
+        for (LineupAddDto lineupAddDto : newLineups) {
+            TeamEntity teamEntity = this.teamService.findTeamById(lineupAddDto.getTeamId());
+            GameEntity gameEntity = this.gameService.findGameById(lineupAddDto.getGameId());
             LineupEntity lineupEntity = this.mappingService.mapTeamEntityToLineupEntity(teamEntity, gameEntity);
             this.lineupService.saveLineup(lineupEntity);
         }
 
         // a new LineupTeamPlayerEntity object is created for each player that can be found in the lineup
         // for this, we iterate over each transferred lineup once
-        for (AddLineupDto addLineupDto : newLineups) {
-            for (PlayerForLineupDto playerForLineupDto : addLineupDto.getPlayerList()) {
+        for (LineupAddDto lineupAddDto : newLineups) {
+            for (PlayerForLineupDto playerForLineupDto : lineupAddDto.getPlayerList()) {
                 if (!Utility.checkIfPlayerIsAlreadyAssignedToLineup(playerForLineupDto.getPlayerId())) {
-                    LineupEntity lineupEntity2 = lineupService.findLineupByTeamId(addLineupDto.getTeamId());
+                    LineupEntity lineupEntity2 = lineupService.findLineupByTeamId(lineupAddDto.getTeamId());
                     TeamPlayerEntity teamPlayer = this.teamPlayerService.findTeamPlayerEntityByTeamIdAndPlayerId(lineupEntity2.getTeam().getId(), playerForLineupDto.getPlayerId());
                     PositionEntity position = this.positionService.findById(playerForLineupDto.getPositionId());
                     LineupTeamPlayerEntity lineupTeamPlayerEntity = this.mappingService.mapToLineupTeamPlayerEntity(
@@ -84,21 +84,21 @@ public class LineupController {
                 }
             }
         }
-        GetLineupDto getLineupDto1 = new GetLineupDto();
-        GetLineupDto getLineupDto2 = new GetLineupDto();
-        getLineupDto1.setPlayerList(new ArrayList<>());
-        getLineupDto2.setPlayerList(new ArrayList<>());
+        LineupGetDto lineupGetDto1 = new LineupGetDto();
+        LineupGetDto lineupGetDto2 = new LineupGetDto();
+        lineupGetDto1.setPlayerList(new ArrayList<>());
+        lineupGetDto2.setPlayerList(new ArrayList<>());
         for (LineupTeamPlayerEntity lineupTeamPlayer : addedLineupTeamPlayers) {
             if (Objects.equals(lineupTeamPlayer.getTeamPlayer().getTeam().getId(), newLineups.get(0).getTeamId())) {
-                getLineupDto1.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
-                getLineupDto1.getPlayerList().add(this.mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
+                lineupGetDto1.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
+                lineupGetDto1.getPlayerList().add(this.mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
             } else {
-                getLineupDto2.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
-                getLineupDto2.getPlayerList().add(this.mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
+                lineupGetDto2.setTeamId(lineupTeamPlayer.getTeamPlayer().getTeam().getId());
+                lineupGetDto2.getPlayerList().add(this.mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(lineupTeamPlayer));
             }
         }
-        addedLineup.add(getLineupDto1);
-        addedLineup.add(getLineupDto2);
+        addedLineup.add(lineupGetDto1);
+        addedLineup.add(lineupGetDto2);
         return new ResponseEntity<>(addedLineup, HttpStatus.CREATED);
     }
 }

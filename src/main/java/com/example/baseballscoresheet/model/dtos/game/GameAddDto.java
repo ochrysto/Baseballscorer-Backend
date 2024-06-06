@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AddGameDto {
+public class GameAddDto {
 
     @NotNull(message = "Number for game name is mandatory")
     private Integer gameNr;

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetAssociationDto {
+public class AssociationGetDto {
 
     private Long id;
 

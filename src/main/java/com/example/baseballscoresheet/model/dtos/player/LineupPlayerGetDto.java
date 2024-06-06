@@ -5,13 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetPlayerDto {
-
+public class LineupPlayerGetDto {
     private Long id;
-
     private String firstName;
-
     private String lastName;
-
     private Integer passnumber;
+    private Integer jerseyNr;
+    private Integer position;
 }

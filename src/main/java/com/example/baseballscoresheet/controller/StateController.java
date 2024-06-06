@@ -5,10 +5,9 @@ import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.dtos.action.OffensiveActionsDto;
 import com.example.baseballscoresheet.model.dtos.diamond.DiamondDto;
 import com.example.baseballscoresheet.model.dtos.gamestate.GameStateDto;
-import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
+import com.example.baseballscoresheet.model.dtos.player.LineupPlayerGetDto;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.services.InningService;
-import com.example.baseballscoresheet.services.LineupService;
 import com.example.baseballscoresheet.services.LineupTeamPlayerService;
 import com.example.baseballscoresheet.services.TurnService;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -59,7 +58,7 @@ public class StateController {
         TurnEntity turn = turnService.getLastTurn(game);
 
         LineupTeamPlayerEntity batter = turnService.getBatter(turn).getLineupTeamPlayer();
-        GetPlayerFromLineupDto batterDto = mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(batter);
+        LineupPlayerGetDto batterDto = mappingService.mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(batter);
 
         List<TurnEntity> activeRunners = turnService.getActiveRunners(game);
         Optional<TurnEntity> first_runner = activeRunners.stream().filter(turnEntity -> turnEntity.getBase() == TurnEntity.Base.FIRST_BASE.getValue()).findFirst();
@@ -111,11 +110,11 @@ public class StateController {
                     content = @Content),
     })
     @RolesAllowed("user")
-    public ResponseEntity<List<GetPlayerFromLineupDto>> getGameStateOfDefenciveTeam(@PathVariable long gid) {
+    public ResponseEntity<List<LineupPlayerGetDto>> getGameStateOfDefenciveTeam(@PathVariable long gid) {
         GameEntity game = turnService.getGame(gid);
         TurnEntity turn = turnService.getLastTurn(game);
         List<LineupTeamPlayerEntity> entities;
-        List<GetPlayerFromLineupDto> dtos;
+        List<LineupPlayerGetDto> dtos;
 
         switch (turn.getInning().getBattingTeam()) {
             case AWAY -> entities = playerService.findByGameAndTeam(game.getId(), game.getHost().getId());

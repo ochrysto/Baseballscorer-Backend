@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetPositionDto {
+public class PositionGetDto {
 
     private Long id;
 

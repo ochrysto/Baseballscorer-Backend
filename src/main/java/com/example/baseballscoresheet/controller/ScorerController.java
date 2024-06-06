@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.dtos.scorer.ScorerGetDto;
 import com.example.baseballscoresheet.model.entities.ScorerEntity;
-import com.example.baseballscoresheet.model.dtos.scorer.GetScorerDto;
 import com.example.baseballscoresheet.services.ScorerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,7 +38,7 @@ public class ScorerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "scorers found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetScorerDto.class))}),
+                            schema = @Schema(implementation = ScorerGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "scorers not found",
@@ -48,9 +48,9 @@ public class ScorerController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetScorerDto>> findAllScorers() {
+    public ResponseEntity<List<ScorerGetDto>> findAllScorers() {
         List<ScorerEntity> allScorersEntities = scorerService.readAll();
-        List<GetScorerDto> allScorersDtos = new ArrayList<>();
+        List<ScorerGetDto> allScorersDtos = new ArrayList<>();
         for (ScorerEntity scorerEntity : allScorersEntities) {
             allScorersDtos.add(mappingService.mapScorerEntityToGetScorerDto(scorerEntity));
         }

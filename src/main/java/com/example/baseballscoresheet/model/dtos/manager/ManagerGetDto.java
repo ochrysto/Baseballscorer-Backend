@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetManagerDto {
+public class ManagerGetDto {
 
     private long id;
 

@@ -1,13 +1,13 @@
 package com.example.baseballscoresheet.mapping;
 
+import com.example.baseballscoresheet.model.dtos.league.LeagueGetDto;
+import com.example.baseballscoresheet.model.dtos.manager.ManagerGetDto;
+import com.example.baseballscoresheet.model.dtos.team.TeamGetDto;
 import com.example.baseballscoresheet.model.entities.ClubEntity;
 import com.example.baseballscoresheet.model.entities.LeagueEntity;
 import com.example.baseballscoresheet.model.entities.ManagerEntity;
 import com.example.baseballscoresheet.model.entities.TeamEntity;
-import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
-import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
-import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
-import com.example.baseballscoresheet.model.dtos.team.GetTeamWithoutPlayerListDto;
+import com.example.baseballscoresheet.model.dtos.club.ClubGetDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -52,7 +52,7 @@ public class MappingServiceIT {
 
     @Test
     public void whenMapClubEntityToGetClubDto_thenReturnClubDto(){
-        GetClubDto clubDto = this.mapper.map(clubEntity, GetClubDto.class);
+        ClubGetDto clubDto = this.mapper.map(clubEntity, ClubGetDto.class);
 
         assertEquals(clubEntity.getName(), clubDto.getName());
         assertEquals(clubDto.getCity(), clubEntity.getCity());
@@ -62,7 +62,7 @@ public class MappingServiceIT {
 
     @Test
     public void whenMapManagerEntityToGetManagerDto_thenReturnManagerDto(){
-        GetManagerDto managerDto = this.mapper.map(managerEntity, GetManagerDto.class);
+        ManagerGetDto managerDto = this.mapper.map(managerEntity, ManagerGetDto.class);
 
         assertEquals(managerEntity.getFirstName(), managerDto.getFirstName());
         assertEquals(managerEntity.getLastName(), managerDto.getLastName());
@@ -72,7 +72,7 @@ public class MappingServiceIT {
 
     @Test
     public void whenMapLeagueEntityToGetLeagueDto_thenReturnLeagueDto(){
-        GetLeagueDto leagueDto = this.mapper.map(leagueEntity, GetLeagueDto.class);
+        LeagueGetDto leagueDto = this.mapper.map(leagueEntity, LeagueGetDto.class);
 
         assertEquals(leagueEntity.getName(), leagueDto.getName());
 
@@ -81,7 +81,7 @@ public class MappingServiceIT {
 
     @Test
     public void whenMapTeamEntityToGetTeamInfoDto_thenReturnTeamDto(){
-        GetTeamWithoutPlayerListDto teamDto = this.mapper.map(teamEntity, GetTeamWithoutPlayerListDto.class);
+        TeamGetDto teamDto = this.mapper.map(teamEntity, TeamGetDto.class);
 
         assertEquals(teamEntity.getName(), teamDto.getName());
         assertEquals(teamEntity.getTeamLogo(), teamDto.getTeamLogo());

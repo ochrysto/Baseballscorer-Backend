@@ -1,6 +1,6 @@
 package com.example.baseballscoresheet.model.dtos.lineup;
 
-import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
+import com.example.baseballscoresheet.model.dtos.player.LineupPlayerGetDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +8,10 @@ import java.util.List;
 
 @Setter
 @Getter
-public class GetLineupDto {
+public class LineupGetDto {
 
     private Long teamId;
 
-    List<GetPlayerFromLineupDto> playerList;
+    List<LineupPlayerGetDto> playerList;
 
 }

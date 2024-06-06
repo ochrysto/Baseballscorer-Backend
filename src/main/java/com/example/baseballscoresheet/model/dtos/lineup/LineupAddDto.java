@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AddLineupDto {
+public class LineupAddDto {
 
     @NotNull (message = "Team id is mandatory")
     private Long teamId;

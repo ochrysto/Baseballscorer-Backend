@@ -1,13 +1,13 @@
 package com.example.baseballscoresheet.model.dtos.league;
 
-import com.example.baseballscoresheet.model.dtos.association.GetAssociationDto;
+import com.example.baseballscoresheet.model.dtos.association.AssociationGetDto;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class GetLeagueDto {
+public class LeagueGetDto {
     private long id;
     private String name;
-    private GetAssociationDto association;
+    private AssociationGetDto association;
 }

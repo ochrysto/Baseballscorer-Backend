@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-public class UpdateGameDto {
+public class GamePutDto {
 
     @Min(value = 2)
     @Max(value = 35)

@@ -2,7 +2,7 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.entities.ClubEntity;
-import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
+import com.example.baseballscoresheet.model.dtos.club.ClubGetDto;
 import com.example.baseballscoresheet.services.ClubService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,7 +34,7 @@ public class ClubController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "clubs found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetClubDto.class))}),
+                            schema = @Schema(implementation = ClubGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "clubs not found",
@@ -44,9 +44,9 @@ public class ClubController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetClubDto>> findAllClubs() {
+    public ResponseEntity<List<ClubGetDto>> findAllClubs() {
         List<ClubEntity> allClubEntities = clubService.readAll();
-        List<GetClubDto> allClubDtos = new LinkedList<>();
+        List<ClubGetDto> allClubDtos = new LinkedList<>();
         for (ClubEntity clubEntity : allClubEntities) {
             allClubDtos.add(mappingService.mapClubEntityToGetClubDto(clubEntity));
         }

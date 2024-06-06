@@ -3,10 +3,10 @@ package com.example.baseballscoresheet.controller;
 import com.example.baseballscoresheet.exceptionHandling.BadRequestError;
 import com.example.baseballscoresheet.exceptionHandling.DoubleInputException;
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
-import com.example.baseballscoresheet.model.dtos.game.GetFinishedGameDto;
-import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
-import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
+import com.example.baseballscoresheet.model.dtos.game.GameAddDto;
+import com.example.baseballscoresheet.model.dtos.game.GameFinishedGetDto;
+import com.example.baseballscoresheet.model.dtos.game.GameGetDto;
+import com.example.baseballscoresheet.model.dtos.game.GamePutDto;
 import com.example.baseballscoresheet.model.entities.*;
 import com.example.baseballscoresheet.services.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,7 +54,7 @@ public class GameController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created game",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetGameDto.class))}),
+                            schema = @Schema(implementation = GameGetDto.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "not authorized",
@@ -63,17 +63,17 @@ public class GameController {
                     content = @Content)})
     @PostMapping
     @RolesAllowed("user")
-    public ResponseEntity<GetGameDto> createGame(@RequestBody @Valid AddGameDto addGameDto) {
-        AssociationEntity associationEntity = this.associationService.findById(addGameDto.getAssociationId());
-        LeagueEntity leagueEntity = this.leagueService.getLeagueById(addGameDto.getLeagueId());
-        ScorerEntity scorerEntity = this.scorerService.findById(addGameDto.getScorerId());
-        TeamEntity hostTeam = this.teamService.findTeamById(addGameDto.getHostTeamId());
-        TeamEntity guestTeam = this.teamService.findTeamById(addGameDto.getGuestTeamId());
+    public ResponseEntity<GameGetDto> createGame(@RequestBody @Valid GameAddDto gameAddDto) {
+        AssociationEntity associationEntity = this.associationService.findById(gameAddDto.getAssociationId());
+        LeagueEntity leagueEntity = this.leagueService.getLeagueById(gameAddDto.getLeagueId());
+        ScorerEntity scorerEntity = this.scorerService.findById(gameAddDto.getScorerId());
+        TeamEntity hostTeam = this.teamService.findTeamById(gameAddDto.getHostTeamId());
+        TeamEntity guestTeam = this.teamService.findTeamById(gameAddDto.getGuestTeamId());
         GameEntity gameEntity;
 
         // maps transferred umpires to UmpireEntities and adds them to a list
         List<UmpireEntity> umpires = new ArrayList<>();
-        for (Long umpireId : addGameDto.getUmpireIdsList()) {
+        for (Long umpireId : gameAddDto.getUmpireIdsList()) {
             umpires.add(this.umpireService.findById(umpireId));
         }
 
@@ -86,7 +86,7 @@ public class GameController {
             } else {
                 // saving game
                 if (!hostTeam.equals(guestTeam)) {
-                    gameEntity = this.mappingService.mapToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
+                    gameEntity = this.mappingService.mapToGameEntity(gameAddDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
                     gameEntity = this.gameService.createGame(gameEntity);
                 } else {
                     throw new DoubleInputException("Host team and guest team must not be the same");
@@ -100,7 +100,7 @@ public class GameController {
         } else if (umpires.size() == 1) {
             // saving game
             if (!hostTeam.equals(guestTeam)) {
-                gameEntity = this.mappingService.mapToGameEntity(addGameDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
+                gameEntity = this.mappingService.mapToGameEntity(gameAddDto, associationEntity, leagueEntity, hostTeam, guestTeam, scorerEntity);
                 gameEntity = this.gameService.createGame(gameEntity);
             } else {
                 throw new DoubleInputException("Host team and guest team must not be the same");
@@ -119,7 +119,7 @@ public class GameController {
         gameState.setGame(gameEntity);
         gameStateService.create(gameState);
 
-        GetGameDto addedGame = this.mappingService.mapToGetGameDto(gameEntity, gameUmpireEntities);
+        GameGetDto addedGame = this.mappingService.mapToGetGameDto(gameEntity, gameUmpireEntities);
         return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
     }
 
@@ -129,7 +129,7 @@ public class GameController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "game found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetFinishedGameDto.class))}),
+                            schema = @Schema(implementation = GameFinishedGetDto.class))}),
             @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
@@ -141,10 +141,10 @@ public class GameController {
     })
     @PutMapping("/{gameNr}")
     @RolesAllowed("user")
-    public ResponseEntity<GetFinishedGameDto> finishGame(@PathVariable final Integer gameNr,
-                                                     @Valid @RequestBody final UpdateGameDto updateGameDto) {
+    public ResponseEntity<GameFinishedGetDto> finishGame(@PathVariable final Integer gameNr,
+                                                         @Valid @RequestBody final GamePutDto gamePutDto) {
 
-        GameEntity updatedGameEntity = this.mappingService.mapUpdateGameDtoToGameEntity(updateGameDto);
+        GameEntity updatedGameEntity = this.mappingService.mapUpdateGameDtoToGameEntity(gamePutDto);
         GameEntity foundGameEntity = this.gameService.findGameByGameNr(gameNr);
         updatedGameEntity.setId(foundGameEntity.getId());
         updatedGameEntity = this.gameService.finish(updatedGameEntity);
@@ -152,7 +152,7 @@ public class GameController {
         List<GameUmpireEntity> gameUmpireEntities = gameUmpireService.findAllByGameId(foundGameEntity.getId());
 
 
-        GetFinishedGameDto finishedGameDto = this.mappingService.mapToGetFinishedGameDto(updatedGameEntity, gameUmpireEntities);
+        GameFinishedGetDto finishedGameDto = this.mappingService.mapToGetFinishedGameDto(updatedGameEntity, gameUmpireEntities);
         return new ResponseEntity<>(finishedGameDto, HttpStatus.CREATED);
     }
 
@@ -160,7 +160,7 @@ public class GameController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "game found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetFinishedGameDto.class))}),
+                            schema = @Schema(implementation = GameFinishedGetDto.class))}),
             @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
@@ -172,10 +172,10 @@ public class GameController {
     })
     @GetMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetGameDto> getGameById(@PathVariable final Long id) {
+    public ResponseEntity<GameGetDto> getGameById(@PathVariable final Long id) {
         GameEntity foundGameEntity = this.gameService.findGameById(id);
         List<GameUmpireEntity> gameUmpireEntities = gameUmpireService.findAllByGameId(foundGameEntity.getId());
-        GetGameDto gameDto = this.mappingService.mapToGetGameDto(foundGameEntity, gameUmpireEntities);
+        GameGetDto gameDto = this.mappingService.mapToGetGameDto(foundGameEntity, gameUmpireEntities);
         return new ResponseEntity<>(gameDto, HttpStatus.OK);
     }
 }

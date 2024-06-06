@@ -1,12 +1,12 @@
 package com.example.baseballscoresheet.model.dtos.club;
 
-import com.example.baseballscoresheet.model.dtos.association.GetAssociationDto;
+import com.example.baseballscoresheet.model.dtos.association.AssociationGetDto;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class GetClubDto {
+public class ClubGetDto {
     private Long id;
 
     private String name;
@@ -17,5 +17,5 @@ public class GetClubDto {
 
     private String email;
 
-    private GetAssociationDto association;
+    private AssociationGetDto association;
 }

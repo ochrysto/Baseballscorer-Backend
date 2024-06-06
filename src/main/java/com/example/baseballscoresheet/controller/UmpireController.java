@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.dtos.umpire.UmpireGetDto;
 import com.example.baseballscoresheet.model.entities.UmpireEntity;
-import com.example.baseballscoresheet.model.dtos.umpire.GetUmpireDto;
 import com.example.baseballscoresheet.services.UmpireService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,7 +36,7 @@ public class UmpireController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "umpires found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetUmpireDto.class))}),
+                            schema = @Schema(implementation = UmpireGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "umpires not found",
@@ -46,9 +46,9 @@ public class UmpireController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetUmpireDto>> findAllUmpires() {
+    public ResponseEntity<List<UmpireGetDto>> findAllUmpires() {
         List<UmpireEntity> allUmpireEntities = umpireService.readAll();
-        List<GetUmpireDto> allUmpireDtos = new ArrayList<>();
+        List<UmpireGetDto> allUmpireDtos = new ArrayList<>();
         for (UmpireEntity umpireEntity : allUmpireEntities) {
             allUmpireDtos.add(mappingService.mapUmpireEntityToGetUmpireDto(umpireEntity));
         }

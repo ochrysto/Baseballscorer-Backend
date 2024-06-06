@@ -2,7 +2,7 @@ package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
 import com.example.baseballscoresheet.model.entities.LeagueEntity;
-import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
+import com.example.baseballscoresheet.model.dtos.league.LeagueGetDto;
 import com.example.baseballscoresheet.services.LeagueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +35,7 @@ public class LeagueController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "leagues found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetLeagueDto.class))}),
+                            schema = @Schema(implementation = LeagueGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "leagues not found",
@@ -45,9 +45,9 @@ public class LeagueController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetLeagueDto>> findAllLeagues() {
+    public ResponseEntity<List<LeagueGetDto>> findAllLeagues() {
         List<LeagueEntity> allLeagueEntities = leagueService.readAll();
-        List<GetLeagueDto> allLeagueDtos = new ArrayList<>();
+        List<LeagueGetDto> allLeagueDtos = new ArrayList<>();
         for (LeagueEntity leagueEntity : allLeagueEntities) {
             allLeagueDtos.add(mappingService.mapLeagueEntityToGetLeagueDto(leagueEntity));
         }

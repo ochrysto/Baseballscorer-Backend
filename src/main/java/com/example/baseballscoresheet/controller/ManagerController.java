@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.dtos.manager.ManagerGetDto;
 import com.example.baseballscoresheet.model.entities.ManagerEntity;
-import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
 import com.example.baseballscoresheet.services.ManagerService;
 import com.example.baseballscoresheet.services.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class ManagerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "manager found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetManagerDto.class))}),
+                            schema = @Schema(implementation = ManagerGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "manager not found",
@@ -47,8 +47,8 @@ public class ManagerController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetManagerDto>> findAllAvailableManagers() {
-        List<GetManagerDto> allAvailableManagers = new ArrayList<>();
+    public ResponseEntity<List<ManagerGetDto>> findAllAvailableManagers() {
+        List<ManagerGetDto> allAvailableManagers = new ArrayList<>();
         List<ManagerEntity> allManagers = managerService.readAll();
         List<ManagerEntity> listOfAllManagersInTeams = teamService.findAllManagersInTeams();
 
@@ -67,7 +67,7 @@ public class ManagerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "managers found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetManagerDto.class))}),
+                            schema = @Schema(implementation = ManagerGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "managers not found",
@@ -77,9 +77,9 @@ public class ManagerController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetManagerDto>> findAllManagers() {
+    public ResponseEntity<List<ManagerGetDto>> findAllManagers() {
         List<ManagerEntity> allManagerEntities = managerService.readAll();
-        List<GetManagerDto> allManagerDos = new LinkedList<>();
+        List<ManagerGetDto> allManagerDos = new LinkedList<>();
 
         for (ManagerEntity manager : allManagerEntities) {
             allManagerDos.add(mappingService.mapManagerEntityToGetManagerDto(manager));

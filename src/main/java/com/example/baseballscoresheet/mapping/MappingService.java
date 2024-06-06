@@ -1,23 +1,23 @@
 package com.example.baseballscoresheet.mapping;
 
-import com.example.baseballscoresheet.model.dtos.association.GetAssociationDto;
-import com.example.baseballscoresheet.model.dtos.club.GetClubDto;
-import com.example.baseballscoresheet.model.dtos.game.AddGameDto;
-import com.example.baseballscoresheet.model.dtos.game.GetFinishedGameDto;
-import com.example.baseballscoresheet.model.dtos.game.GetGameDto;
-import com.example.baseballscoresheet.model.dtos.game.UpdateGameDto;
-import com.example.baseballscoresheet.model.dtos.league.GetLeagueDto;
+import com.example.baseballscoresheet.model.dtos.association.AssociationGetDto;
+import com.example.baseballscoresheet.model.dtos.club.ClubGetDto;
+import com.example.baseballscoresheet.model.dtos.game.GameAddDto;
+import com.example.baseballscoresheet.model.dtos.game.GameFinishedGetDto;
+import com.example.baseballscoresheet.model.dtos.game.GameGetDto;
+import com.example.baseballscoresheet.model.dtos.game.GamePutDto;
+import com.example.baseballscoresheet.model.dtos.league.LeagueGetDto;
+import com.example.baseballscoresheet.model.dtos.player.LineupPlayerGetDto;
+import com.example.baseballscoresheet.model.dtos.player.PlayerAddDto;
 import com.example.baseballscoresheet.model.dtos.player.PlayerForLineupDto;
-import com.example.baseballscoresheet.model.dtos.player.GetPlayerFromLineupDto;
-import com.example.baseballscoresheet.model.dtos.manager.GetManagerDto;
-import com.example.baseballscoresheet.model.dtos.player.AddPlayerDto;
-import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
-import com.example.baseballscoresheet.model.dtos.position.GetPositionDto;
-import com.example.baseballscoresheet.model.dtos.scorer.GetScorerDto;
-import com.example.baseballscoresheet.model.dtos.team.GetTeamWithPlayerListDto;
-import com.example.baseballscoresheet.model.dtos.team.GetTeamWithoutPlayerListDto;
-import com.example.baseballscoresheet.model.dtos.team.AddTeamWithoutPlayerListDto;
-import com.example.baseballscoresheet.model.dtos.umpire.GetUmpireDto;
+import com.example.baseballscoresheet.model.dtos.manager.ManagerGetDto;
+import com.example.baseballscoresheet.model.dtos.player.PlayerGetDto;
+import com.example.baseballscoresheet.model.dtos.position.PositionGetDto;
+import com.example.baseballscoresheet.model.dtos.scorer.ScorerGetDto;
+import com.example.baseballscoresheet.model.dtos.team.TeamGetDto;
+import com.example.baseballscoresheet.model.dtos.team.TeamWithPlayersGetDto;
+import com.example.baseballscoresheet.model.dtos.team.TeamAddDto;
+import com.example.baseballscoresheet.model.dtos.umpire.UmpireGetDto;
 import com.example.baseballscoresheet.model.entities.*;
 import org.springframework.stereotype.Service;
 
@@ -30,21 +30,21 @@ import java.util.List;
 public class MappingService {
 
     // AddTeamInfoDto + ManagerEntity + ClubEntity + LeagueEntity -> TeamEntity
-    public TeamEntity mapToTeamEntity(AddTeamWithoutPlayerListDto addTeamWithoutPlayerListDto,
+    public TeamEntity mapToTeamEntity(TeamAddDto teamAddDto,
                                       ManagerEntity managerEntity, ClubEntity clubEntity,
                                       LeagueEntity leagueEntity) {
         var teamEntity = new TeamEntity();
-        teamEntity.setName(addTeamWithoutPlayerListDto.getName());
-        teamEntity.setTeamLogo(addTeamWithoutPlayerListDto.getTeamLogo());
+        teamEntity.setName(teamAddDto.getName());
+        teamEntity.setTeamLogo(teamAddDto.getTeamLogo());
         teamEntity.setClub(clubEntity);
         teamEntity.setLeague(leagueEntity);
         teamEntity.setManager(managerEntity);
         return teamEntity;
     }
 
-    // TeamEntity -> GetTeamWithoutPlayerListDto
-    public GetTeamWithoutPlayerListDto mapTeamToGetTeamWithoutPlayerListDto(TeamEntity teamEntity) {
-        GetTeamWithoutPlayerListDto teamInfoDto = new GetTeamWithoutPlayerListDto();
+    // TeamEntity -> TeamGetDto
+    public TeamGetDto mapTeamToGetTeamWithoutPlayerListDto(TeamEntity teamEntity) {
+        TeamGetDto teamInfoDto = new TeamGetDto();
         teamInfoDto.setTeamId(teamEntity.getId());
         teamInfoDto.setName(teamEntity.getName());
         teamInfoDto.setTeamLogo(teamEntity.getTeamLogo());
@@ -55,20 +55,20 @@ public class MappingService {
     }
 
     // ClubEntity -> GetClubDto
-    public GetClubDto mapClubEntityToGetClubDto(ClubEntity clubEntity) {
-        GetClubDto getClubDto = new GetClubDto();
-        getClubDto.setId(clubEntity.getId());
-        getClubDto.setName(clubEntity.getName());
-        getClubDto.setCity(clubEntity.getCity());
-        getClubDto.setLogo(clubEntity.getClubLogo());
-        getClubDto.setEmail(clubEntity.getEmail());
-        getClubDto.setAssociation(mapAssociationEntityToGetAssociationDto(clubEntity.getAssociation()));
-        return getClubDto;
+    public ClubGetDto mapClubEntityToGetClubDto(ClubEntity clubEntity) {
+        ClubGetDto clubGetDto = new ClubGetDto();
+        clubGetDto.setId(clubEntity.getId());
+        clubGetDto.setName(clubEntity.getName());
+        clubGetDto.setCity(clubEntity.getCity());
+        clubGetDto.setLogo(clubEntity.getClubLogo());
+        clubGetDto.setEmail(clubEntity.getEmail());
+        clubGetDto.setAssociation(mapAssociationEntityToGetAssociationDto(clubEntity.getAssociation()));
+        return clubGetDto;
     }
 
-    // ManagerEntity -> GetManagerDto
-    public GetManagerDto mapManagerEntityToGetManagerDto(ManagerEntity managerEntity) {
-        GetManagerDto managerDto = new GetManagerDto();
+    // ManagerEntity -> ManagerGetDto
+    public ManagerGetDto mapManagerEntityToGetManagerDto(ManagerEntity managerEntity) {
+        ManagerGetDto managerDto = new ManagerGetDto();
         managerDto.setId(managerEntity.getId());
         managerDto.setFirstName(managerEntity.getFirstName());
         managerDto.setLastName(managerEntity.getLastName());
@@ -76,25 +76,25 @@ public class MappingService {
         return managerDto;
     }
 
-    // LeagueEntity -> GetLeagueDto
-    public GetLeagueDto mapLeagueEntityToGetLeagueDto(LeagueEntity leagueEntity) {
-        GetLeagueDto getLeagueDto = new GetLeagueDto();
-        getLeagueDto.setId(leagueEntity.getId());
-        getLeagueDto.setName(leagueEntity.getName());
-        getLeagueDto.setAssociation(mapAssociationEntityToGetAssociationDto(leagueEntity.getAssociation()));
-        return getLeagueDto;
+    // LeagueEntity -> LeagueGetDto
+    public LeagueGetDto mapLeagueEntityToGetLeagueDto(LeagueEntity leagueEntity) {
+        LeagueGetDto leagueGetDto = new LeagueGetDto();
+        leagueGetDto.setId(leagueEntity.getId());
+        leagueGetDto.setName(leagueEntity.getName());
+        leagueGetDto.setAssociation(mapAssociationEntityToGetAssociationDto(leagueEntity.getAssociation()));
+        return leagueGetDto;
     }
 
-    // AssociationEntity -> GetAssociationDto
-    public GetAssociationDto mapAssociationEntityToGetAssociationDto(AssociationEntity associationEntity) {
-        GetAssociationDto getAssociationDto = new GetAssociationDto();
-        getAssociationDto.setId(associationEntity.getId());
-        getAssociationDto.setName(associationEntity.getName());
-        return getAssociationDto;
+    // AssociationEntity -> AssociationGetDto
+    public AssociationGetDto mapAssociationEntityToGetAssociationDto(AssociationEntity associationEntity) {
+        AssociationGetDto associationGetDto = new AssociationGetDto();
+        associationGetDto.setId(associationEntity.getId());
+        associationGetDto.setName(associationEntity.getName());
+        return associationGetDto;
     }
 
-    // AddPlayerDto -> PlayerEntity
-    public PlayerEntity mapAddPlayerDtoToPlayerEntity(AddPlayerDto newPlayer) {
+    // PlayerAddDto -> PlayerEntity
+    public PlayerEntity mapAddPlayerDtoToPlayerEntity(PlayerAddDto newPlayer) {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setFirstName(newPlayer.getFirstName());
         playerEntity.setLastName(newPlayer.getLastName());
@@ -103,18 +103,18 @@ public class MappingService {
     }
 
     // PlayerEntity -> GetPlayerInfoDto
-    public GetPlayerDto mapPlayerEntityToGetPlayerDto(PlayerEntity playerEntity) {
-        GetPlayerDto getPlayerDto = new GetPlayerDto();
-        getPlayerDto.setId(playerEntity.getId());
-        getPlayerDto.setFirstName(playerEntity.getFirstName());
-        getPlayerDto.setLastName(playerEntity.getLastName());
-        getPlayerDto.setPassnumber(playerEntity.getPassnumber());
-        return getPlayerDto;
+    public PlayerGetDto mapPlayerEntityToGetPlayerDto(PlayerEntity playerEntity) {
+        PlayerGetDto playerGetDto = new PlayerGetDto();
+        playerGetDto.setId(playerEntity.getId());
+        playerGetDto.setFirstName(playerEntity.getFirstName());
+        playerGetDto.setLastName(playerEntity.getLastName());
+        playerGetDto.setPassnumber(playerEntity.getPassnumber());
+        return playerGetDto;
     }
 
-    // TeamPlayerEntity -> GetPlayerDto
-    public GetPlayerDto mapTeamPlayerEntityToGetPlayerDto(TeamPlayerEntity teamPlayerEntity) {
-        GetPlayerDto playerInfoDto = new GetPlayerDto();
+    // TeamPlayerEntity -> PlayerGetDto
+    public PlayerGetDto mapTeamPlayerEntityToGetPlayerDto(TeamPlayerEntity teamPlayerEntity) {
+        PlayerGetDto playerInfoDto = new PlayerGetDto();
         playerInfoDto.setId(teamPlayerEntity.getPlayer().getId());
         playerInfoDto.setFirstName(teamPlayerEntity.getPlayer().getFirstName());
         playerInfoDto.setLastName(teamPlayerEntity.getPlayer().getLastName());
@@ -122,13 +122,13 @@ public class MappingService {
         return playerInfoDto;
     }
 
-    // PositionEntity -> GetPositionDto
-    public GetPositionDto mapPositionEntityToGetPositionDto(PositionEntity positionEntity) {
-        GetPositionDto getPositionDto = new GetPositionDto();
-        getPositionDto.setId(positionEntity.getId());
-        getPositionDto.setPosition(positionEntity.getPosition());
-        getPositionDto.setDescription(positionEntity.getDescription());
-        return getPositionDto;
+    // PositionEntity -> PositionGetDto
+    public PositionGetDto mapPositionEntityToGetPositionDto(PositionEntity positionEntity) {
+        PositionGetDto positionGetDto = new PositionGetDto();
+        positionGetDto.setId(positionEntity.getId());
+        positionGetDto.setPosition(positionEntity.getPosition());
+        positionGetDto.setDescription(positionEntity.getDescription());
+        return positionGetDto;
     }
 
 
@@ -152,46 +152,46 @@ public class MappingService {
         return lineupTeamPlayerEntity;
     }
 
-    // LineupTeamPlayerEntity -> GetPlayerFromLineupDto
-    public GetPlayerFromLineupDto mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(LineupTeamPlayerEntity lineupTeamPlayer) {
-        GetPlayerFromLineupDto getPlayerFromLineupDto = new GetPlayerFromLineupDto();
-        getPlayerFromLineupDto.setId(lineupTeamPlayer.getId());
-        getPlayerFromLineupDto.setFirstName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName());
-        getPlayerFromLineupDto.setLastName(lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
-        getPlayerFromLineupDto.setPassnumber(lineupTeamPlayer.getTeamPlayer().getPlayer().getPassnumber());
-        getPlayerFromLineupDto.setJerseyNr(lineupTeamPlayer.getJerseyNr());
-        getPlayerFromLineupDto.setPosition(lineupTeamPlayer.getPosition().getPosition());
-        return getPlayerFromLineupDto;
+    // LineupTeamPlayerEntity -> LineupPlayerGetDto
+    public LineupPlayerGetDto mapLineupTeamPlayerEntityToGetPlayerFromLineUpDto(LineupTeamPlayerEntity lineupTeamPlayer) {
+        LineupPlayerGetDto lineupPlayerGetDto = new LineupPlayerGetDto();
+        lineupPlayerGetDto.setId(lineupTeamPlayer.getId());
+        lineupPlayerGetDto.setFirstName(lineupTeamPlayer.getTeamPlayer().getPlayer().getFirstName());
+        lineupPlayerGetDto.setLastName(lineupTeamPlayer.getTeamPlayer().getPlayer().getLastName());
+        lineupPlayerGetDto.setPassnumber(lineupTeamPlayer.getTeamPlayer().getPlayer().getPassnumber());
+        lineupPlayerGetDto.setJerseyNr(lineupTeamPlayer.getJerseyNr());
+        lineupPlayerGetDto.setPosition(lineupTeamPlayer.getPosition().getPosition());
+        return lineupPlayerGetDto;
     }
 
-    // UmpireEntity -> GetUmpireDto
-    public GetUmpireDto mapUmpireEntityToGetUmpireDto(UmpireEntity umpireEntity) {
-        GetUmpireDto getUmpireDto = new GetUmpireDto();
-        getUmpireDto.setUmpireId(umpireEntity.getId());
-        getUmpireDto.setPassnumber(umpireEntity.getPassnumber());
-        getUmpireDto.setName(umpireEntity.getFirstName(), umpireEntity.getLastName());
-        return getUmpireDto;
+    // UmpireEntity -> UmpireGetDto
+    public UmpireGetDto mapUmpireEntityToGetUmpireDto(UmpireEntity umpireEntity) {
+        UmpireGetDto umpireGetDto = new UmpireGetDto();
+        umpireGetDto.setUmpireId(umpireEntity.getId());
+        umpireGetDto.setPassnumber(umpireEntity.getPassnumber());
+        umpireGetDto.setName(umpireEntity.getFirstName(), umpireEntity.getLastName());
+        return umpireGetDto;
     }
 
-    // ScorerEntity -> GetScorerDto
-    public GetScorerDto mapScorerEntityToGetScorerDto(ScorerEntity scorerEntity) {
-        GetScorerDto getScorerDto = new GetScorerDto();
-        getScorerDto.setScorerId(scorerEntity.getId());
-        getScorerDto.setPassnumber(scorerEntity.getPassnumber());
-        getScorerDto.setName(scorerEntity.getFirstName(), scorerEntity.getLastName());
-        return getScorerDto;
+    // ScorerEntity -> ScorerGetDto
+    public ScorerGetDto mapScorerEntityToGetScorerDto(ScorerEntity scorerEntity) {
+        ScorerGetDto scorerGetDto = new ScorerGetDto();
+        scorerGetDto.setScorerId(scorerEntity.getId());
+        scorerGetDto.setPassnumber(scorerEntity.getPassnumber());
+        scorerGetDto.setName(scorerEntity.getFirstName(), scorerEntity.getLastName());
+        return scorerGetDto;
     }
 
-    // AddGameDto + AssociationEntity + LeagueEntity + TeamEntity + TeamEntity + ScorerEntity-> GameEntity
-    public GameEntity mapToGameEntity(AddGameDto addGameDto, AssociationEntity associationEntity,
+    // GameAddDto + AssociationEntity + LeagueEntity + TeamEntity + TeamEntity + ScorerEntity-> GameEntity
+    public GameEntity mapToGameEntity(GameAddDto gameAddDto, AssociationEntity associationEntity,
                                       LeagueEntity leagueEntity, TeamEntity hostTeam, TeamEntity guestTeam,
                                       ScorerEntity scorerEntity) {
         GameEntity gameEntity = new GameEntity();
         gameEntity.setGameUmpire(new HashSet<>());
-        gameEntity.setGameNr(addGameDto.getGameNr());
-        gameEntity.setDate(addGameDto.getDate());
-        gameEntity.setLocation(addGameDto.getLocation());
-        gameEntity.setInnings(addGameDto.getInnings());
+        gameEntity.setGameNr(gameAddDto.getGameNr());
+        gameEntity.setDate(gameAddDto.getDate());
+        gameEntity.setLocation(gameAddDto.getLocation());
+        gameEntity.setInnings(gameAddDto.getInnings());
         gameEntity.setAssociation(associationEntity);
         gameEntity.setHost(hostTeam);
         gameEntity.setGuest(guestTeam);
@@ -201,33 +201,33 @@ public class MappingService {
     }
 
     // GameEntity + List<GameUmpireEntity> -> GetGameDto
-    public GetGameDto mapToGetGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntityList) {
-        GetGameDto getGameDto = new GetGameDto();
-        getGameDto.setId(gameEntity.getId());
-        getGameDto.setGameNr(gameEntity.getGameNr());
-        getGameDto.setDate(gameEntity.getDate());
-        getGameDto.setLocation(gameEntity.getLocation());
-        getGameDto.setInnings(gameEntity.getInnings());
+    public GameGetDto mapToGetGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntityList) {
+        GameGetDto gameGetDto = new GameGetDto();
+        gameGetDto.setId(gameEntity.getId());
+        gameGetDto.setGameNr(gameEntity.getGameNr());
+        gameGetDto.setDate(gameEntity.getDate());
+        gameGetDto.setLocation(gameEntity.getLocation());
+        gameGetDto.setInnings(gameEntity.getInnings());
         if (gameEntity.getAssociation() != null)
-            getGameDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
+            gameGetDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
         if (gameEntity.getLeague() != null)
-            getGameDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
+            gameGetDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
         if (gameEntity.getHost() != null)
-            getGameDto.setHostTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getHost()));
+            gameGetDto.setHostTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getHost()));
         if (gameEntity.getGuest() != null)
-            getGameDto.setGuestTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getGuest()));
+            gameGetDto.setGuestTeam(mapTeamEntityToGetTeamWithPlayerListDto(gameEntity.getGuest()));
         if (gameEntity.getScorer() != null)
-            getGameDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
-        getGameDto.setUmpireList(new ArrayList<>());
+            gameGetDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
+        gameGetDto.setUmpireList(new ArrayList<>());
 
         for (GameUmpireEntity gameUmpire : gameUmpireEntityList) {
-            GetUmpireDto getUmpireDto = new GetUmpireDto();
-            getUmpireDto.setUmpireId(gameUmpire.getUmpire().getId());
-            getUmpireDto.setPassnumber(gameUmpire.getUmpire().getPassnumber());
-            getUmpireDto.setName(gameUmpire.getUmpire().getFirstName(), gameUmpire.getUmpire().getLastName());
-            getGameDto.getUmpireList().add(getUmpireDto);
+            UmpireGetDto umpireGetDto = new UmpireGetDto();
+            umpireGetDto.setUmpireId(gameUmpire.getUmpire().getId());
+            umpireGetDto.setPassnumber(gameUmpire.getUmpire().getPassnumber());
+            umpireGetDto.setName(gameUmpire.getUmpire().getFirstName(), gameUmpire.getUmpire().getLastName());
+            gameGetDto.getUmpireList().add(umpireGetDto);
         }
-        return getGameDto;
+        return gameGetDto;
     }
 
     // GameEntity + UmpireEntity -> GameUmpireEntity
@@ -238,71 +238,71 @@ public class MappingService {
         return gameUmpireEntity;
     }
 
-    // UpdateGameDto -> GameEntity
-    public GameEntity mapUpdateGameDtoToGameEntity(UpdateGameDto updateGameDto) {
+    // GamePutDto -> GameEntity
+    public GameEntity mapUpdateGameDtoToGameEntity(GamePutDto gamePutDto) {
         GameEntity gameEntity = new GameEntity();
-        gameEntity.setInnings(updateGameDto.getInnings());
-        gameEntity.setAttendance(updateGameDto.getAttendance());
-        gameEntity.setStartTime(updateGameDto.getStartTime());
-        gameEntity.setEndTime(updateGameDto.getEndTime());
-        gameEntity.setDurationInMinutes(updateGameDto.getDurationInMinutes());
+        gameEntity.setInnings(gamePutDto.getInnings());
+        gameEntity.setAttendance(gamePutDto.getAttendance());
+        gameEntity.setStartTime(gamePutDto.getStartTime());
+        gameEntity.setEndTime(gamePutDto.getEndTime());
+        gameEntity.setDurationInMinutes(gamePutDto.getDurationInMinutes());
         return gameEntity;
     }
 
-    public GetTeamWithoutPlayerListDto mapTeamEntityToGetTeamWithoutPlayerListDto(TeamEntity teamEntity) {
-        GetTeamWithoutPlayerListDto getTeamWithoutPlayerListDto = new GetTeamWithoutPlayerListDto();
-        getTeamWithoutPlayerListDto.setTeamId(teamEntity.getId());
-        getTeamWithoutPlayerListDto.setName(teamEntity.getName());
-        getTeamWithoutPlayerListDto.setClub(mapClubEntityToGetClubDto(teamEntity.getClub()));
-        getTeamWithoutPlayerListDto.setManager(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
-        getTeamWithoutPlayerListDto.setLeague(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
-        getTeamWithoutPlayerListDto.setTeamLogo(teamEntity.getTeamLogo());
-        return getTeamWithoutPlayerListDto;
+    public TeamGetDto mapTeamEntityToGetTeamWithoutPlayerListDto(TeamEntity teamEntity) {
+        TeamGetDto teamGetDto = new TeamGetDto();
+        teamGetDto.setTeamId(teamEntity.getId());
+        teamGetDto.setName(teamEntity.getName());
+        teamGetDto.setClub(mapClubEntityToGetClubDto(teamEntity.getClub()));
+        teamGetDto.setManager(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
+        teamGetDto.setLeague(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
+        teamGetDto.setTeamLogo(teamEntity.getTeamLogo());
+        return teamGetDto;
     }
 
-    // TeamEntity -> GetTeamWithPlayerListDto
-    public GetTeamWithPlayerListDto mapTeamEntityToGetTeamWithPlayerListDto(TeamEntity teamEntity) {
-        List<GetPlayerDto> players = new ArrayList<>();
-        GetTeamWithPlayerListDto getTeamWithPlayerListDto = new GetTeamWithPlayerListDto();
-        getTeamWithPlayerListDto.setTeamId(teamEntity.getId());
-        getTeamWithPlayerListDto.setName(teamEntity.getName());
+    // TeamEntity -> TeamWithPlayersGetDto
+    public TeamWithPlayersGetDto mapTeamEntityToGetTeamWithPlayerListDto(TeamEntity teamEntity) {
+        List<PlayerGetDto> players = new ArrayList<>();
+        TeamWithPlayersGetDto teamWithPlayersGetDto = new TeamWithPlayersGetDto();
+        teamWithPlayersGetDto.setTeamId(teamEntity.getId());
+        teamWithPlayersGetDto.setName(teamEntity.getName());
         if (teamEntity.getClub() != null)
-            getTeamWithPlayerListDto.setClub(mapClubEntityToGetClubDto(teamEntity.getClub()));
+            teamWithPlayersGetDto.setClub(mapClubEntityToGetClubDto(teamEntity.getClub()));
         if (teamEntity.getManager() != null)
-            getTeamWithPlayerListDto.setManager(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
+            teamWithPlayersGetDto.setManager(mapManagerEntityToGetManagerDto(teamEntity.getManager()));
         if (teamEntity.getLeague() != null)
-            getTeamWithPlayerListDto.setLeague(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
-        getTeamWithPlayerListDto.setTeamLogo(teamEntity.getTeamLogo());
-        getTeamWithPlayerListDto.setPlayerList(players);
+            teamWithPlayersGetDto.setLeague(mapLeagueEntityToGetLeagueDto(teamEntity.getLeague()));
+        teamWithPlayersGetDto.setTeamLogo(teamEntity.getTeamLogo());
+        teamWithPlayersGetDto.setPlayerList(players);
         if (teamEntity.getTeamplayer() != null)
             for (TeamPlayerEntity teamPlayerEntity : teamEntity.getTeamplayer()) {
-                getTeamWithPlayerListDto.getPlayerList().add(mapTeamPlayerEntityToGetPlayerDto(teamPlayerEntity));
+                teamWithPlayersGetDto.getPlayerList().add(mapTeamPlayerEntityToGetPlayerDto(teamPlayerEntity));
             }
-        return getTeamWithPlayerListDto;
+        return teamWithPlayersGetDto;
     }
 
-    public GetFinishedGameDto mapToGetFinishedGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntities) {
-        GetFinishedGameDto getFinishedGameDto = new GetFinishedGameDto();
-        getFinishedGameDto.setGameNr(gameEntity.getGameNr());
-        getFinishedGameDto.setDate(gameEntity.getDate());
-        getFinishedGameDto.setLocation(gameEntity.getLocation());
-        getFinishedGameDto.setInnings(gameEntity.getInnings());
-        getFinishedGameDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
-        getFinishedGameDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
-        getFinishedGameDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
-        getFinishedGameDto.setUmpireList(new ArrayList<>());
+    public GameFinishedGetDto mapToGetFinishedGameDto(GameEntity gameEntity, List<GameUmpireEntity> gameUmpireEntities) {
+        GameFinishedGetDto gameFinishedGetDto = new GameFinishedGetDto();
+        gameFinishedGetDto.setGameNr(gameEntity.getGameNr());
+        gameFinishedGetDto.setDate(gameEntity.getDate());
+        gameFinishedGetDto.setLocation(gameEntity.getLocation());
+        gameFinishedGetDto.setInnings(gameEntity.getInnings());
+        gameFinishedGetDto.setAssociation(mapAssociationEntityToGetAssociationDto(gameEntity.getAssociation()));
+        gameFinishedGetDto.setLeague(mapLeagueEntityToGetLeagueDto(gameEntity.getLeague()));
+        gameFinishedGetDto.setScorer(mapScorerEntityToGetScorerDto(gameEntity.getScorer()));
+        gameFinishedGetDto.setUmpireList(new ArrayList<>());
 
         for (GameUmpireEntity gameUmpire : gameUmpireEntities) {
-            GetUmpireDto getUmpireDto = new GetUmpireDto();
-            getUmpireDto.setUmpireId(gameUmpire.getUmpire().getId());
-            getUmpireDto.setPassnumber(gameUmpire.getUmpire().getPassnumber());
-            getUmpireDto.setName(gameUmpire.getUmpire().getFirstName(), gameUmpire.getUmpire().getLastName());
-            getFinishedGameDto.getUmpireList().add(getUmpireDto);
+            UmpireGetDto umpireGetDto = new UmpireGetDto();
+            umpireGetDto.setUmpireId(gameUmpire.getUmpire().getId());
+            umpireGetDto.setPassnumber(gameUmpire.getUmpire().getPassnumber());
+            umpireGetDto.setName(gameUmpire.getUmpire().getFirstName(), gameUmpire.getUmpire().getLastName());
+            gameFinishedGetDto.getUmpireList().add(umpireGetDto);
         }
-        getFinishedGameDto.setAttendance(gameEntity.getAttendance());
-        getFinishedGameDto.setStartTime(gameEntity.getStartTime());
-        getFinishedGameDto.setEndTime(gameEntity.getEndTime());
-        getFinishedGameDto.setDurationInMinutes(gameEntity.getDurationInMinutes());
-        return getFinishedGameDto;
+        gameFinishedGetDto.setAttendance(gameEntity.getAttendance());
+        gameFinishedGetDto.setStartTime(gameEntity.getStartTime());
+        gameFinishedGetDto.setEndTime(gameEntity.getEndTime());
+        gameFinishedGetDto.setDurationInMinutes(gameEntity.getDurationInMinutes());
+        return gameFinishedGetDto;
     }
 }

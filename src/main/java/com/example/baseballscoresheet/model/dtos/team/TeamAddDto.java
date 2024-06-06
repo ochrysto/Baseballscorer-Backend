@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AddTeamWithoutPlayerListDto {
+public class TeamAddDto {
 
     @NotBlank(message = "Name is mandatory")
     @Size(max = 70, message = "Name must not exceed 70 characters")

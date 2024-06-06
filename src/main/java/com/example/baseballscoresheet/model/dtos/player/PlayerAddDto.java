@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AddPlayerDto {
+public class PlayerAddDto {
 
     @NotBlank(message = "Players first name is mandatory")
     @Size(max = 70, message = "Firstname must not exceed 70 characters")

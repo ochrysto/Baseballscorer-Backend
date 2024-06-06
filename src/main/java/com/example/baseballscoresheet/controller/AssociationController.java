@@ -1,8 +1,8 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
+import com.example.baseballscoresheet.model.dtos.association.AssociationGetDto;
 import com.example.baseballscoresheet.model.entities.AssociationEntity;
-import com.example.baseballscoresheet.model.dtos.association.GetAssociationDto;
 import com.example.baseballscoresheet.services.AssociationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,7 +36,7 @@ public class AssociationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "associations found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetAssociationDto.class))}),
+                            schema = @Schema(implementation = AssociationGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "associations not found",
@@ -46,9 +46,9 @@ public class AssociationController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetAssociationDto>> findAllAssociations() {
+    public ResponseEntity<List<AssociationGetDto>> findAllAssociations() {
         List<AssociationEntity> allAssociationEntities = associationService.readAll();
-        List<GetAssociationDto> allAssociationDos = new ArrayList<>();
+        List<AssociationGetDto> allAssociationDos = new ArrayList<>();
         for (AssociationEntity associationEntity : allAssociationEntities) {
             allAssociationDos.add(mappingService.mapAssociationEntityToGetAssociationDto(associationEntity));
         }

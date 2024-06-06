@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class GetScorerDto {
+public class ScorerGetDto {
 
     private Long scorerId;
 

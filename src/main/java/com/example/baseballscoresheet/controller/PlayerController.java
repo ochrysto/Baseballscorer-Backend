@@ -1,9 +1,9 @@
 package com.example.baseballscoresheet.controller;
 
 import com.example.baseballscoresheet.mapping.MappingService;
-import com.example.baseballscoresheet.model.dtos.player.GetPlayerDto;
+import com.example.baseballscoresheet.model.dtos.player.PlayerGetDto;
 import com.example.baseballscoresheet.model.entities.PlayerEntity;
-import com.example.baseballscoresheet.model.dtos.player.AddPlayerDto;
+import com.example.baseballscoresheet.model.dtos.player.PlayerAddDto;
 import com.example.baseballscoresheet.services.PlayerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,7 +36,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "created player",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = PlayerGetDto.class))}),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "not authorized",
@@ -46,10 +46,10 @@ public class PlayerController {
     })
     @RolesAllowed("user")
     @PostMapping
-    public ResponseEntity<GetPlayerDto> createPlayer(@RequestBody @Valid AddPlayerDto newPlayer) {
+    public ResponseEntity<PlayerGetDto> createPlayer(@RequestBody @Valid PlayerAddDto newPlayer) {
         PlayerEntity playerEntity = this.mappingService.mapAddPlayerDtoToPlayerEntity(newPlayer);
         playerEntity = this.playerService.createPlayer(playerEntity);
-        GetPlayerDto addedPlayer = this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity);
+        PlayerGetDto addedPlayer = this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity);
         return new ResponseEntity<>(addedPlayer, HttpStatus.CREATED);
     }
 
@@ -58,7 +58,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "players found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = PlayerGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "players not found",
@@ -68,9 +68,9 @@ public class PlayerController {
     })
     @GetMapping
     @RolesAllowed("user")
-    public ResponseEntity<List<GetPlayerDto>> findAllPlayers() {
+    public ResponseEntity<List<PlayerGetDto>> findAllPlayers() {
         List<PlayerEntity> playerEntities = this.playerService.findAllPlayers();
-        List<GetPlayerDto> playerDtos = new ArrayList<>();
+        List<PlayerGetDto> playerDtos = new ArrayList<>();
         for (PlayerEntity playerEntity : playerEntities) {
             playerDtos.add(this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity));
         }
@@ -82,7 +82,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "player found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = PlayerGetDto.class))}),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "player not found",
@@ -92,10 +92,10 @@ public class PlayerController {
     })
     @GetMapping("/{playerId}")
     @RolesAllowed("user")
-    public ResponseEntity<GetPlayerDto> findPlayerById(@PathVariable Long playerId) {
+    public ResponseEntity<PlayerGetDto> findPlayerById(@PathVariable Long playerId) {
         PlayerEntity playerEntity = this.playerService.findPlayerById(playerId);
-        GetPlayerDto getPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity);
-        return new ResponseEntity<>(getPlayerDto, HttpStatus.OK);
+        PlayerGetDto playerGetDto = this.mappingService.mapPlayerEntityToGetPlayerDto(playerEntity);
+        return new ResponseEntity<>(playerGetDto, HttpStatus.OK);
     }
 
     // Endpoint for updating an existing player
@@ -104,7 +104,7 @@ public class PlayerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "player found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GetPlayerDto.class))}),
+                            schema = @Schema(implementation = PlayerGetDto.class))}),
             @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "invalid JSON posted",
                     content = @Content),
@@ -116,10 +116,10 @@ public class PlayerController {
     })
     @PutMapping("/{id}")
     @RolesAllowed("user")
-    public ResponseEntity<GetPlayerDto> updatePlayer(@PathVariable final Long id,
-                                                     @Valid @RequestBody final AddPlayerDto addPlayerDto) {
-        GetPlayerDto updatedPlayerDto;
-        PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerDtoToPlayerEntity(addPlayerDto);
+    public ResponseEntity<PlayerGetDto> updatePlayer(@PathVariable final Long id,
+                                                     @Valid @RequestBody final PlayerAddDto playerAddDto) {
+        PlayerGetDto updatedPlayerDto;
+        PlayerEntity updatedPlayerEntity = this.mappingService.mapAddPlayerDtoToPlayerEntity(playerAddDto);
         updatedPlayerEntity.setId(id);
         updatedPlayerEntity = this.playerService.update(updatedPlayerEntity);
         updatedPlayerDto = this.mappingService.mapPlayerEntityToGetPlayerDto(updatedPlayerEntity);
